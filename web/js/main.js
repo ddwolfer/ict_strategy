@@ -22,6 +22,54 @@ const currentTimeEl   = document.getElementById('current-time');
 const chartContainer  = document.getElementById('chart-container');
 const sidebarEl       = document.getElementById('sidebar');
 
+const fvgModeBtns     = document.querySelectorAll('.fvg-mode-btn');
+const fvgCapInput     = document.getElementById('fvg-cap');
+
+// ── FVG Settings ──────────────────────────────────────────────────────────────
+
+const LS_MODE = 'ict_fvg_mode';
+const LS_CAP  = 'ict_fvg_cap';
+
+function getFvgSettings() {
+  const mode = localStorage.getItem(LS_MODE) || 'compact';
+  const cap  = parseInt(localStorage.getItem(LS_CAP) ?? '12', 10);
+  return { mode, cap };
+}
+
+function applyFvgSettingsToUI(mode, cap) {
+  fvgModeBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
+  fvgCapInput.value    = cap;
+  fvgCapInput.disabled = mode !== 'compact';
+}
+
+function pushFvgToEngine() {
+  if (!engine) return;
+  const { mode, cap } = getFvgSettings();
+  engine.setZoneDisplay({ mode, cap });
+}
+
+// Restore persisted settings on load
+{
+  const { mode, cap } = getFvgSettings();
+  applyFvgSettingsToUI(mode, cap);
+}
+
+fvgModeBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mode = btn.dataset.mode;
+    localStorage.setItem(LS_MODE, mode);
+    applyFvgSettingsToUI(mode, parseInt(fvgCapInput.value, 10));
+    pushFvgToEngine();
+  });
+});
+
+fvgCapInput.addEventListener('change', () => {
+  const cap = Math.max(0, Math.min(30, parseInt(fvgCapInput.value, 10) || 0));
+  fvgCapInput.value = cap;
+  localStorage.setItem(LS_CAP, String(cap));
+  pushFvgToEngine();
+});
+
 // ── Application State ──────────────────────────────────────────────────────────
 
 let engine     = null;
@@ -144,6 +192,9 @@ async function loadAndStartDay(date) {
 
   // Initialize engine
   engine = new ReplayEngine(data);
+  // Apply persisted FVG display settings
+  const { mode: fvgMode, cap: fvgCap } = getFvgSettings();
+  engine.setZoneDisplay({ mode: fvgMode, cap: fvgCap });
   unsubUpdate = engine.onUpdate(onEngineUpdate);
 
   // Render at bar 0
@@ -426,13 +477,21 @@ window.__seekTo = (idx) => {
       // 跳到震盪段中段檢查 zone 數量（疊框問題的觀測點）
       engine.seekTo(145);
 
+      // fvgMode 驗證：切到「僅進場」後 visibleZones 應 <= 2（通常 0-1 條進場 FVG）
+      engine.setZoneDisplay({ mode: 'entry', cap: 12 });
+      const entryZones = engine.visibleZones.length;
+      const fvgModeOK  = entryZones <= 2;
+      // 還原成預設模式
+      engine.setZoneDisplay({ mode: 'compact', cap: 12 });
+
       report.textContent = [
-        sliderSeekOK ? 'AUTOTEST_OK' : 'AUTOTEST_FAIL(slider)',
+        sliderSeekOK && fvgModeOK ? 'AUTOTEST_OK' : `AUTOTEST_FAIL(slider=${sliderSeekOK},fvgMode=${fvgModeOK})`,
         `idx=${engine.currentIndex}`,
         `sliderSeek=${sliderSeekOK}`,
         `sliderHit=${hitDesc}`,
         `sliderRect=${Math.round(rect.width)}x${Math.round(rect.height)}`,
         `zones=${engine.visibleZones.length}`,
+        `fvgMode=${fvgModeOK}(entryZones=${entryZones})`,
         `state=${JSON.stringify(st?.state)}`,
         `activeTrade=${JSON.stringify(engine.activeTrade?.id ?? null)}`,
       ].join(' | ');

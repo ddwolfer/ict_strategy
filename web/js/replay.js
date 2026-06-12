@@ -122,6 +122,31 @@ export class ReplayEngine {
     this._interval = null;
     this._speed    = 1;
     this._callbacks = [];
+
+    // FVG display settings (can be overridden via setZoneDisplay)
+    this._fvgMode = 'compact';   // 'compact' | 'all' | 'entry'
+    this._fvgCap  = 12;
+
+    // One-time: collect entry-FVG signatures from state_timeline
+    this._entryFvgSigs = [];
+    for (const entry of this._data.state_timeline) {
+      if (entry.state === 'WAIT_RETRACE' && entry.detail) {
+        const d = entry.detail;
+        if (d.fvg_top != null && d.fvg_bottom != null) {
+          this._entryFvgSigs.push({ top: d.fvg_top, bottom: d.fvg_bottom });
+        }
+      }
+    }
+  }
+
+  /**
+   * Update FVG display settings and trigger a redraw.
+   * @param {{ mode: string, cap: number }} opts
+   */
+  setZoneDisplay({ mode, cap }) {
+    this._fvgMode = mode ?? this._fvgMode;
+    this._fvgCap  = cap  ?? this._fvgCap;
+    this._notify();
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────────
@@ -160,33 +185,55 @@ export class ReplayEngine {
 
   /**
    * Visible zones: from_t <= currentT.
+   * Behaviour depends on this._fvgMode:
+   *   'compact' — original logic (ghost 5 min, min height 0.75, fresh cap N)
+   *   'all'     — no size filter, no cap, never disappear; only alpha by status
+   *   'entry'   — only zones that match an agent WAIT_RETRACE fvg_top/bottom
+   *               (tolerance 0.25); always full-bright, never expire
    */
   get visibleZones() {
     const t = this.currentT;
     if (t === null) return [];
-    const GHOST_SEC = 300;       // 非 fresh 後殘影保留 5 分鐘
-    const MIN_HEIGHT = 0.75;     // 過濾 < 3 ticks 的微型 FVG（噪音）
-    const MAX_FRESH = 12;        // 同時最多顯示的 fresh 區數量
-    const out = [];
+    const mode = this._fvgMode;
+    const GHOST_SEC  = 300;
+    const MIN_HEIGHT = 0.75;
+
+    // Build base list with status resolved
+    const base = [];
     for (const z of this._data.annotations.zones) {
       if (z.from_t > t) continue;
-      if ((z.top - z.bottom) < MIN_HEIGHT) continue;
       let status = 'fresh';
       let endT = null;
       for (const sc of (z.status_changes || [])) {
         if (sc.t <= t) {
           status = sc.status;
-          // ICT 語意：FVG 第一次被回踩（touched）機會就已用掉，
-          // 開始殘影倒數；filled/invalidated 亦同
-          if (endT === null && sc.status !== 'fresh') {
-            endT = sc.t;
-          }
+          if (endT === null && sc.status !== 'fresh') endT = sc.t;
         }
       }
-      if (endT !== null && t > endT + GHOST_SEC) continue; // 殘影期過 → 消失
-      out.push({ ...z, _status: status, _end_t: endT });
+      base.push({ ...z, _status: status, _end_t: endT });
     }
-    // fresh 區也設上限：只留最新的 N 個（未被觸碰的舊缺口通常離價太遠）
+
+    if (mode === 'all') {
+      // No size filter, no cap, no expiry — just clip to current time
+      return base;
+    }
+
+    if (mode === 'entry') {
+      const TICK = 0.25;
+      return base.filter(z => {
+        return this._entryFvgSigs.some(sig =>
+          Math.abs(sig.top - z.top) <= TICK && Math.abs(sig.bottom - z.bottom) <= TICK
+        );
+      });
+    }
+
+    // 'compact' (default) — original logic
+    const out = base.filter(z => {
+      if ((z.top - z.bottom) < MIN_HEIGHT) return false;
+      if (z._end_t !== null && t > z._end_t + GHOST_SEC) return false;
+      return true;
+    });
+    const MAX_FRESH = this._fvgCap;
     const fresh = out.filter(z => z._status === 'fresh');
     if (fresh.length > MAX_FRESH) {
       const cutoff = fresh.sort((a, b) => b.from_t - a.from_t)[MAX_FRESH - 1].from_t;

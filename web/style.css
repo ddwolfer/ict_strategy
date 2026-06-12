@@ -218,6 +218,88 @@ html, body {
   font-weight: 500;
 }
 
+/* ── FVG SETTINGS ── */
+#fvg-settings {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+#fvg-mode-group {
+  display: flex;
+  align-items: center;
+}
+
+.fvg-mode-btn {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-sec);
+  font-family: var(--font);
+  font-size: 10px;
+  padding: 2px 6px;
+  cursor: pointer;
+  height: 22px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  margin-left: -1px;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+
+.fvg-mode-btn:first-child {
+  border-radius: 2px 0 0 2px;
+  margin-left: 0;
+}
+
+.fvg-mode-btn:last-child {
+  border-radius: 0 2px 2px 0;
+}
+
+.fvg-mode-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+  border-color: var(--border-mid);
+  z-index: 1;
+}
+
+.fvg-mode-btn.active {
+  background: #1a2030;
+  color: var(--blue);
+  border-color: rgba(96, 165, 250, 0.4);
+  z-index: 2;
+}
+
+#fvg-cap-label {
+  margin-left: 2px;
+}
+
+#fvg-cap {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 10px;
+  padding: 2px 4px;
+  height: 22px;
+  width: 38px;
+  outline: none;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+#fvg-cap::-webkit-outer-spin-button,
+#fvg-cap::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#fvg-cap:disabled {
+  color: var(--text-dim);
+  border-color: var(--border);
+  cursor: default;
+  opacity: 0.5;
+}
+
 /* ── MAIN LAYOUT ── */
 #main {
   display: flex;
