@@ -1,0 +1,323 @@
+/**
+ * replay.js — Pure state management for bar-by-bar replay.
+ * No DOM interactions; all rendering delegated to consumers via onUpdate callback.
+ */
+
+// ── Data normalization ────────────────────────────────────────────────────────
+// Handles both the "ideal" schema used in demo data and the real Python
+// engine output schema. Produces a consistent internal shape.
+
+function normalizeData(raw) {
+  const data = { ...raw };
+
+  // Ensure annotation arrays exist
+  data.annotations = { ...(raw.annotations || {}) };
+  data.annotations.levels  = (data.annotations.levels  || []).map(normalizeLevel);
+  data.annotations.zones   = (data.annotations.zones   || []).map(normalizeZone);
+  data.annotations.markers = (data.annotations.markers || []).map(normalizeMarker);
+  data.trades         = (raw.trades         || []).map(normalizeTrade);
+  data.state_timeline = (raw.state_timeline || []);
+  data.equity         = (raw.equity         || []);
+  data.bars           = (raw.bars           || []);
+  return data;
+}
+
+function normalizeLevel(l) {
+  return {
+    ...l,
+    // swept: true if swept_t exists (real data) or swept boolean (demo data)
+    swept: !!(l.swept || l.swept_t != null),
+  };
+}
+
+function normalizeZone(z) {
+  // Real data uses status_changes array; demo uses filled/invalidated booleans
+  let filled = z.filled ?? false;
+  let invalidated = z.invalidated ?? false;
+  if (z.status_changes && z.status_changes.length) {
+    const statuses = z.status_changes.map(sc => sc.status);
+    filled = statuses.includes('filled');
+    invalidated = statuses.includes('invalidated');
+  }
+  return { ...z, filled, invalidated };
+}
+
+function normalizeMarker(m) {
+  // Normalize marker text: real data may have garbled text for non-ASCII
+  return {
+    ...m,
+    // Map real 'side' field for directional markers
+    kind: m.kind,
+    label: sanitizeText(m.text || m.label || m.kind),
+  };
+}
+
+function sanitizeText(str) {
+  if (!str) return '';
+  // Replace any replacement chars or null bytes
+  return str.replace(/\uFFFD/g, '').trim();
+}
+
+function normalizeTrade(tr) {
+  // Real data: side='SELL'/'BUY', exit_fills array
+  // Demo data: direction='LONG'/'SHORT', exit_t/exit_price/exit_kind
+
+  const direction = tr.direction
+    ?? (tr.side === 'BUY' ? 'LONG' : tr.side === 'SELL' ? 'SHORT' : 'LONG');
+
+  // Compute exit info from exit_fills if present
+  let exit_t     = tr.exit_t    ?? null;
+  let exit_price = tr.exit_price ?? null;
+  let exit_kind  = tr.exit_kind  ?? null;
+  let pnl_usd    = tr.pnl_usd   ?? null;
+  let r_value    = tr.r_multiple ?? tr.r_value ?? null;
+
+  if (tr.exit_fills && tr.exit_fills.length) {
+    // Last fill determines the exit time
+    const lastFill  = tr.exit_fills[tr.exit_fills.length - 1];
+    exit_t     = lastFill.t;
+    exit_price = lastFill.price;
+    // Determine kind from reason field
+    const reason = (lastFill.reason || '').toUpperCase();
+    if (reason === 'TARGET' || reason === 'TP') exit_kind = 'EXIT_TARGET';
+    else if (reason === 'STOP' || reason === 'SL') exit_kind = 'EXIT_STOP';
+    else if (reason === 'EOD' || reason === 'CLOSE') exit_kind = 'EXIT_EOD';
+    else exit_kind = 'EXIT_EOD';
+  }
+
+  // Target price from first target
+  const target_price = tr.target_price
+    ?? (tr.targets && tr.targets.length ? tr.targets[0].price : null);
+
+  return {
+    ...tr,
+    direction,
+    exit_t,
+    exit_price,
+    exit_kind,
+    pnl_usd,
+    r_value,
+    target_price,
+    stop_timeline: tr.stop_timeline || [],
+  };
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+
+const SPEED_INTERVALS = {
+  1:  1000,
+  2:  500,
+  5:  200,
+  10: 100,
+  30: 33,
+  60: 16,
+};
+
+export class ReplayEngine {
+  /** @param {object} data - full day JSON from data.js */
+  constructor(data) {
+    this._data     = normalizeData(data);
+    this._index    = 0;
+    this._playing  = false;
+    this._interval = null;
+    this._speed    = 1;
+    this._callbacks = [];
+  }
+
+  // ── Accessors ──────────────────────────────────────────────────────────────
+
+  get currentIndex() { return this._index; }
+  get totalBars()    { return this._data.bars.length; }
+
+  get currentBar() {
+    return this._data.bars[this._index] ?? null;
+  }
+
+  get currentT() {
+    return this.currentBar?.t ?? null;
+  }
+
+  /**
+   * Visible bars: bars[0..currentIndex] inclusive.
+   * Returns a new array (safe for immutable chart updates).
+   */
+  get visibleBars() {
+    return this._data.bars.slice(0, this._index + 1);
+  }
+
+  /**
+   * Visible levels: from_t <= currentT.
+   * If to_t is defined and < currentT, level still shown (swept/expired).
+   */
+  get visibleLevels() {
+    const t = this.currentT;
+    if (t === null) return [];
+    return this._data.annotations.levels.filter(l => l.from_t <= t);
+  }
+
+  /**
+   * Visible zones: from_t <= currentT.
+   */
+  get visibleZones() {
+    const t = this.currentT;
+    if (t === null) return [];
+    return this._data.annotations.zones.filter(z => z.from_t <= t);
+  }
+
+  /**
+   * Visible markers: t <= currentT.
+   */
+  get visibleMarkers() {
+    const t = this.currentT;
+    if (t === null) return [];
+    return this._data.annotations.markers.filter(m => m.t <= t);
+  }
+
+  /**
+   * Visible trades: entry_t <= currentT.
+   */
+  get visibleTrades() {
+    const t = this.currentT;
+    if (t === null) return [];
+    return this._data.trades.filter(tr => tr.entry_t <= t);
+  }
+
+  /**
+   * Current agent state: last state_timeline entry where t <= currentT.
+   */
+  get currentState() {
+    const t = this.currentT;
+    if (t === null || !this._data.state_timeline.length) return null;
+    let last = null;
+    for (const entry of this._data.state_timeline) {
+      if (entry.t <= t) last = entry;
+    }
+    return last;
+  }
+
+  /**
+   * Visible equity: entries where t <= currentT.
+   */
+  get visibleEquity() {
+    const t = this.currentT;
+    if (t === null) return [];
+    return this._data.equity.filter(e => e.t <= t);
+  }
+
+  /**
+   * Active trade (IN_POSITION): the trade whose entry_t <= currentT and exit_t
+   * is null OR exit_t > currentT.
+   */
+  get activeTrade() {
+    const t = this.currentT;
+    if (t === null) return null;
+    return this._data.trades.find(tr => {
+      if (tr.entry_t > t) return false;
+      if (tr.exit_t !== null && tr.exit_t !== undefined && tr.exit_t <= t) return false;
+      return true;
+    }) ?? null;
+  }
+
+  /**
+   * Last stop price for the active trade (from stop_timeline).
+   */
+  get currentStopPrice() {
+    const trade = this.activeTrade;
+    if (!trade || !trade.stop_timeline?.length) return null;
+    const t = this.currentT;
+    let last = null;
+    for (const entry of trade.stop_timeline) {
+      if (entry.t <= t) last = entry;
+    }
+    return last?.price ?? null;
+  }
+
+  // ── Navigation ─────────────────────────────────────────────────────────────
+
+  /**
+   * Jump to specific bar index.
+   * @param {number} index
+   */
+  seekTo(index) {
+    const clamped = Math.max(0, Math.min(index, this.totalBars - 1));
+    this._index = clamped;
+    this._notify();
+  }
+
+  stepForward() {
+    if (this._index < this.totalBars - 1) {
+      this._index++;
+      this._notify();
+    } else {
+      // Auto-pause at end
+      this.pause();
+    }
+  }
+
+  stepBackward() {
+    if (this._index > 0) {
+      this._index--;
+      this._notify();
+    }
+  }
+
+  // ── Playback ───────────────────────────────────────────────────────────────
+
+  /**
+   * Start autoplay at given speed multiplier.
+   * @param {number} speedMultiplier - 1, 2, 5, 10, 30, or 60
+   */
+  play(speedMultiplier = 1) {
+    if (this._playing) this.pause();
+    this._speed = speedMultiplier;
+    const ms = SPEED_INTERVALS[speedMultiplier] ?? 1000;
+    this._playing = true;
+    this._interval = setInterval(() => {
+      if (this._index >= this.totalBars - 1) {
+        this.pause();
+        return;
+      }
+      this._index++;
+      this._notify();
+    }, ms);
+    this._notify();
+  }
+
+  pause() {
+    this._playing = false;
+    if (this._interval !== null) {
+      clearInterval(this._interval);
+      this._interval = null;
+    }
+    this._notify();
+  }
+
+  get isPlaying() { return this._playing; }
+
+  // ── Subscription ──────────────────────────────────────────────────────────
+
+  /**
+   * Register a callback to be called whenever replay state changes.
+   * @param {function} callback
+   */
+  onUpdate(callback) {
+    this._callbacks.push(callback);
+    return () => {
+      this._callbacks = this._callbacks.filter(c => c !== callback);
+    };
+  }
+
+  _notify() {
+    for (const cb of this._callbacks) {
+      try { cb(this); } catch (e) { console.error('[ReplayEngine] callback error:', e); }
+    }
+  }
+
+  // ── Data accessors for consumers ──────────────────────────────────────────
+
+  get sessionStartT()  { return this._data.session_start_t ?? null; }
+  get sessionEndT()    { return this._data.session_end_t   ?? null; }
+  get date()           { return this._data.date ?? ''; }
+  get symbol()         { return this._data.symbol ?? ''; }
+  get allTrades()      { return this._data.trades ?? []; }
+}

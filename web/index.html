@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICT 策略回放</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+  <div id="toolbar">
+    <span id="symbol-label">NQ=F</span>
+    <div id="toolbar-divider"></div>
+    <select id="date-select">
+      <option value="">── 選擇日期 ──</option>
+    </select>
+    <div id="toolbar-divider"></div>
+    <div id="playback-controls">
+      <button id="btn-back" title="單步後退 [←]">&#9664;</button>
+      <button id="btn-play" title="播放/暫停 [Space]">&#9654; 播放</button>
+      <button id="btn-fwd" title="單步前進 [→]">&#9654;&#9654;</button>
+      <div id="speed-wrapper">
+        <span class="ctrl-label">速度</span>
+        <select id="speed-select">
+          <option value="1">1×</option>
+          <option value="2">2×</option>
+          <option value="5">5×</option>
+          <option value="10">10×</option>
+          <option value="30">30×</option>
+          <option value="60">60×</option>
+        </select>
+      </div>
+    </div>
+    <div id="toolbar-divider"></div>
+    <div id="progress-wrapper">
+      <input type="range" id="progress-slider" min="0" max="0" value="0">
+      <span id="progress-label">0 / 0</span>
+    </div>
+    <div id="toolbar-divider"></div>
+    <span id="current-time">──:── ET</span>
+  </div>
+
+  <div id="main">
+    <div id="chart-container"></div>
+    <div id="sidebar">
+      <div class="sidebar-section" id="section-state">
+        <div class="section-header">Agent 狀態</div>
+        <div id="state-badge">──</div>
+        <div id="state-waiting"></div>
+      </div>
+
+      <div class="sidebar-section" id="section-position" style="display:none">
+        <div class="section-header">持倉資訊</div>
+        <div class="info-grid">
+          <span class="info-label">方向</span><span class="info-val" id="pos-direction">──</span>
+          <span class="info-label">進場</span><span class="info-val" id="pos-entry">──</span>
+          <span class="info-label">停損</span><span class="info-val" id="pos-stop">──</span>
+          <span class="info-label">目標</span><span class="info-val" id="pos-target">──</span>
+          <span class="info-label">盈虧</span><span class="info-val" id="pos-pnl">──</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section" id="section-trades">
+        <div class="section-header">交易日誌</div>
+        <div id="trade-log-wrapper">
+          <table id="trade-table">
+            <thead>
+              <tr>
+                <th>方向</th>
+                <th>進場</th>
+                <th>出場</th>
+                <th>R</th>
+                <th>盈虧</th>
+              </tr>
+            </thead>
+            <tbody id="trade-tbody"></tbody>
+          </table>
+          <div id="trade-empty" class="empty-msg">無交易紀錄</div>
+        </div>
+      </div>
+
+      <div class="sidebar-section" id="section-stats">
+        <div class="section-header">統計</div>
+        <div class="stats-grid">
+          <div class="stat-block">
+            <span class="stat-label">勝率</span>
+            <span class="stat-val" id="stat-winrate">──</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-label">獲利因子</span>
+            <span class="stat-val" id="stat-pf">──</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-label">總 R</span>
+            <span class="stat-val" id="stat-totalr">──</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-label">盈虧 USD</span>
+            <span class="stat-val" id="stat-pnl-usd">──</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-label">最大回撤</span>
+            <span class="stat-val" id="stat-maxdd">──</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section" id="section-equity">
+        <div class="section-header">權益曲線</div>
+        <canvas id="equity-canvas" height="60"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

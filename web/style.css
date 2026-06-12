@@ -1,0 +1,442 @@
+/* ── ICT Replay Viewer ── Bloomberg Terminal × Editorial ── */
+
+:root {
+  --bg:          #0c0e12;
+  --bg-alt:      #0f1117;
+  --bg-hover:    #13161d;
+  --border:      #1e2128;
+  --border-mid:  #252830;
+  --text:        #c8cbd0;
+  --text-sec:    #6b7280;
+  --text-dim:    #3d4249;
+  --bull:        #4ade80;
+  --bear:        #f87171;
+  --amber:       #fbbf24;
+  --blue:        #60a5fa;
+  --purple:      #a78bfa;
+  --font:        'IBM Plex Mono', 'Courier New', monospace;
+  --toolbar-h:   32px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 11px;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TOOLBAR ── */
+#toolbar {
+  height: var(--toolbar-h);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-alt);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+#toolbar-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--border);
+  margin: 0 10px;
+  flex-shrink: 0;
+}
+
+#symbol-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+#date-select {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 11px;
+  cursor: pointer;
+  outline: none;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+#date-select option {
+  background: #151820;
+  color: var(--text);
+}
+
+#playback-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+#playback-controls button {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 10px;
+  padding: 2px 8px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  height: 22px;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+}
+
+#playback-controls button:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-mid);
+  color: #e0e3e8;
+}
+
+#playback-controls button:active {
+  background: #1a1e26;
+}
+
+#btn-play {
+  min-width: 70px;
+  font-size: 11px !important;
+}
+
+#btn-play.playing {
+  color: var(--amber) !important;
+  border-color: rgba(251, 191, 36, 0.3) !important;
+}
+
+#speed-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 4px;
+}
+
+.ctrl-label {
+  color: var(--text-sec);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+#speed-select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 10px;
+  padding: 2px 4px;
+  cursor: pointer;
+  outline: none;
+  height: 22px;
+}
+
+#speed-select option {
+  background: #151820;
+}
+
+#progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+#progress-slider {
+  flex: 1;
+  min-width: 60px;
+  height: 2px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border);
+  cursor: pointer;
+  outline: none;
+}
+
+#progress-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  background: var(--text);
+  cursor: pointer;
+}
+
+#progress-slider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  background: var(--text);
+  border: none;
+  cursor: pointer;
+}
+
+#progress-label {
+  color: var(--text-sec);
+  font-size: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 56px;
+  text-align: right;
+}
+
+#current-time {
+  font-size: 12px;
+  color: var(--amber);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+/* ── MAIN LAYOUT ── */
+#main {
+  display: flex;
+  height: calc(100vh - var(--toolbar-h));
+  overflow: hidden;
+}
+
+#chart-container {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+}
+
+/* ── SIDEBAR ── */
+#sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg-alt);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+#sidebar::-webkit-scrollbar {
+  width: 3px;
+}
+
+#sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
+.sidebar-section {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-header {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-sec);
+  margin-bottom: 8px;
+}
+
+/* ── STATE PANEL ── */
+#state-badge {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+#state-badge.state-idle    { color: var(--text-sec); }
+#state-badge.state-wait    { color: var(--amber); }
+#state-badge.state-in      { color: var(--bull); }
+#state-badge.state-order   { color: var(--blue); }
+#state-badge.state-done    { color: var(--text-sec); }
+
+#state-waiting {
+  font-size: 11px;
+  color: var(--text-sec);
+  line-height: 1.4;
+  word-break: break-word;
+  min-height: 14px;
+}
+
+/* ── POSITION INFO ── */
+.info-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 10px;
+  align-items: baseline;
+}
+
+.info-label {
+  font-size: 10px;
+  color: var(--text-sec);
+  white-space: nowrap;
+}
+
+.info-val {
+  font-size: 13px;
+  color: var(--text);
+  text-align: right;
+}
+
+.info-val.bull { color: var(--bull); }
+.info-val.bear { color: var(--bear); }
+.info-val.pos  { color: var(--bull); }
+.info-val.neg  { color: var(--bear); }
+
+/* ── TRADE TABLE ── */
+#trade-log-wrapper {
+  overflow-x: auto;
+}
+
+#trade-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+}
+
+#trade-table th {
+  color: var(--text-sec);
+  font-weight: 400;
+  text-align: right;
+  padding: 2px 4px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.04em;
+}
+
+#trade-table th:first-child {
+  text-align: left;
+}
+
+#trade-table td {
+  color: var(--text);
+  text-align: right;
+  padding: 3px 4px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+}
+
+#trade-table td:first-child {
+  text-align: left;
+}
+
+#trade-table tbody tr:nth-child(even) td {
+  background: rgba(255,255,255,0.015);
+}
+
+#trade-table tbody tr:hover td {
+  background: var(--bg-hover);
+}
+
+.td-bull { color: var(--bull); }
+.td-bear { color: var(--bear); }
+.td-pos  { color: var(--bull); }
+.td-neg  { color: var(--bear); }
+.td-amb  { color: var(--amber); }
+.td-pending { color: var(--text-dim); }
+
+.empty-msg {
+  color: var(--text-dim);
+  font-size: 10px;
+  text-align: center;
+  padding: 12px 0;
+}
+
+/* ── STATS ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+
+.stat-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-label {
+  font-size: 9px;
+  color: var(--text-sec);
+  letter-spacing: 0.06em;
+}
+
+.stat-val {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.stat-val.pos { color: var(--bull); }
+.stat-val.neg { color: var(--bear); }
+
+/* ── EQUITY SPARKLINE ── */
+#equity-canvas {
+  width: 100%;
+  display: block;
+  margin-top: 4px;
+}
+
+/* ── LOADING OVERLAY ── */
+#loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  font-size: 12px;
+  color: var(--text-sec);
+  letter-spacing: 0.12em;
+}
+
+#loading-overlay.hidden {
+  display: none;
+}
+
+/* ── NOTICE BAR ── */
+#notice {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 280px;
+  background: rgba(251, 191, 36, 0.1);
+  border-top: 1px solid rgba(251, 191, 36, 0.3);
+  color: var(--amber);
+  font-size: 10px;
+  padding: 4px 12px;
+  text-align: center;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 50;
+}
+
+#notice.visible {
+  opacity: 1;
+}
