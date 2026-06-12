@@ -403,10 +403,8 @@ class ICTStrategy:
             self._disp_high = bar.high
             self._disp_low = bar.low
 
-            # first_setup_only: mark chain started
-            if self.config.first_setup_only:
-                self._first_setup_used = True
-
+            # 注意：first_setup_only 的名額在「MSS 確認」時才消耗——
+            # 掃蕩後 MSS 沒出現不算一個 setup（朋友規則：第一個 MSS）
             self._transition(
                 "WAIT_MSS", bar,
                 f"掃蕩確認（{evt.kind} {evt.level:.2f}），鎖定方向={locked}，等 MSS（最多 {self.config.mss_timeout_bars} 根）",
@@ -464,6 +462,10 @@ class ICTStrategy:
             self._mss_broken_level = evt.broken_swing_level
             self._entry_bar = self._bar_count
             entry_px = self._entry_price_for(fvg)
+
+            # first_setup_only：MSS 正式確認，消耗當日唯一名額
+            if self.config.first_setup_only:
+                self._first_setup_used = True
 
             self._transition(
                 "WAIT_RETRACE", bar,

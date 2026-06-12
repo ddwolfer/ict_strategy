@@ -34,10 +34,10 @@
       "date": "2026-05-19",
       "bias": "BOTH",
       "bias_reason": "m13_raid：雙向等掃蕩；DR=29098.75–29686.75 eq=29392.75；PDH=29356.25",
-      "trades": 0,
+      "trades": 1,
       "wins": 0,
-      "pnl_usd": 0,
-      "total_r": 0,
+      "pnl_usd": -239.92,
+      "total_r": -1.0,
       "ambiguous": 0
     },
     {
@@ -211,5 +211,5 @@
       "ambiguous": 0
     }
   ],
-  "generated_at": "2026-06-12T16:14:32.276490+00:00"
+  "generated_at": "2026-06-12T16:17:21.593773+00:00"
 }

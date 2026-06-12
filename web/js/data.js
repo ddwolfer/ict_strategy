@@ -34,7 +34,9 @@
  * }
  */
 
-const BASE = './replay_data/';
+// URL 帶 ?data=sb 時讀 Silver Bullet 結果（replay_data_sb/）
+const _ds = new URLSearchParams(location.search).get('data');
+const BASE = _ds === 'sb' ? './replay_data_sb/' : './replay_data/';
 
 /**
  * Load the index file listing available replay dates.
