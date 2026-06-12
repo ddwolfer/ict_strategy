@@ -208,6 +208,8 @@ def run_all(
     verbose: bool = True,
     es_csv_path: Path | str | None = None,
     json_days: int = 60,
+    start_date: date | None = None,
+    end_date: date | None = None,
 ) -> dict:
     """跑全量回測，寫出 replay_data JSON，回傳統計摘要。
 
@@ -238,6 +240,12 @@ def run_all(
     for b in all_bars:
         days_map.setdefault(trading_date(b.ts_utc), []).append(b)
     trading_days = list(days_map.keys())
+    # IS/OOS 切分用日期範圍（history 分組仍含範圍前資料，偏向計算不受影響）
+    all_days_ordered = trading_days
+    if start_date or end_date:
+        trading_days = [d for d in trading_days
+                        if (start_date is None or d >= start_date)
+                        and (end_date is None or d <= end_date)]
 
     # 偏向/暖機只需要近期歷史：取最近 HISTORY_DAYS 個交易日的 bars
     HISTORY_DAYS = 40   # m1_program 需 20 日 dealing range，40 日綽綽有餘
@@ -259,8 +267,10 @@ def run_all(
 
     all_trade_rows: list[dict] = []
 
+    day_pos = {d: k for k, d in enumerate(all_days_ordered)}
     for i, day in enumerate(trading_days):
-        hist_days = trading_days[max(0, i - HISTORY_DAYS):i]
+        pos = day_pos[day]
+        hist_days = all_days_ordered[max(0, pos - HISTORY_DAYS):pos]
         history_bars = [b for d in hist_days for b in days_map[d]]
         result = run_day(day, cfg, all_bars, initial_equity=running_equity,
                          es_bars_map=es_bars_map if es_bars_map else None,

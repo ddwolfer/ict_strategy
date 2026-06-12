@@ -161,6 +161,11 @@ class StrategyConfig:
     min_stop_points: float = 3.0  # 停損下限 §3
     max_stop_points: float = 40.0 # 停損上限 §3
 
+    # ── 波動率門檻（M11「可用範圍不足 → 非高機率日」的盤前對應）─────────────
+    # 隔夜波幅（ONH-ONL）須 ≥ 近 20 交易日隔夜波幅均值 × 此比例，否則當日 NO_TRADE。
+    # 0 = 關閉。掃蕩反轉策略在低波動緩漲市衰減（2023-25 實證），此為結構性過濾。
+    min_on_range_ratio: float = 0.0
+
     # ── Silver Bullet 新增 ────────────────────────────────────────────────────
     min_rr: float = 0.0          # 0=off; T1 dist < min_rr×stop_dist → abandon setup
     first_setup_only: bool = False  # True: after first MSS chain ends (any way), → DONE

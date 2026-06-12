@@ -211,6 +211,25 @@ def _compute_m13_raid(
         last_on_day = max(on_map.keys())
         overnight_high, overnight_low = on_map[last_on_day]
 
+    # 波動率門檻（M11：可用範圍不足非高機率日）：
+    # 今晨隔夜波幅 < 近 20 日隔夜波幅均值 × ratio → NO_TRADE
+    if cfg.min_on_range_ratio > 0 and on_map and overnight_high is not None:
+        ranges = [h - l for _d, (h, l) in sorted(on_map.items())]
+        recent = ranges[-21:-1] if len(ranges) > 1 else []
+        if recent:
+            avg_range = sum(recent) / len(recent)
+            today_range = overnight_high - overnight_low
+            if today_range < avg_range * cfg.min_on_range_ratio:
+                return DailyBias(
+                    direction="NO_TRADE",
+                    dealing_range=dr,
+                    dol_level=None,
+                    reason=(f"隔夜波幅 {today_range:.1f} 點 < 近20日均值 "
+                            f"{avg_range:.1f} × {cfg.min_on_range_ratio}（低波動日不交易）"),
+                    swing_highs=swing_highs,
+                    swing_lows=swing_lows,
+                )
+
     # 20 日各日高低列表（水位素材）
     daily_highs = [b.high for b in recent_daily]
     daily_lows = [b.low for b in recent_daily]
