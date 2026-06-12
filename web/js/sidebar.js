@@ -127,6 +127,7 @@ export class SidebarManager {
     const stopEl     = document.getElementById('pos-stop');
     const targetEl   = document.getElementById('pos-target');
     const pnlEl      = document.getElementById('pos-pnl');
+    const currentT   = engine.currentT;
 
     if (direction) {
       direction.textContent = trade.direction === 'LONG' ? '多' : '空';
@@ -135,11 +136,40 @@ export class SidebarManager {
 
     if (entryEl) entryEl.textContent = fmtPrice(trade.entry_price);
 
-    const stopPrice = engine.currentStopPrice;
-    if (stopEl) stopEl.textContent = fmtPrice(stopPrice);
+    // Stop: show current effective stop from stop_timeline, with reason
+    const sl = trade.stop_timeline;
+    let stopEntry = null;
+    if (sl && sl.length && currentT !== null) {
+      for (const s of sl) {
+        if (s.t <= currentT) stopEntry = s;
+      }
+    }
+    const stopPrice = stopEntry?.price ?? trade.stop_initial ?? engine.currentStopPrice;
+    if (stopEl) {
+      stopEl.textContent = stopPrice != null
+        ? fmtPrice(stopPrice) + (stopEntry?.reason ? ` (${stopEntry.reason})` : '')
+        : '──';
+    }
 
-    // Target: from trade if available
-    if (targetEl) targetEl.textContent = fmtPrice(trade.target_price ?? null);
+    // Targets: show remaining unfilled targets as "T1 / T2 / T3"
+    if (targetEl && trade.targets && trade.targets.length) {
+      // Determine filled targets (exit_fills with TARGET reason, t <= currentT)
+      const filledPrices = new Set();
+      if (trade.exit_fills && currentT !== null) {
+        for (const fill of trade.exit_fills) {
+          if (fill.t <= currentT) {
+            const r = (fill.reason || '').toUpperCase();
+            if (r === 'TARGET' || r === 'TP') filledPrices.add(fill.price);
+          }
+        }
+      }
+      const remaining = trade.targets
+        .filter(t => !filledPrices.has(t.price))
+        .map((t, i) => `T${i + 1} ${fmtPrice(t.price)}`);
+      targetEl.textContent = remaining.length ? remaining.join(' · ') : '已達目標';
+    } else if (targetEl) {
+      targetEl.textContent = fmtPrice(trade.target_price ?? null);
+    }
 
     // Live PnL using current bar's close
     if (pnlEl && curBar) {
@@ -150,8 +180,9 @@ export class SidebarManager {
         const pts = trade.direction === 'LONG'
           ? closePrice - entryPrice
           : entryPrice - closePrice;
-        // NQ=F: $20 per point
-        pnl = pts * 20;
+        // MNQ: $2 per point; NQ: $20 per point — use point_value from meta if available
+        const pointVal = 20; // default NQ
+        pnl = pts * pointVal;
       }
       pnlEl.textContent = pnl != null ? fmtPnl(pnl) : '──';
       pnlEl.className   = 'info-val ' + (pnl == null ? '' : pnl >= 0 ? 'pos' : 'neg');

@@ -227,20 +227,26 @@ class DayResult:
         # trades
         trades_out = []
         trade_id = 1
+        strat_moves = getattr(self.strategy, "stop_moves", {}) if self.strategy else {}
+        strat_targets = getattr(self.strategy, "bracket_targets", {}) if self.strategy else {}
         for t in self.closed_trades:
-            stop_tl = []
-            # We only have final stop; strategy may have moved it
-            # For now emit single entry
+            stop_initial = (t.entry_price - t.initial_stop_distance if t.side == "BUY"
+                            else t.entry_price + t.initial_stop_distance)
+            stop_tl = [{"t": _ts(t.entry_time), "price": stop_initial, "reason": "初始停損"}]
+            for m in strat_moves.get(t.bracket_id, []):
+                stop_tl.append({"t": _ts(m["t_utc"]), "price": m["price"], "reason": m["reason"]})
+            targets_out = [
+                {"price": p, "qty": q} for p, q in strat_targets.get(t.bracket_id, [])
+            ]
             trades_out.append({
                 "id": f"T{trade_id}",
                 "side": t.side,
                 "entry_t": _ts(t.entry_time),
                 "entry_price": t.entry_price,
                 "qty": t.qty,
-                "stop_initial": t.entry_price - t.initial_stop_distance if t.side == "BUY"
-                                else t.entry_price + t.initial_stop_distance,
+                "stop_initial": stop_initial,
                 "stop_timeline": stop_tl,
-                "targets": [],
+                "targets": targets_out,
                 "exit_fills": [
                     {
                         "t": _ts(f.ts),
@@ -265,11 +271,11 @@ class DayResult:
 
         result = {
             "meta": {
-                "symbol": "NQ=F",
+                "symbol": f"{getattr(cfg, 'instrument', 'NQ')}（資料源 NQ=F）",
                 "date": str(self.date),
                 "window": getattr(cfg, "window", "RTH_OPEN_3H"),
                 "tick": TICK,
-                "point_value": POINT_VALUE,
+                "point_value": getattr(cfg, "point_value", POINT_VALUE),
                 "config": cfg.as_dict(),
                 "bias_direction": bias.direction,
                 "bias_reason": bias.reason,

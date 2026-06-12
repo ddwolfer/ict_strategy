@@ -87,7 +87,7 @@ class TestSellProgram:
 
     def test_direction_is_short(self):
         history = self._make_bars()
-        cfg = StrategyConfig(min_dol_points=0.5)
+        cfg = StrategyConfig(bias_mode="m1_program", min_dol_points=0.5)
         result = compute_bias(history, cfg)
         assert result.direction == "SHORT", (
             f"Expected SHORT, got {result.direction}\nReason: {result.reason}"
@@ -95,7 +95,7 @@ class TestSellProgram:
 
     def test_dol_level_below_close(self):
         history = self._make_bars()
-        cfg = StrategyConfig(min_dol_points=0.5)
+        cfg = StrategyConfig(bias_mode="m1_program", min_dol_points=0.5)
         result = compute_bias(history, cfg)
         if result.direction == "SHORT":
             assert result.dol_level is not None
@@ -103,7 +103,7 @@ class TestSellProgram:
 
     def test_swing_lows_captured(self):
         history = self._make_bars()
-        cfg = StrategyConfig(min_dol_points=0.5)
+        cfg = StrategyConfig(bias_mode="m1_program", min_dol_points=0.5)
         result = compute_bias(history, cfg)
         # Must have detected the swing low at 228
         # (direction might be SHORT or NO_TRADE but swing_lows should be populated)
@@ -128,7 +128,7 @@ class TestSellProgram:
         ]
         for i, (o, h, lo, c) in enumerate(pattern):
             bars.extend(_make_rth_day(i, o, h, lo, c))
-        cfg = StrategyConfig(min_dol_points=0.5)
+        cfg = StrategyConfig(bias_mode="m1_program", min_dol_points=0.5)
         result = compute_bias(bars, cfg)
         assert result.direction == "NO_TRADE"
 
@@ -171,7 +171,7 @@ class TestBuyProgram:
 
     def test_direction_is_long(self):
         history = self._make_bars()
-        cfg = StrategyConfig(min_dol_points=0.5)
+        cfg = StrategyConfig(bias_mode="m1_program", min_dol_points=0.5)
         result = compute_bias(history, cfg)
         assert result.direction == "LONG", (
             f"Expected LONG, got {result.direction}\nReason: {result.reason}"
@@ -179,7 +179,7 @@ class TestBuyProgram:
 
     def test_dol_level_above_close(self):
         history = self._make_bars()
-        cfg = StrategyConfig(min_dol_points=0.5)
+        cfg = StrategyConfig(bias_mode="m1_program", min_dol_points=0.5)
         result = compute_bias(history, cfg)
         if result.direction == "LONG":
             assert result.dol_level is not None
@@ -203,7 +203,7 @@ class TestBuyProgram:
         ]
         for i, (o, h, lo, c) in enumerate(pattern):
             bars.extend(_make_rth_day(i, o, h, lo, c))
-        cfg = StrategyConfig(min_dol_points=0.5)
+        cfg = StrategyConfig(bias_mode="m1_program", min_dol_points=0.5)
         result = compute_bias(bars, cfg)
         assert result.direction == "NO_TRADE"
 
@@ -226,19 +226,19 @@ class TestNoTrade:
         assert "不足" in result.reason
 
     def test_flat_market_no_strict_swing(self):
-        """所有日 K 高低完全相同 → 無嚴格 swing → NO_TRADE。"""
+        """所有日 K 高低完全相同 → 無嚴格 swing → NO_TRADE（m1_program 模式）。"""
         bars = []
         for i in range(10):
             bars.extend(_make_rth_day(i, 100.0, 102.0, 98.0, 100.0))
-        result = compute_bias(bars)
+        result = compute_bias(bars, StrategyConfig(bias_mode="m1_program"))
         assert result.direction == "NO_TRADE"
 
     def test_no_swing_lows_for_sell(self):
-        """連續上漲日 K，無 swing low 確認 → sell program 無法觸發。"""
+        """連續上漲日 K，無 swing low 確認 → sell program 無法觸發（m1_program 模式）。"""
         bars = []
         for i in range(10):
             bars.extend(_make_rth_day(i, 100.0 + i, 105.0 + i, 99.0 + i, 103.0 + i))
-        result = compute_bias(bars)
+        result = compute_bias(bars, StrategyConfig(bias_mode="m1_program"))
         # Might have swing highs but not lows, and close > eq → no sell program
         assert result.direction in ("NO_TRADE", "LONG")
 
@@ -262,13 +262,60 @@ class TestDolDistance:
         for i, (o, h, lo, c) in enumerate(pattern):
             bars.extend(_make_rth_day(i, o, h, lo, c))
 
-        # Normal config: should be SHORT
-        cfg_normal = StrategyConfig(min_dol_points=0.5)
+        # Normal config: should be SHORT (m1_program mode)
+        cfg_normal = StrategyConfig(bias_mode="m1_program", min_dol_points=0.5)
         result_normal = compute_bias(bars, cfg_normal)
         # If SHORT, then large min_dol_points should give NO_TRADE
         if result_normal.direction == "SHORT":
-            cfg_large = StrategyConfig(min_dol_points=9999.0)
+            cfg_large = StrategyConfig(bias_mode="m1_program", min_dol_points=9999.0)
             result_large = compute_bias(bars, cfg_large)
             assert result_large.direction == "NO_TRADE"
             assert ("DOL" in result_large.reason or "距" in result_large.reason or
                     "min_dol" in result_large.reason)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# v2 新增：m13_raid 雙向模式測試
+# ═══════════════════════════════════════════════════════════════════════════
+
+class TestM13RaidBias:
+    """m13_raid 模式：direction=BOTH，填入盤前素材。"""
+
+    def _make_bars(self) -> list[Bar]:
+        """至少 3 個交易日的 RTH bars。"""
+        bars = []
+        for i in range(5):
+            bars.extend(_make_rth_day(i, 20000.0, 20100.0, 19900.0, 20050.0))
+        return bars
+
+    def test_direction_is_both(self):
+        """m13_raid 預設 → direction=BOTH。"""
+        bars = self._make_bars()
+        result = compute_bias(bars)  # 預設 bias_mode="m13_raid"
+        assert result.direction == "BOTH"
+
+    def test_dealing_range_computed(self):
+        """BOTH 模式仍計算 dealing range。"""
+        bars = self._make_bars()
+        result = compute_bias(bars)
+        assert result.dealing_range is not None
+        assert result.dealing_range.high > result.dealing_range.low
+
+    def test_prev_day_levels_filled(self):
+        """BOTH 模式填入前日高低。"""
+        bars = self._make_bars()
+        result = compute_bias(bars)
+        assert result.prev_day_high is not None
+        assert result.prev_day_low is not None
+        assert result.prev_day_high >= result.prev_day_low
+
+    def test_dol_level_is_none(self):
+        """BOTH 模式 dol_level=None（由掃蕩後動態決定）。"""
+        bars = self._make_bars()
+        result = compute_bias(bars)
+        assert result.dol_level is None
+
+    def test_empty_history_returns_no_trade(self):
+        """空歷史 → NO_TRADE（即使 m13_raid 模式）。"""
+        result = compute_bias([])
+        assert result.direction == "NO_TRADE"

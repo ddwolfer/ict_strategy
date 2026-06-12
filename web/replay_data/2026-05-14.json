@@ -1,10 +1,10 @@
 {
   "meta": {
-    "symbol": "NQ=F",
+    "symbol": "MNQ（資料源 NQ=F）",
     "date": "2026-05-14",
     "window": "RTH_OPEN_3H",
     "tick": 0.25,
-    "point_value": 20.0,
+    "point_value": 2.0,
     "config": {
       "bias_mode": "m13_raid",
       "entry_window": [
@@ -21,6 +21,7 @@
       "entry_timeout_bars": 20,
       "displacement_window": 20,
       "displacement_mult": 2.0,
+      "mss_confirm": "displacement",
       "entry_level": "proximal",
       "fvg_filter": "leg_equilibrium",
       "stop_mode": "fvg_candle",
@@ -45,8 +46,8 @@
       "daily_loss_limit_r": -2.0,
       "risk_per_trade_pct": 0.5,
       "account_equity": 50000.0,
+      "instrument": "MNQ",
       "slippage_ticks": 1,
-      "commission_per_side": 2.25,
       "swing_n": 1,
       "use_day_filter": false,
       "fvg_half_filter": false,

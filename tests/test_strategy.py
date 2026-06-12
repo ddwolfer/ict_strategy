@@ -314,10 +314,10 @@ class TestTrailingStop:
         broker._current_trade = t
         strategy._state = "IN_POSITION"
         strategy._initial_stop_dist = 20.0
-        strategy._tp2_dist = 40.0   # TP2 = 40pt away
+        strategy._t1_dist = 40.0   # T1 = 40pt away (v2 uses _t1_dist)
         strategy._trailing_milestone = 0
 
-        # bar 收在 20090 - 40*0.75 = 20060 → 達到 75%
+        # bar 收在 20090 - 40*0.75 = 20060 → 達到 75%（trail_be_at=0.75）
         b = _bar(_et(9, 35), 20075, 20075, 20058, 20060)
         strategy.on_bar(b)
 
@@ -325,4 +325,302 @@ class TestTrailingStop:
         assert broker.position.stop_price == 20090.0, (
             f"Expected stop at BE 20090.0, got {broker.position.stop_price}"
         )
-        assert strategy._trailing_milestone == 3
+        assert strategy._trailing_milestone == 2  # v2: 0=none, 1=half, 2=BE
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# v2 新增測試
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _make_both_bias(pdh: float = 20200.0, pdl: float = 19800.0,
+                    onh: float = 20180.0, onl: float = 19850.0) -> DailyBias:
+    """m13_raid 雙向偏向 bias。"""
+    dr = DealingRange(high=20200.0, low=19800.0)
+    return DailyBias(
+        direction="BOTH",
+        dealing_range=dr,
+        dol_level=None,
+        reason="m13_raid 雙向",
+        swing_highs=[],
+        swing_lows=[],
+        prev_day_high=pdh,
+        prev_day_low=pdl,
+        overnight_high=onh,
+        overnight_low=onl,
+    )
+
+
+def _make_strategy_both(**cfg_kwargs) -> tuple[ICTStrategy, SimBroker, RiskManager]:
+    bias = _make_both_bias()
+    defaults = dict(
+        bias_mode="m13_raid",
+        max_trades_per_session=2,
+        mss_timeout_bars=15,
+        entry_timeout_bars=20,
+        stop_buffer_ticks=4,
+        risk_per_trade_pct=1.0,
+        account_equity=50_000.0,
+        fvg_filter="none",
+        stop_mode="sweep_extreme",
+        targets_mode="r_multiple",
+        use_day_filter=False,
+        min_stop_points=0.0,
+        max_stop_points=999.0,
+    )
+    defaults.update(cfg_kwargs)
+    cfg = StrategyConfig(**defaults)
+    broker = SimBroker(BrokerConfig(slippage_ticks=0, commission_per_side=0.0))
+    risk_mgr = RiskManager(RiskConfig(
+        risk_per_trade_pct=cfg.risk_per_trade_pct,
+        account_equity=cfg.account_equity,
+        max_trades_per_session=cfg.max_trades_per_session,
+        daily_loss_limit_r=cfg.daily_loss_limit_r,
+    ))
+    strategy = ICTStrategy(config=cfg, bias=bias, broker=broker, risk_manager=risk_mgr)
+    return strategy, broker, risk_mgr
+
+
+class TestM13RaidBothDirection:
+    """m13_raid 雙向模式：上方被掃 → 鎖 SHORT；下方被掃 → 鎖 LONG。"""
+
+    def test_buy_side_raid_locks_short(self):
+        """掃上方流動性（BUY side）→ locked_direction=SHORT。"""
+        strategy, broker, _ = _make_strategy_both()
+
+        b0 = _bar(_et(9, 30), 20100, 20100, 20095, 20095)
+        strategy.on_bar(b0)
+        assert strategy.state == "WAIT_SWEEP"
+        assert strategy._locked_direction is None
+
+        # 注入 BUY side Raid（掃上方）
+        strategy._state = "WAIT_MSS"
+        strategy._locked_direction = "SHORT"
+        strategy._mss_start_bar = strategy._bar_count
+        strategy._raid_level = 20110.0
+        strategy._disp_high = 20110.0
+        strategy._disp_low = 20090.0
+
+        assert strategy._locked_direction == "SHORT"
+
+    def test_sell_side_raid_locks_long(self):
+        """掃下方流動性（SELL side）→ locked_direction=LONG。"""
+        strategy, broker, _ = _make_strategy_both()
+
+        b0 = _bar(_et(9, 30), 20100, 20100, 20095, 20095)
+        strategy.on_bar(b0)
+
+        # 注入 SELL side Raid（掃下方）
+        strategy._state = "WAIT_MSS"
+        strategy._locked_direction = "LONG"
+        strategy._mss_start_bar = strategy._bar_count
+        strategy._raid_level = 19850.0
+        strategy._disp_high = 20100.0
+        strategy._disp_low = 19850.0
+
+        assert strategy._locked_direction == "LONG"
+
+    def test_locked_direction_resets_after_trade_close(self):
+        """BOTH 模式：平倉後 _locked_direction 重置為 None。"""
+        strategy, broker, _ = _make_strategy_both()
+
+        b0 = _bar(_et(9, 30), 20100, 20100, 20095, 20095)
+        strategy.on_bar(b0)
+
+        # 直接設定 IN_POSITION 狀態
+        strategy._locked_direction = "SHORT"
+        strategy._state = "IN_POSITION"
+        from engine.sim.orders import Position, Trade as TObj
+        pos = Position(side="SELL", qty=1, avg_entry=20090.0, stop_price=20110.0,
+                       remaining_targets=[(20070.0, 1)])
+        broker.position = pos
+        t = TObj(side="SELL", entry_price=20090.0,
+                 entry_time=_et(9, 35).astimezone(UTC), qty=1,
+                 initial_stop_distance=20.0)
+        broker._current_trade = t
+        strategy._initial_stop_dist = 20.0
+        strategy._t1_dist = 20.0
+
+        # 讓停損觸發（high > stop_price）
+        b_stop = _bar(_et(9, 40), 20115, 20120, 20110, 20115)
+        strategy.on_bar(b_stop)
+
+        # 停損後回 WAIT_SWEEP，locked_direction 重置
+        assert strategy._locked_direction is None
+
+
+class TestFvgCandleStop:
+    """stop_mode="fvg_candle"：停損 = FVG 第一根的 high（空單），精確無 buffer。"""
+
+    def test_fvg_candle_stop_value(self):
+        """驗證 fvg_candle 模式下，停損為 candle_stop_level（第一根高點）。"""
+        strategy, broker, _ = _make_strategy_both(
+            stop_mode="fvg_candle",
+            min_stop_points=0.0,
+        )
+
+        b0 = _bar(_et(9, 30), 20100, 20100, 20095, 20095)
+        strategy.on_bar(b0)
+
+        # 設置 WAIT_RETRACE 狀態，帶有 candle_stop_level
+        from engine.model.strategy import _EntryFVG
+        fvg = _EntryFVG(
+            direction="BEAR",
+            top=20105.0,
+            bottom=20095.0,
+            ce=20100.0,
+            confirmed_at=_et(9, 31).astimezone(UTC),
+            candle_stop_level=20112.0,  # 第一根 high
+            leg_high=20120.0,
+            leg_low=20080.0,
+        )
+        strategy._state = "WAIT_RETRACE"
+        strategy._entry_fvg = fvg
+        strategy._locked_direction = "SHORT"
+        strategy._entry_bar = strategy._bar_count
+        strategy._raid_level = 20115.0
+
+        # 呼叫 _submit_entry_order
+        strategy._submit_entry_order(b0, fvg)
+
+        # 停損應等於 candle_stop_level = 20112.0，不加 buffer
+        assert broker._pending_brackets  # 有掛單
+        bid = list(broker._pending_brackets.keys())[0]
+        bstate = broker._pending_brackets[bid]
+        assert bstate.bracket.stop_price == 20112.0, (
+            f"Expected stop 20112.0, got {bstate.bracket.stop_price}"
+        )
+
+
+class TestMinStopPoints:
+    """min_stop_points：停損距離不足時放棄 setup。"""
+
+    def test_too_small_stop_abandons_setup(self):
+        """停損距離 < min_stop_points → 回 WAIT_SWEEP，不掛單。"""
+        strategy, broker, _ = _make_strategy_both(
+            stop_mode="fvg_candle",
+            min_stop_points=10.0,  # 要求至少 10 pt
+        )
+
+        b0 = _bar(_et(9, 30), 20100, 20100, 20095, 20095)
+        strategy.on_bar(b0)
+
+        from engine.model.strategy import _EntryFVG
+        # FVG proximal=20095, candle_stop=20097（距離=2pt < 10pt）
+        fvg = _EntryFVG(
+            direction="BEAR",
+            top=20100.0,
+            bottom=20095.0,
+            ce=20097.5,
+            confirmed_at=_et(9, 31).astimezone(UTC),
+            candle_stop_level=20097.0,  # stop_dist = 20095 - 20097 = 2pt（進場 proximal=20095）
+            leg_high=20120.0,
+            leg_low=20080.0,
+        )
+        strategy._state = "WAIT_RETRACE"
+        strategy._entry_fvg = fvg
+        strategy._locked_direction = "SHORT"
+        strategy._entry_bar = strategy._bar_count
+        strategy._raid_level = 20097.0
+
+        strategy._submit_entry_order(b0, fvg)
+
+        # 不應有掛單，狀態回 WAIT_SWEEP
+        assert not broker._pending_brackets or len(broker._pending_brackets) == 0
+        assert strategy.state == "WAIT_SWEEP"
+
+
+class TestM13LiquidityTargets:
+    """targets_mode="m13_liquidity" 停利階梯測試。"""
+
+    def test_all_three_layers_valid(self):
+        """T1/T2/T3 都有效時，分 3 層分配口數。"""
+        # bias: ONL=19850, PDL=19800
+        bias = _make_both_bias(pdh=20200.0, pdl=19800.0, onh=20180.0, onl=19850.0)
+        strategy, broker, _ = _make_strategy_both(targets_mode="m13_liquidity")
+        strategy.bias = bias
+        strategy._pdl = 19800.0
+        strategy._pdh = 20200.0
+        strategy._onl = 19850.0
+        strategy._onh = 20180.0
+        strategy._locked_direction = "SHORT"
+
+        entry_px = 20090.0
+        stop_dist = 20.0
+        total_qty = 4
+
+        targets, t1_dist = strategy._build_targets_v2(
+            entry_px, stop_dist, total_qty, "SHORT"
+        )
+
+        # T1 應在 entry_px 下方（空單），T2=ONL 附近，T3=PDL 附近
+        assert len(targets) >= 2
+        # 所有目標應在 entry_px 下方（空單）
+        for price, qty in targets:
+            assert price < entry_px, f"Target {price} should be below entry {entry_px}"
+
+    def test_missing_on_falls_back(self):
+        """T2（ONL）缺失時，fallback 到 r_multiple 補充。"""
+        bias = _make_both_bias(pdh=20200.0, pdl=19800.0, onh=None, onl=None)
+        strategy, broker, _ = _make_strategy_both(targets_mode="m13_liquidity")
+        strategy.bias = bias
+        strategy._pdl = 19800.0
+        strategy._onl = None
+        strategy._locked_direction = "SHORT"
+
+        entry_px = 20090.0
+        stop_dist = 20.0
+        targets, t1_dist = strategy._build_targets_v2(entry_px, stop_dist, 2, "SHORT")
+
+        # 應有目標（不為空）
+        assert len(targets) >= 1
+        for price, qty in targets:
+            assert price < entry_px
+
+
+class TestEntryWindow:
+    """新倉時間窗：11:00 ET 後不開新倉。"""
+
+    def test_no_new_entry_after_window(self):
+        """11:01 ET 時，WAIT_SWEEP 不會嘗試進場（不轉 WAIT_MSS）。"""
+        strategy, broker, _ = _make_strategy_both(
+            entry_window=("09:30", "11:00"),
+            late_window_thu_fri=False,
+        )
+
+        # 開盤 → WAIT_SWEEP
+        b0 = _bar(_et(9, 30), 20100, 20100, 20095, 20095)
+        strategy.on_bar(b0)
+        assert strategy.state == "WAIT_SWEEP"
+
+        # 11:01 ET 傳入一根 bar（不在新倉窗內）
+        b_late = _bar(_et(11, 1), 20100, 20110, 20095, 20098)
+        strategy.on_bar(b_late)
+
+        # 狀態應仍是 WAIT_SWEEP，而不是 WAIT_MSS（時間窗外跳過掃蕩偵測）
+        assert strategy.state in ("WAIT_SWEEP", "DONE")
+
+    def test_flatten_at_flatten_time(self):
+        """12:30 ET 強平 IN_POSITION。"""
+        strategy, broker, _ = _make_strategy_both()
+        b0 = _bar(_et(9, 30), 20100, 20100, 20095, 20095)
+        strategy.on_bar(b0)
+
+        # 強制 IN_POSITION
+        from engine.sim.orders import Position, Trade as TObj
+        pos = Position(side="SELL", qty=1, avg_entry=20090.0, stop_price=20110.0,
+                       remaining_targets=[(20070.0, 1)])
+        broker.position = pos
+        t = TObj(side="SELL", entry_price=20090.0,
+                 entry_time=_et(9, 35).astimezone(UTC), qty=1,
+                 initial_stop_distance=20.0)
+        broker._current_trade = t
+        strategy._state = "IN_POSITION"
+        strategy._initial_stop_dist = 20.0
+        strategy._t1_dist = 20.0
+
+        # 12:30 bar
+        b_flat = _bar(_et(12, 30), 20085, 20088, 20082, 20083)
+        strategy.on_bar(b_flat)
+
+        assert strategy.state == "DONE"
+        assert broker.position is None

@@ -134,6 +134,12 @@ class StrategyConfig:
     # 位移判定（偵測器 §5）：實體 >= mult × 近 window 根平均實體
     displacement_window: int = 20
     displacement_mult: float = 2.0
+    # MSS 確認方式：
+    #   displacement  = 位移棒（實體 z-score 門檻）收破 swing（v2 預設）
+    #   fvg_evidence  = 收破 swing 即可，但位移段必須留下 FVG（M13 原文的
+    #                   「rapid MSS + displacement 形成 FVG」——FVG 本身就是
+    #                   位移證據，不另設實體門檻）
+    mss_confirm: Literal["displacement", "fvg_evidence"] = "displacement"
     entry_level: Literal["proximal", "ce", "ote62"] = "proximal"
 
     # ── FVG / 停損過濾 ────────────────────────────────────────────────────────
@@ -157,9 +163,20 @@ class StrategyConfig:
     risk_per_trade_pct: float = 0.5
     account_equity: float = 50_000.0
 
-    # ── 撮合 ──────────────────────────────────────────────────────────────────
+    # ── 商品與撮合 ────────────────────────────────────────────────────────────
+    # MNQ = 微型那斯達克期貨（同 NQ100 指數，1/10 合約，每點 $2）。
+    # $50k 帳戶以 0.5% 風險做 1 分 K ICT，大 NQ（每點 $20）只付得起 12.5 點
+    # 停損，幾乎所有 setup 都開不出 1 口；MNQ 才是此資金規模的合理工具。
+    instrument: Literal["MNQ", "NQ"] = "MNQ"
     slippage_ticks: int = 1
-    commission_per_side: float = 2.25
+
+    @property
+    def point_value(self) -> float:
+        return 2.0 if self.instrument == "MNQ" else 20.0
+
+    @property
+    def commission_per_side(self) -> float:
+        return 0.74 if self.instrument == "MNQ" else 2.25
 
     # ── 偵測器參數 ───────────────────────────────────────────────────────────
     swing_n: int = 1   # SwingDetector n=1 → 3-bar fractal

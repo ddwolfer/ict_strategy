@@ -145,10 +145,12 @@ class ICTStrategy:
             n=config.swing_n,
             r=config.raid_recover_bars,
         )
+        # fvg_evidence 模式：實體門檻歸零（任何收破 swing 都先當候選），
+        # 位移證據改由「位移段留下 FVG」承擔（_find_mss_fvg 的 raid 後新鮮度檢查）
         self._mss_det = MSSDetector(
             n=config.swing_n,
             window=config.displacement_window,
-            mult=config.displacement_mult,
+            mult=0.0 if config.mss_confirm == "fvg_evidence" else config.displacement_mult,
         )
         self._fvg_det = FVGDetector()
 
@@ -180,6 +182,10 @@ class ICTStrategy:
         self._initial_stop_dist: float = 0.0
         self._t1_dist: float = 0.0        # T1 距離（trailing 基準）
         self._trailing_milestone: int = 0  # 0=未觸發, 1=半距, 2=BE
+
+        # 對外記錄（決策日誌用）：bracket_id → 停損移動 / 停利目標
+        self.stop_moves: dict[str, list[dict]] = {}
+        self.bracket_targets: dict[str, list[tuple[float, int]]] = {}
 
         # 每節交易記錄
         self._session_state = SessionState()
@@ -443,9 +449,12 @@ class ICTStrategy:
 
         v2：同時從 FVGDetector._buf 取得第一棒的極值作為 candle_stop_level。
         """
+        raid_t = self._last_raid.confirmed_at if self._last_raid else None
         matching = [
             fvg for fvg in self._fvg_det._active
             if fvg.direction == direction and not fvg.filled
+            # 進場 FVG 必須來自掃蕩後的位移段，不能撿掃蕩前的舊缺口
+            and (raid_t is None or fvg.anchor >= raid_t)
         ]
         if not matching:
             return None
@@ -589,8 +598,20 @@ class ICTStrategy:
         if self.config.thursday_size_factor != 1.0 and et.strftime("%a") == "Thu":
             size_factor = self.config.thursday_size_factor
 
-        qty = self.risk.size_for(stop_dist)
-        qty = max(1, int(qty * size_factor))
+        qty = int(self.risk.size_for(stop_dist) * size_factor)
+        if qty < 1:
+            # 風險預算開不出 1 口 → 誠實放棄，不可偷偷加大風險
+            self._transition(
+                "WAIT_SWEEP", bar,
+                f"放棄 setup：停損 {stop_dist:.2f} pt 在 "
+                f"{self.config.risk_per_trade_pct}% 風險下開不出 1 口"
+                f"（每口風險 ${stop_dist * self.risk.cfg.point_value:.0f}）",
+                {"stop_dist": stop_dist, "qty": 0},
+            )
+            if self._direction_bias == "BOTH":
+                self._locked_direction = None
+                self._raided_sides.clear()
+            return
 
         # ── 停利目標 ─────────────────────────────────────────────────────────
         targets, t1_dist = self._build_targets_v2(entry_px, stop_dist, qty, direction)
@@ -600,6 +621,7 @@ class ICTStrategy:
         bracket = Bracket(entry=order, stop_price=stop_px, targets=targets)
 
         self._pending_bracket_id = self.broker.submit(bracket)
+        self.bracket_targets[self._pending_bracket_id] = list(targets)
         self._entry_price = entry_px
         self._initial_stop_dist = stop_dist
         self._t1_dist = t1_dist
@@ -900,14 +922,22 @@ class ICTStrategy:
             self._trailing_milestone = 1
 
     def _update_stop(self, pos, new_stop: float, bar: Bar, msg: str) -> None:
-        """更新 position 停損價（只允許往有利方向移動）。"""
+        """更新 position 停損價（只允許往有利方向移動），並記錄移動時點。"""
         direction = self._effective_direction()
+        moved = False
         if direction == "SHORT":
             if new_stop < pos.stop_price:
                 pos.stop_price = new_stop
+                moved = True
         else:
             if new_stop > pos.stop_price:
                 pos.stop_price = new_stop
+                moved = True
+        if moved:
+            self.stop_moves.setdefault(pos.bracket_id, []).append(
+                {"t_utc": bar.ts_utc, "price": new_stop, "reason": msg}
+            )
+            self._transition("IN_POSITION", bar, msg, {"new_stop": new_stop})
 
     # ── Broker 事件處理 ───────────────────────────────────────────────────
 

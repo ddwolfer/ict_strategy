@@ -1,10 +1,10 @@
 {
   "meta": {
-    "symbol": "NQ=F",
+    "symbol": "MNQ（資料源 NQ=F）",
     "date": "2026-05-20",
     "window": "RTH_OPEN_3H",
     "tick": 0.25,
-    "point_value": 20.0,
+    "point_value": 2.0,
     "config": {
       "bias_mode": "m13_raid",
       "entry_window": [
@@ -21,6 +21,7 @@
       "entry_timeout_bars": 20,
       "displacement_window": 20,
       "displacement_mult": 2.0,
+      "mss_confirm": "displacement",
       "entry_level": "proximal",
       "fvg_filter": "leg_equilibrium",
       "stop_mode": "fvg_candle",
@@ -45,8 +46,8 @@
       "daily_loss_limit_r": -2.0,
       "risk_per_trade_pct": 0.5,
       "account_equity": 50000.0,
+      "instrument": "MNQ",
       "slippage_ticks": 1,
-      "commission_per_side": 2.25,
       "swing_n": 1,
       "use_day_filter": false,
       "fvg_half_filter": false,
@@ -3331,6 +3332,13 @@
         "text": "TARGET 29141.50 x1"
       },
       {
+        "t": 1779284160,
+        "kind": "EXIT_STOP",
+        "side": "BULL",
+        "price": 29056.5,
+        "text": "STOP 29056.50 x2"
+      },
+      {
         "t": 1779284400,
         "kind": "MSS",
         "side": "BULL",
@@ -3443,20 +3451,20 @@
     {
       "t": 1779284100,
       "state": "IN_POSITION",
-      "waiting_for": "限價單成交 @ 29095.50，持倉 1 口，停損 N/A，子窗=09:30-10:00",
+      "waiting_for": "限價單成交 @ 29095.50，持倉 3 口，停損 29056.5，子窗=09:30-10:00",
       "detail": {
         "entry_price": 29095.5,
-        "qty": 1,
+        "qty": 3,
         "entry_subwindow": "09:30-10:00"
       }
     },
     {
-      "t": 1779284100,
+      "t": 1779284160,
       "state": "WAIT_SWEEP",
-      "waiting_for": "交易結束（TARGET，+1.18R），可再進場，等下一個掃蕩",
+      "waiting_for": "交易結束（STOP，-0.27R），可再進場，等下一個掃蕩",
       "detail": {
-        "exit_reason": "TARGET",
-        "r": 1.1794871794871795
+        "exit_reason": "STOP",
+        "r": -0.2735042735043046
       }
     },
     {
@@ -3588,7 +3596,7 @@
       "type": "LIMIT",
       "side": "BUY",
       "price": 29095.5,
-      "qty": 1,
+      "qty": 3,
       "status": "FILLED",
       "t_fill": 1779284100,
       "fill_price": 29095.5
@@ -3600,21 +3608,46 @@
       "side": "BUY",
       "entry_t": 1779284100,
       "entry_price": 29095.5,
-      "qty": 1,
+      "qty": 3,
       "stop_initial": 29056.5,
-      "stop_timeline": [],
-      "targets": [],
+      "stop_timeline": [
+        {
+          "t": 1779284100,
+          "price": 29056.5,
+          "reason": "初始停損"
+        }
+      ],
+      "targets": [
+        {
+          "price": 29141.5,
+          "qty": 1
+        },
+        {
+          "price": 29186.0,
+          "qty": 1
+        },
+        {
+          "price": 29210.0,
+          "qty": 1
+        }
+      ],
       "exit_fills": [
         {
           "t": 1779284100,
           "price": 29141.5,
           "qty": 1,
           "reason": "TARGET"
+        },
+        {
+          "t": 1779284160,
+          "price": 29056.5,
+          "qty": 2,
+          "reason": "STOP"
         }
       ],
-      "pnl_pts": 46.0,
-      "pnl_usd": 915.5,
-      "r_multiple": 1.1795,
+      "pnl_pts": -32.0,
+      "pnl_usd": -68.44,
+      "r_multiple": -0.2735,
       "ambiguous": false
     }
   ],
@@ -4096,891 +4129,891 @@
     },
     {
       "t": 1779284100,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 50000.0,
+      "total": 49885.0
     },
     {
       "t": 1779284160,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284220,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284280,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284340,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284400,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284460,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284520,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284580,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284640,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284700,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284760,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284820,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284880,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779284940,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285000,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285060,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285120,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285180,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285240,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285300,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285360,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285420,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285480,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285540,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285600,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285660,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285720,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285780,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285840,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285900,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779285960,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286020,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286080,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286140,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286200,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286260,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286320,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286380,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286440,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286500,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286560,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286620,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286680,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286740,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286800,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286860,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286920,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779286980,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287040,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287100,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287160,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287220,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287280,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287340,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287400,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287460,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287520,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287580,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287640,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287700,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287760,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287820,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287880,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779287940,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288000,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288060,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288120,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288180,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288240,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288300,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288360,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288420,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288480,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288540,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288600,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288660,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288720,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288780,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288840,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288900,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779288960,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289020,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289080,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289140,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289200,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289260,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289320,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289380,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289440,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289500,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289560,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289620,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289680,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289740,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289800,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289860,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289920,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779289980,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290040,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290100,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290160,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290220,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290280,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290340,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290400,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290460,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290520,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290580,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290640,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290700,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290760,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290820,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290880,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779290940,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291000,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291060,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291120,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291180,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291240,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291300,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291360,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291420,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291480,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291540,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291600,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291660,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291720,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291780,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291840,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291900,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779291960,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292020,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292080,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292140,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292200,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292260,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292320,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292380,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292440,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292500,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292560,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292620,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292680,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292740,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292800,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292860,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292920,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779292980,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293040,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293100,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293160,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293220,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293280,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293340,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293400,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293460,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293520,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293580,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293640,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293700,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293760,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293820,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293880,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779293940,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779294000,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779294060,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779294120,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779294180,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779294240,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779294300,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779294360,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779294420,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779294480,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     },
     {
       "t": 1779294540,
-      "realized": 50915.5,
-      "total": 50915.5
+      "realized": 49931.56,
+      "total": 49931.56
     }
   ],
   "stats": {
     "trades": 1,
-    "wins": 1,
-    "losses": 0,
-    "win_rate": 1.0,
-    "gross_profit": 915.5,
-    "gross_loss": 0,
-    "profit_factor": null,
-    "total_r": 1.1795,
-    "pnl_usd": 915.5,
-    "max_drawdown_usd": 0.0,
+    "wins": 0,
+    "losses": 1,
+    "win_rate": 0.0,
+    "gross_profit": 0,
+    "gross_loss": 68.44,
+    "profit_factor": 0.0,
+    "total_r": -0.2735,
+    "pnl_usd": -68.44,
+    "max_drawdown_usd": 115.0,
     "ambiguous_count": 0
   }
 }

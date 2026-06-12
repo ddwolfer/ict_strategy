@@ -92,6 +92,7 @@ def run_day(
     broker_cfg = BrokerConfig(
         slippage_ticks=config.slippage_ticks,
         commission_per_side=config.commission_per_side,
+        point_value=config.point_value,
     )
     broker = SimBroker(broker_cfg)
 
@@ -100,6 +101,7 @@ def run_day(
         account_equity=initial_equity,
         max_trades_per_session=config.max_trades_per_session,
         daily_loss_limit_r=config.daily_loss_limit_r,
+        point_value=config.point_value,
     )
     risk_mgr = RiskManager(risk_cfg)
 

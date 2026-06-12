@@ -46,6 +46,26 @@ function toNYWallTimeDisplay(epochUtcSec) {
 // ── Update Loop ───────────────────────────────────────────────────────────────
 
 function onEngineUpdate(eng) {
+  try {
+    onEngineUpdateInner(eng);
+  } catch (err) {
+    // 任何更新錯誤都要可見，不准靜默凍結
+    console.error('[main] onEngineUpdate failed:', err);
+    let box = document.getElementById('runtime-error');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'runtime-error';
+      box.style.cssText =
+        'position:fixed;bottom:8px;left:8px;z-index:99;max-width:60vw;' +
+        'background:#2a0f0f;color:#f87171;border:1px solid #f87171;' +
+        'padding:6px 10px;font-size:11px;white-space:pre-wrap;';
+      document.body.appendChild(box);
+    }
+    box.textContent = '更新錯誤: ' + (err.stack || err.message || String(err));
+  }
+}
+
+function onEngineUpdateInner(eng) {
   if (!eng) return;
 
   const idx    = eng.currentIndex;
@@ -66,9 +86,12 @@ function onEngineUpdate(eng) {
   const visibleMarkers = eng.visibleMarkers;
   const visibleLevels  = eng.visibleLevels;
 
+  // loadData clears all priceLine handles (they become stale after setData)
   chartMgr.loadData(visibleBars);
   chartMgr.updateMarkers(visibleMarkers);
   chartMgr.updateLevels(visibleLevels, barT);
+  // Trade price lines: entry / stop (animated by stop_timeline) / targets
+  chartMgr.updateTradePriceLines(eng.activeTrade, barT);
 
   // ── Overlay ──
   overlayMgr.update(
@@ -203,10 +226,21 @@ speedSelect.addEventListener('change', () => {
   }
 });
 
+// Debounce slider via rAF — fires on every pixel of drag but only
+// actually seeks once per animation frame, keeping the chart smooth.
+let _sliderRaf = null;
 progressSlider.addEventListener('input', () => {
   if (!engine) return;
   engine.pause();
-  engine.seekTo(parseInt(progressSlider.value));
+  // Cancel any pending rAF seek so we use the latest slider value
+  if (_sliderRaf !== null) {
+    cancelAnimationFrame(_sliderRaf);
+  }
+  _sliderRaf = requestAnimationFrame(() => {
+    _sliderRaf = null;
+    if (!engine) return;
+    engine.seekTo(parseInt(progressSlider.value));
+  });
 });
 
 // ── Keyboard Shortcuts ────────────────────────────────────────────────────────
@@ -295,9 +329,96 @@ function showLoading(show) {
   loadingEl.classList.toggle('hidden', !show);
 }
 
+// ── Debug hook (for headless verification via dump-dom) ───────────────────────
+
+/**
+ * window.__debug() returns a JSON-serialisable snapshot of the current
+ * replay state — useful for headless Edge --dump-dom assertions.
+ */
+window.__debug = () => {
+  if (!engine) return { error: 'engine not ready' };
+  const trade = engine.activeTrade;
+  const t     = engine.currentT;
+
+  // Effective stop from stop_timeline
+  let stopEntry = null;
+  if (trade?.stop_timeline && t !== null) {
+    for (const s of trade.stop_timeline) {
+      if (s.t <= t) stopEntry = s;
+    }
+  }
+
+  // Remaining targets
+  let remainingTargets = [];
+  if (trade?.targets) {
+    const filledPrices = new Set();
+    if (trade.exit_fills) {
+      for (const fill of trade.exit_fills) {
+        if (fill.t <= t) {
+          const r = (fill.reason || '').toUpperCase();
+          if (r === 'TARGET' || r === 'TP') filledPrices.add(fill.price);
+        }
+      }
+    }
+    remainingTargets = trade.targets
+      .filter(tgt => !filledPrices.has(tgt.price))
+      .map(tgt => tgt.price);
+  }
+
+  return {
+    date:              engine.date,
+    currentIndex:      engine.currentIndex,
+    totalBars:         engine.totalBars,
+    currentT:          t,
+    activeTrade:       trade ? {
+      side:         trade.side,
+      entry_price:  trade.entry_price,
+      qty:          trade.qty,
+      stopPrice:    stopEntry?.price ?? trade.stop_initial ?? null,
+      stopReason:   stopEntry?.reason ?? null,
+      remainingTargets,
+    } : null,
+    priceLineCount:    chartMgr ? chartMgr._priceLines.size : 0,
+  };
+};
+
+// Expose seekTo for headless testing
+window.__seekTo = (idx) => {
+  if (!engine) return false;
+  engine.seekTo(idx);
+  return true;
+};
+
 // ── Bootstrap ─────────────────────────────────────────────────────────────────
 
 (async () => {
   showLoading(true);
   await populateDateSelector();
+
+  // headless 自動測試：?autotest=<date> → 載入該日、前進到第 120 根、
+  // 再往回 seek 到 60，把結果寫進 DOM 供 dump-dom 檢查
+  const params = new URLSearchParams(location.search);
+  const testDate = params.get('autotest');
+  if (testDate) {
+    const report = document.createElement('div');
+    report.id = 'autotest-report';
+    document.body.appendChild(report);
+    try {
+      await loadAndStartDay(testDate);
+      engine.seekTo(120);
+      engine.seekTo(60);   // 往回拖
+      engine.seekTo(150);
+      const st = engine.visibleStates?.at?.(-1) ?? engine.currentState ?? null;
+      report.textContent = [
+        'AUTOTEST_OK',
+        `idx=${engine.currentIndex}`,
+        `bars=${engine.visibleBars.length}`,
+        `markers=${engine.visibleMarkers.length}`,
+        `state=${JSON.stringify(st)}`,
+        `activeTrade=${JSON.stringify(engine.activeTrade?.id ?? null)}`,
+      ].join(' | ');
+    } catch (err) {
+      report.textContent = 'AUTOTEST_FAIL: ' + (err.stack || err.message);
+    }
+  }
 })();

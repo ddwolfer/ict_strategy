@@ -67,6 +67,12 @@ function getLevelColor(kind) {
   return LEVEL_COLORS[kind] ?? '#6b7280';
 }
 
+// ── Trade price line key prefixes ─────────────────────────────────────────────
+
+const TL_ENTRY  = '__trade_entry__';
+const TL_STOP   = '__trade_stop__';
+const TL_TARGET = '__trade_target__'; // prefix; append index
+
 // ── ChartManager ─────────────────────────────────────────────────────────────
 
 export class ChartManager {
@@ -75,7 +81,9 @@ export class ChartManager {
     this._container = container;
     this._chart     = null;
     this._series    = null;
-    this._priceLines = new Map(); // levelId → priceLine object
+    this._priceLines = new Map(); // key → priceLine object
+    // Track last setData call to detect when handles become stale
+    this._dataVersion = 0;
   }
 
   /**
@@ -152,6 +160,8 @@ export class ChartManager {
 
   /**
    * Feed candlestick data to the chart.
+   * Calling setData() invalidates existing priceLine handles — bump version
+   * so _syncPriceLine knows to always re-create rather than skip.
    * @param {Array} bars - array of {t, o, h, l, c} with UTC epoch seconds
    */
   loadData(bars) {
@@ -163,7 +173,24 @@ export class ChartManager {
       low:   b.l,
       close: b.c,
     }));
+    // Bump version — all stored priceLine handles are now stale
+    this._dataVersion++;
+    // After setData the series internally resets; price lines survive in
+    // lightweight-charts v4 as long as the series object itself lives,
+    // but we clear our map here to force a clean re-render each call.
+    // This ensures backward seeks always show the correct lines.
+    this._clearAllPriceLines();
     this._series.setData(converted);
+  }
+
+  /**
+   * Internal: remove all tracked price lines and clear the map.
+   */
+  _clearAllPriceLines() {
+    for (const pl of this._priceLines.values()) {
+      try { this._series.removePriceLine(pl); } catch (_) {}
+    }
+    this._priceLines.clear();
   }
 
   /**
@@ -204,37 +231,37 @@ export class ChartManager {
 
   /**
    * Update price lines for visible levels.
-   * Keeps a Map of id → priceLine to add/remove efficiently.
+   * Since loadData() already cleared the map, we only need to add new lines.
+   * For levels that are still the same (forward step), we skip re-creation
+   * by checking if the key already exists (map was NOT cleared this tick).
    * @param {Array} visibleLevels - from engine.visibleLevels
    * @param {number} currentT     - current bar's UTC epoch seconds
    */
   updateLevels(visibleLevels, currentT) {
     if (!this._series) return;
 
+    // Remove level keys that are no longer visible (only relevant when map
+    // was NOT cleared by loadData this tick — i.e. caller of updateLevels
+    // without preceding loadData, which doesn't currently happen)
     const visibleIds = new Set(visibleLevels.map(l => l.id));
-
-    // Remove levels no longer visible
-    for (const [id, pl] of this._priceLines.entries()) {
-      if (!visibleIds.has(id)) {
-        try { this._series.removePriceLine(pl); } catch (_) {}
-        this._priceLines.delete(id);
+    for (const [key, pl] of this._priceLines.entries()) {
+      // Only touch level keys (not trade keys)
+      if (!key.startsWith('__trade_')) {
+        if (!visibleIds.has(key)) {
+          try { this._series.removePriceLine(pl); } catch (_) {}
+          this._priceLines.delete(key);
+        }
       }
     }
 
-    // Add or update levels
+    // Add levels not yet in map
     for (const level of visibleLevels) {
+      if (this._priceLines.has(level.id)) continue; // already drawn this tick
+
       const color = getLevelColor(level.kind);
       const lineStyle = level.swept
         ? LightweightCharts.LineStyle.Dashed
         : LightweightCharts.LineStyle.Solid;
-
-      if (this._priceLines.has(level.id)) {
-        // Lightweight Charts price lines cannot be updated in place;
-        // remove and re-create if price changed
-        const existing = this._priceLines.get(level.id);
-        try { this._series.removePriceLine(existing); } catch (_) {}
-        this._priceLines.delete(level.id);
-      }
 
       const pl = this._series.createPriceLine({
         price:            level.price,
@@ -245,6 +272,105 @@ export class ChartManager {
         title:            level.label || level.kind,
       });
       this._priceLines.set(level.id, pl);
+    }
+  }
+
+  /**
+   * Update price lines for the active trade (entry / stop / targets).
+   * Called after updateLevels so trade lines render on top.
+   *
+   * @param {object|null} activeTrade  - engine.activeTrade (normalized)
+   * @param {number|null} currentT     - current bar UTC epoch seconds
+   */
+  updateTradePriceLines(activeTrade, currentT) {
+    if (!this._series) return;
+
+    // Keys that belong to trade lines
+    const tradeKeys = [TL_ENTRY, TL_STOP];
+    // Remove old trade lines (they were cleared by loadData; this is a safety
+    // guard for any code path that calls updateTradePriceLines without a
+    // preceding loadData)
+    for (const key of [...this._priceLines.keys()]) {
+      if (key === TL_ENTRY || key === TL_STOP || key.startsWith(TL_TARGET)) {
+        try { this._series.removePriceLine(this._priceLines.get(key)); } catch (_) {}
+        this._priceLines.delete(key);
+      }
+    }
+
+    if (!activeTrade || currentT === null) return;
+
+    // ── Entry line ──────────────────────────────────────────────────────────
+    const entryPl = this._series.createPriceLine({
+      price:            activeTrade.entry_price,
+      color:            '#94a3b8',
+      lineStyle:        LightweightCharts.LineStyle.Solid,
+      lineWidth:        1,
+      axisLabelVisible: true,
+      title:            `進場 ${activeTrade.entry_price.toFixed(2)}`,
+    });
+    this._priceLines.set(TL_ENTRY, entryPl);
+
+    // ── Stop line ───────────────────────────────────────────────────────────
+    // Find the effective stop: last stop_timeline entry where t <= currentT
+    const sl = activeTrade.stop_timeline;
+    let stopEntry = null;
+    if (sl && sl.length) {
+      for (const s of sl) {
+        if (s.t <= currentT) stopEntry = s;
+      }
+    }
+    const stopPrice = stopEntry?.price ?? activeTrade.stop_initial ?? null;
+
+    if (stopPrice != null) {
+      const stopLabel = stopEntry?.reason
+        ? `停損 ${stopPrice.toFixed(2)} (${stopEntry.reason})`
+        : `停損 ${stopPrice.toFixed(2)}`;
+
+      const stopPl = this._series.createPriceLine({
+        price:            stopPrice,
+        color:            '#f87171',
+        lineStyle:        LightweightCharts.LineStyle.Solid,
+        lineWidth:        1,
+        axisLabelVisible: true,
+        title:            stopLabel,
+      });
+      this._priceLines.set(TL_STOP, stopPl);
+    }
+
+    // ── Target lines ────────────────────────────────────────────────────────
+    if (activeTrade.targets && activeTrade.targets.length) {
+      // Determine which targets have been filled (exit_fills with reason TARGET
+      // that have t <= currentT, matched by price)
+      const filledPrices = new Set();
+      if (activeTrade.exit_fills) {
+        for (const fill of activeTrade.exit_fills) {
+          if (fill.t <= currentT) {
+            const r = (fill.reason || '').toUpperCase();
+            if (r === 'TARGET' || r === 'TP') {
+              filledPrices.add(fill.price);
+            }
+          }
+        }
+      }
+
+      let tIndex = 1;
+      for (const target of activeTrade.targets) {
+        if (filledPrices.has(target.price)) {
+          tIndex++;
+          continue; // target already hit — skip
+        }
+        const key = TL_TARGET + tIndex;
+        const tPl = this._series.createPriceLine({
+          price:            target.price,
+          color:            '#4ade80',
+          lineStyle:        LightweightCharts.LineStyle.Dashed,
+          lineWidth:        1,
+          axisLabelVisible: true,
+          title:            `T${tIndex} ${target.price.toFixed(2)}`,
+        });
+        this._priceLines.set(key, tPl);
+        tIndex++;
+      }
     }
   }
 
@@ -277,7 +403,7 @@ export class ChartManager {
   /** Tear down chart and observers. */
   destroy() {
     this._resizeObserver?.disconnect();
-    this._priceLines.clear();
+    this._priceLines.clear(); // no need to removePriceLine — chart is going away
     if (this._chart) {
       this._chart.remove();
       this._chart = null;

@@ -75,13 +75,15 @@ class TestJSONSchema:
             assert k in meta, f"Missing meta key: {k}"
 
     def test_meta_symbol(self, day_json):
-        assert day_json["meta"]["symbol"] == "NQ=F"
+        # 預設商品 MNQ（微型），資料源為 NQ=F
+        assert "NQ=F" in day_json["meta"]["symbol"]
 
     def test_meta_tick(self, day_json):
         assert day_json["meta"]["tick"] == 0.25
 
     def test_meta_point_value(self, day_json):
-        assert day_json["meta"]["point_value"] == 20.0
+        # 預設 MNQ 每點 $2；config 切 NQ 時為 $20
+        assert day_json["meta"]["point_value"] == 2.0
 
     def test_bars_list(self, day_json):
         bars = day_json["bars"]
