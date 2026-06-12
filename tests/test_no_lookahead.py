@@ -241,3 +241,87 @@ class TestSimBrokerNoLookahead:
                         f"Bar {i}: fill_price {evt.fill_price} outside "
                         f"[{bar.low}, {bar.high}]"
                     )
+
+
+# ─── ICTStrategy 無前視保證 ───────────────────────────────────────────────────
+
+class TestICTStrategyNoLookahead:
+    """ICTStrategy 的 StateChanged 事件確認時間不得超過當前 bar 的 ts_utc。"""
+
+    @staticmethod
+    def _make_et_bars(n: int = 40) -> list[Bar]:
+        """製造 n 根 09:30 ET 開始的 1 分 K bars。"""
+        from zoneinfo import ZoneInfo
+        from datetime import date as _date
+        ET_ = ZoneInfo("America/New_York")
+        UTC_ = ZoneInfo("utc")
+        bars = []
+        import math
+        from datetime import timedelta as _td
+        base_et = datetime(2025, 6, 16, 9, 30, 0, tzinfo=ET_)
+        for i in range(n):
+            et_dt = base_et + _td(minutes=i)
+            utc_dt = et_dt.astimezone(UTC_)
+            base = 20100.0 + 5.0 * math.sin(i * 0.4)
+            body = 2.0 + abs(math.cos(i * 0.6))
+            d = 1 if math.sin(i) > 0 else -1
+            o = base
+            c = base + d * body
+            h = max(o, c) + 1.0
+            lo = min(o, c) - 1.0
+            bars.append(Bar(ts_utc=utc_dt, open=o, high=h, low=lo, close=c, volume=100.0))
+        return bars
+
+    @staticmethod
+    def _make_strategy():
+        from engine.model.bias import DailyBias
+        from engine.detectors.ranges import DealingRange
+        from engine.model.strategy import ICTStrategy
+        from engine.sim.broker import SimBroker, BrokerConfig
+        from engine.sim.risk import RiskManager, RiskConfig
+        bias = DailyBias(
+            direction="SHORT",
+            dealing_range=DealingRange(20200.0, 19800.0),
+            dol_level=19900.0,
+            reason="test",
+            swing_highs=[],
+            swing_lows=[],
+        )
+        from engine.model.config import StrategyConfig
+        cfg = StrategyConfig(use_day_filter=False, fvg_half_filter=False)
+        broker = SimBroker(BrokerConfig(slippage_ticks=0, commission_per_side=0.0))
+        risk_mgr = RiskManager(RiskConfig(account_equity=50_000.0))
+        return ICTStrategy(config=cfg, bias=bias, broker=broker, risk_manager=risk_mgr)
+
+    def test_state_events_confirmed_at_not_in_future(self):
+        """所有 StateChanged 事件的 confirmed_at <= 當前 bar ts_utc。"""
+        from engine.model.config import StrategyConfig
+        bars = self._make_et_bars(40)
+        strategy = self._make_strategy()
+        for i, bar in enumerate(bars):
+            evts = strategy.on_bar(bar)
+            for e in evts:
+                assert e.confirmed_at <= bar.ts_utc, (
+                    f"bar[{i}] ts={bar.ts_utc}, event confirmed_at={e.confirmed_at}"
+                )
+
+    def test_truncation_state_consistency(self):
+        """截斷一致性：bar[0..k] 的第 k 個狀態 == 全量的第 k 個狀態。"""
+        from engine.model.config import StrategyConfig
+        bars = self._make_et_bars(30)
+
+        strategy_full = self._make_strategy()
+        full_states = []
+        for bar in bars:
+            strategy_full.on_bar(bar)
+            full_states.append(strategy_full.state)
+
+        for k in range(1, len(bars) + 1):
+            s = self._make_strategy()
+            states = []
+            for bar in bars[:k]:
+                s.on_bar(bar)
+                states.append(s.state)
+            assert states == full_states[:k], (
+                f"Truncation k={k}: {states} != {full_states[:k]}"
+            )

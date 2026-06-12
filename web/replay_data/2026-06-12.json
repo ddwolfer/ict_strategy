@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "symbol": "NQ=F",
+    "date": "2026-06-12",
+    "window": "RTH_OPEN_3H",
+    "tick": 0.25,
+    "point_value": 20.0,
+    "config": {
+      "window": "RTH_OPEN_3H",
+      "day_filter": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu"
+      ],
+      "thursday_size_factor": 0.5,
+      "use_day_filter": true,
+      "min_dol_points": 30.0,
+      "raid_recover_bars": 3,
+      "mss_timeout_bars": 15,
+      "entry_timeout_bars": 20,
+      "entry_level": "proximal",
+      "fvg_half_filter": true,
+      "stop_buffer_ticks": 8,
+      "targets_mode": "fixed_points",
+      "tp_points": [
+        20.0,
+        40.0,
+        60.0
+      ],
+      "tp_fractions": [
+        0.5,
+        0.25,
+        0.8
+      ],
+      "dol_early_exit_ticks": 10,
+      "objective_for_trailing": "tp2",
+      "max_trades_per_session": 2,
+      "daily_loss_limit_r": -2.0,
+      "risk_per_trade_pct": 0.5,
+      "account_equity": 50000.0,
+      "slippage_ticks": 1,
+      "commission_per_side": 2.25,
+      "swing_n": 1
+    },
+    "bias_direction": "NO_TRADE",
+    "bias_reason": "現價 29457.75 未突破任何 swing（需 Buy 突破 swing high 或 Sell 跌破 swing low）",
+    "dol_level": null
+  },
+  "bars": [],
+  "session_start_t": 0,
+  "session_end_t": 0,
+  "annotations": {
+    "levels": [],
+    "zones": [],
+    "markers": []
+  },
+  "state_timeline": [],
+  "orders": [],
+  "trades": [],
+  "equity": [],
+  "stats": {
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "win_rate": 0.0,
+    "gross_profit": 0,
+    "gross_loss": 0,
+    "profit_factor": null,
+    "total_r": 0,
+    "pnl_usd": 0,
+    "max_drawdown_usd": 0.0,
+    "ambiguous_count": 0
+  }
+}
