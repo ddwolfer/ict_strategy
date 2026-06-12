@@ -257,6 +257,8 @@ def run_all(
     peak_equity = running_equity
     max_dd = 0.0
 
+    all_trade_rows: list[dict] = []
+
     for i, day in enumerate(trading_days):
         hist_days = trading_days[max(0, i - HISTORY_DAYS):i]
         history_bars = [b for d in hist_days for b in days_map[d]]
@@ -264,6 +266,21 @@ def run_all(
                          es_bars_map=es_bars_map if es_bars_map else None,
                          history_bars=history_bars,
                          day_all_bars=days_map[day])
+
+        for t in result.closed_trades:
+            all_trade_rows.append({
+                "date": str(day),
+                "side": t.side,
+                "entry_time_utc": t.entry_time.isoformat(),
+                "entry_price": t.entry_price,
+                "exit_price": t.exit_fills[-1].price if t.exit_fills else None,
+                "exit_reason": t.exit_reason,
+                "qty": t.qty,
+                "stop_dist": round(t.initial_stop_distance, 2),
+                "r_multiple": round(t.r_multiple, 4),
+                "pnl_usd": round(t.pnl_usd, 2),
+                "ambiguous": t.ambiguous,
+            })
 
         # 更新權益
         day_pnl = sum(t.pnl_usd for t in result.closed_trades)
@@ -325,6 +342,14 @@ def run_all(
     out_dir.mkdir(parents=True, exist_ok=True)
     with open(idx_path, "w", encoding="utf-8") as f:
         json.dump(index, f, ensure_ascii=False, indent=2)
+
+    # 完整交易日誌（全部交易日，供統計分析）
+    if all_trade_rows:
+        import csv as _csv
+        with open(out_dir / "trades.csv", "w", newline="", encoding="utf-8") as f:
+            w = _csv.DictWriter(f, fieldnames=list(all_trade_rows[0].keys()))
+            w.writeheader()
+            w.writerows(all_trade_rows)
 
     summary = {
         "total_days": len(trading_days),
