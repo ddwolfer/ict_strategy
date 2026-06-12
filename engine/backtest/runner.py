@@ -55,6 +55,8 @@ def run_day(
     all_bars: list[Bar],
     initial_equity: float = 50_000.0,
     es_bars_map: dict | None = None,
+    history_bars: list[Bar] | None = None,
+    day_all_bars: list[Bar] | None = None,
 ) -> DayResult:
     """跑單日回測，回傳 DayResult。
 
@@ -64,15 +66,26 @@ def run_day(
     config      : 策略設定
     all_bars    : 全部歷史 bars（包含今日之前的所有資料）
     initial_equity : 起始權益（帳戶累計；通常由 run_all 傳入）
+    history_bars / day_all_bars : run_all 預先分組的切片（效能用）；
+        不給時退回逐根掃描（相容舊呼叫，僅適合小資料集）
     """
     # ── 歷史 bars（截至昨日）────────────────────────────────────────────────
-    history_bars = [b for b in all_bars if trading_date(b.ts_utc) < day]
+    if history_bars is None:
+        history_bars = [b for b in all_bars if trading_date(b.ts_utc) < day]
 
     # ── 計算偏向 ─────────────────────────────────────────────────────────────
     bias = compute_bias(history_bars, config)
 
     # ── 今日 bars（08:00–12:30 ET）──────────────────────────────────────────
-    day_bars = _bars_for_day_window(all_bars, day)
+    if day_all_bars is not None:
+        day_bars = []
+        for b in day_all_bars:
+            t = _to_et(b.ts_utc).time()
+            if time(8, 0) <= t < time(12, 30):
+                day_bars.append(b)
+        day_bars.sort(key=lambda b: b.ts_utc)
+    else:
+        day_bars = _bars_for_day_window(all_bars, day)
     if not day_bars:
         # 此交易日無資料
         return DayResult(
@@ -194,8 +207,13 @@ def run_all(
     out_dir: Path | None = None,
     verbose: bool = True,
     es_csv_path: Path | str | None = None,
+    json_days: int = 60,
 ) -> dict:
-    """跑全量回測，寫出 replay_data JSON，回傳統計摘要。"""
+    """跑全量回測，寫出 replay_data JSON，回傳統計摘要。
+
+    json_days：只為最近 N 個交易日輸出回放 JSON（統計仍涵蓋全部交易日；
+    大歷史下 1,250 份 JSON 會塞爆 repo）。0 = 全部輸出。
+    """
     cfg = config or StrategyConfig()
     out_dir = out_dir or _REPLAY_DIR
 
@@ -213,7 +231,16 @@ def run_all(
                 print(f"警告：ES CSV 不存在（{_es_path}），SMT 過濾器停用")
 
     all_bars = load_bars(csv_path)
-    trading_days = list_trading_days(csv_path)
+
+    # 交易日分組一次算完（trading_date 含時區轉換，逐日全掃會是 O(N×D)）
+    from collections import OrderedDict
+    days_map: "OrderedDict[date, list[Bar]]" = OrderedDict()
+    for b in all_bars:
+        days_map.setdefault(trading_date(b.ts_utc), []).append(b)
+    trading_days = list(days_map.keys())
+
+    # 偏向/暖機只需要近期歷史：取最近 HISTORY_DAYS 個交易日的 bars
+    HISTORY_DAYS = 40   # m1_program 需 20 日 dealing range，40 日綽綽有餘
 
     if verbose:
         print(f"載入 {len(all_bars):,} 根 1 分 K，共 {len(trading_days)} 個交易日")
@@ -230,9 +257,13 @@ def run_all(
     peak_equity = running_equity
     max_dd = 0.0
 
-    for day in trading_days:
+    for i, day in enumerate(trading_days):
+        hist_days = trading_days[max(0, i - HISTORY_DAYS):i]
+        history_bars = [b for d in hist_days for b in days_map[d]]
         result = run_day(day, cfg, all_bars, initial_equity=running_equity,
-                         es_bars_map=es_bars_map if es_bars_map else None)
+                         es_bars_map=es_bars_map if es_bars_map else None,
+                         history_bars=history_bars,
+                         day_all_bars=days_map[day])
 
         # 更新權益
         day_pnl = sum(t.pnl_usd for t in result.closed_trades)
@@ -271,8 +302,9 @@ def run_all(
         }
         day_summaries.append(summary)
 
-        # 寫出 JSON
-        result.write_json(out_dir)
+        # 寫出 JSON（僅最近 json_days 個交易日；0=全部）
+        if json_days <= 0 or i >= len(trading_days) - json_days:
+            result.write_json(out_dir)
 
         if verbose:
             flag = "RED" if stats["pnl_usd"] < 0 else ("---" if stats["trades"] == 0 else "GRN")
@@ -283,9 +315,10 @@ def run_all(
                   f"T={stats['trades']} W={stats['wins']} "
                   f"R={stats['total_r']:+.2f} PnL={stats['pnl_usd']:+.0f}")
 
-    # 寫 index.json
+    # 寫 index.json（只列出有 JSON 檔的日子，避免前端選到 404）
+    listed = day_summaries if json_days <= 0 else day_summaries[-json_days:]
     index = {
-        "days": day_summaries,
+        "days": listed,
         "generated_at": datetime.now(timezone.utc).isoformat(),
     }
     idx_path = out_dir / "index.json"
