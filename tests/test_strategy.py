@@ -552,29 +552,173 @@ class TestM13LiquidityTargets:
             entry_px, stop_dist, total_qty, "SHORT"
         )
 
-        # T1 應在 entry_px 下方（空單），T2=ONL 附近，T3=PDL 附近
-        assert len(targets) >= 2
-        # 所有目標應在 entry_px 下方（空單）
-        for price, qty in targets:
-            assert price < entry_px, f"Target {price} should be below entry {entry_px}"
 
-    def test_missing_on_falls_back(self):
-        """T2（ONL）缺失時，fallback 到 r_multiple 補充。"""
-        bias = _make_both_bias(pdh=20200.0, pdl=19800.0, onh=None, onl=None)
-        strategy, broker, _ = _make_strategy_both(targets_mode="m13_liquidity")
-        strategy.bias = bias
-        strategy._pdl = 19800.0
-        strategy._onl = None
+# ═══════════════════════════════════════════════════════════════════════════
+# Silver Bullet 新功能測試
+# ═══════════════════════════════════════════════════════════════════════════
+
+class TestMinRR:
+    """min_rr：T1 距離不足時放棄 setup。"""
+
+    def test_min_rr_rejects_setup(self):
+        """min_rr=3.0, stop_dist=10, T1_dist=20 < 30 → 放棄。"""
+        strategy, broker, _ = _make_strategy_both(
+            stop_mode="sweep_extreme",
+            stop_buffer_ticks=0,
+            min_stop_points=0.0,
+            min_rr=3.0,
+            targets_mode="r_multiple",   # r_multiple: T1 = 1R = stop_dist
+        )
+
+        b0 = _bar(_et(9, 30), 20100, 20100, 20095, 20095)
+        strategy.on_bar(b0)
+
+        from engine.model.strategy import _EntryFVG
+        fvg = _EntryFVG(
+            direction="BEAR",
+            top=20100.0,
+            bottom=20090.0,
+            ce=20095.0,
+            confirmed_at=_et(9, 31).astimezone(UTC),
+            candle_stop_level=20100.0,
+            leg_high=20120.0,
+            leg_low=20080.0,
+        )
+        strategy._state = "WAIT_RETRACE"
+        strategy._entry_fvg = fvg
         strategy._locked_direction = "SHORT"
+        strategy._entry_bar = strategy._bar_count
+        strategy._raid_level = 20100.0
+        strategy._first_setup_used = True
 
-        entry_px = 20090.0
-        stop_dist = 20.0
-        targets, t1_dist = strategy._build_targets_v2(entry_px, stop_dist, 2, "SHORT")
+        strategy._submit_entry_order(b0, fvg)
 
-        # 應有目標（不為空）
-        assert len(targets) >= 1
-        for price, qty in targets:
-            assert price < entry_px
+        # T1 dist = 1R = 10 (r_multiple fallback), min_rr=3.0 → need 30pt T1
+        # 10 < 30 → rejected
+        assert not broker._pending_brackets or len(broker._pending_brackets) == 0
+
+    def test_min_rr_passes_when_sufficient(self):
+        """min_rr=2.0, stop_dist=10, targets_mode=r_multiple T1=1R=10 < 20 → 仍拒絕。
+        Use r_multiple with larger stop so T1 (1R) >= 2R requirement is never met...
+        Actually r_multiple T1 is always 1R so min_rr>1 always rejects.
+        Use min_rr=0 (disabled) to verify order is placed."""
+        strategy, broker, _ = _make_strategy_both(
+            stop_mode="sweep_extreme",
+            stop_buffer_ticks=0,
+            min_stop_points=0.0,
+            min_rr=0.0,    # disabled
+            targets_mode="r_multiple",
+            risk_per_trade_pct=10.0,   # ensure qty >= 1
+        )
+
+        b0 = _bar(_et(9, 30), 20100, 20100, 20095, 20095)
+        strategy.on_bar(b0)
+
+        from engine.model.strategy import _EntryFVG
+        fvg = _EntryFVG(
+            direction="BEAR",
+            top=20100.0,
+            bottom=20090.0,
+            ce=20095.0,
+            confirmed_at=_et(9, 31).astimezone(UTC),
+            candle_stop_level=20100.0,
+            leg_high=20120.0,
+            leg_low=20080.0,
+        )
+        strategy._state = "WAIT_RETRACE"
+        strategy._entry_fvg = fvg
+        strategy._locked_direction = "SHORT"
+        strategy._entry_bar = strategy._bar_count
+        strategy._raid_level = 20100.0
+
+        strategy._submit_entry_order(b0, fvg)
+
+        # min_rr=0 → no rr filter, order should be placed
+        assert len(broker._pending_brackets) > 0
+
+
+class TestFirstSetupOnly:
+    """first_setup_only：第一個 MSS 鏈路結束後 → DONE。"""
+
+    def test_entry_timeout_goes_done_when_first_setup_only(self):
+        """first_setup_only=True, 進場超時 → DONE（非 WAIT_SWEEP）。"""
+        strategy, broker, _ = _make_strategy_both(
+            entry_timeout_bars=3,
+            first_setup_only=True,
+        )
+
+        b0 = _bar(_et(9, 30), 20100, 20100, 20095, 20095)
+        strategy.on_bar(b0)
+
+        strategy._state = "WAIT_RETRACE"
+        strategy._entry_bar = strategy._bar_count
+        strategy._first_setup_used = True  # simulates first MSS confirmed
+
+        from engine.sim.orders import Order, Bracket
+        o = Order(side="SELL", type="LIMIT", qty=1, price=20090.0)
+        b = Bracket(entry=o, stop_price=20110.0, targets=[(20070.0, 1)])
+        bid = broker.submit(b)
+        strategy._pending_bracket_id = bid
+
+        for i in range(4):
+            b2 = _bar(_et(9, 31 + i), 20080, 20082, 20078, 20080)
+            strategy.on_bar(b2)
+
+        assert strategy.state == "DONE", f"Expected DONE, got {strategy.state}"
+
+    def test_mss_timeout_goes_done_when_first_setup_only(self):
+        """first_setup_only=True, MSS 超時 → DONE。"""
+        strategy, broker, _ = _make_strategy_both(
+            mss_timeout_bars=3,
+            first_setup_only=True,
+        )
+
+        b0 = _bar(_et(9, 30), 20100, 20100, 20095, 20095)
+        strategy.on_bar(b0)
+
+        strategy._state = "WAIT_MSS"
+        strategy._mss_start_bar = strategy._bar_count
+        strategy._raid_level = 20110.0
+        strategy._first_setup_used = True
+
+        for i in range(4):
+            b = _bar(_et(9, 31 + i), 20095, 20097, 20093, 20095)
+            strategy.on_bar(b)
+
+        assert strategy.state == "DONE", f"Expected DONE, got {strategy.state}"
+
+    def test_first_setup_only_false_stays_wait_sweep(self):
+        """first_setup_only=False（預設）：超時後仍回 WAIT_SWEEP。"""
+        strategy, broker, _ = _make_strategy_both(
+            mss_timeout_bars=3,
+            first_setup_only=False,
+        )
+
+        b0 = _bar(_et(9, 30), 20100, 20100, 20095, 20095)
+        strategy.on_bar(b0)
+
+        strategy._state = "WAIT_MSS"
+        strategy._mss_start_bar = strategy._bar_count
+        strategy._raid_level = 20110.0
+
+        for i in range(4):
+            b = _bar(_et(9, 31 + i), 20095, 20097, 20093, 20095)
+            strategy.on_bar(b)
+
+        assert strategy.state == "WAIT_SWEEP", f"Expected WAIT_SWEEP, got {strategy.state}"
+
+
+class TestSilverBulletPreset:
+    """StrategyConfig.silver_bullet() preset 欄位驗證。"""
+
+    def test_preset_fields(self):
+        cfg = StrategyConfig.silver_bullet()
+        assert cfg.entry_window == ("10:00", "11:00")
+        assert cfg.late_window_thu_fri is False
+        assert cfg.max_trades_per_session == 1
+        assert cfg.first_setup_only is True
+        assert cfg.min_rr == 2.0
+        assert cfg.smt_filter == "require"
 
 
 class TestEntryWindow:

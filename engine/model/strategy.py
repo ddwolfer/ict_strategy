@@ -27,6 +27,7 @@ from engine.model.bias import DailyBias
 from engine.sim.broker import SimBroker, BrokerConfig
 from engine.sim.risk import RiskManager, RiskConfig, SessionState
 from engine.sim.orders import Bracket, Order, Trade
+from engine.detectors.smt import SMTChecker
 
 
 # ─── 狀態機狀態 ──────────────────────────────────────────────────────────────
@@ -134,6 +135,7 @@ class ICTStrategy:
         bias: DailyBias,
         broker: SimBroker,
         risk_manager: RiskManager,
+        es_bars: dict | None = None,   # ts_utc → Bar (ES 1m bars for SMT)
     ) -> None:
         self.config = config
         self.bias = bias
@@ -192,6 +194,13 @@ class ICTStrategy:
 
         # 事件收集
         self._events: list[StateChanged] = []
+
+        # SMT
+        self._smt = SMTChecker(lookback_bars=config.smt_lookback_bars)
+        self._es_bars = es_bars or {}
+
+        # first_setup_only: set to True once first MSS chain has started
+        self._first_setup_used: bool = False
 
         # 前時段/前日極值（m13_liquidity 停利素材）
         self._pdh = bias.prev_day_high
@@ -256,6 +265,10 @@ class ICTStrategy:
         pool_evts = self._pool_tracker.on_bar(bar)
         mss_evts = self._mss_det.on_bar(bar)
         fvg_evts = self._fvg_det.on_bar(bar)
+
+        # Feed SMT checker
+        es_bar = self._es_bars.get(bar.ts_utc)
+        self._smt.on_bar(bar, es_bar)
 
         broker_evts = self.broker.on_bar(bar)
         for bev in broker_evts:
@@ -356,13 +369,31 @@ class ICTStrategy:
             elif direction not in ("BOTH", "SHORT", "LONG"):
                 continue
 
-            # 確定鎖定方向
+            # Determine locked direction
             if direction == "BOTH":
                 locked = "SHORT" if evt.side == "BUY" else "LONG"
-                self._locked_direction = locked
-                self._raided_sides.add(evt.side)
             else:
                 locked = direction
+
+            # SMT filter — check BEFORE committing state
+            if self.config.smt_filter == "require":
+                diverged = self._smt.check_divergence(
+                    side=evt.side,
+                    pool_created_t=None,
+                    raid_t=bar.ts_utc,
+                )
+                if not diverged:
+                    self._transition(
+                        "WAIT_SWEEP", bar,
+                        f"SMT 未背離，忽略掃蕩（{evt.kind} {evt.level:.2f}）",
+                        {"raid_kind": evt.kind, "raid_level": evt.level, "smt": "no_divergence"},
+                    )
+                    continue  # try next pool event
+
+            # Commit state
+            if direction == "BOTH":
+                self._locked_direction = locked
+                self._raided_sides.add(evt.side)
 
             self._last_raid = evt
             self._raid_level = evt.level
@@ -371,6 +402,10 @@ class ICTStrategy:
             # 重置位移段追蹤
             self._disp_high = bar.high
             self._disp_low = bar.low
+
+            # first_setup_only: mark chain started
+            if self.config.first_setup_only:
+                self._first_setup_used = True
 
             self._transition(
                 "WAIT_MSS", bar,
@@ -395,9 +430,10 @@ class ICTStrategy:
             if self._direction_bias == "BOTH":
                 self._locked_direction = None
                 self._raided_sides.clear()  # 允許再次掃蕩任何方向
+            dest = "DONE" if (self.config.first_setup_only and self._first_setup_used) else "WAIT_SWEEP"
             self._transition(
-                "WAIT_SWEEP", bar,
-                f"MSS 等待超時（{self.config.mss_timeout_bars} 根），重回等待掃蕩",
+                dest, bar,
+                f"MSS 等待超時（{self.config.mss_timeout_bars} 根），{'收工（first_setup_only）' if dest == 'DONE' else '重回等待掃蕩'}",
                 {"timeout_bars": bars_since},
             )
             return
@@ -572,8 +608,9 @@ class ICTStrategy:
         min_sp = self.config.min_stop_points
         max_sp = self.config.max_stop_points
         if stop_dist < min_sp:
+            dest = "DONE" if (self.config.first_setup_only and self._first_setup_used) else "WAIT_SWEEP"
             self._transition(
-                "WAIT_SWEEP", bar,
+                dest, bar,
                 f"停損距離 {stop_dist:.2f} pt < min_stop_points({min_sp})，放棄此 setup",
                 {"stop_dist": stop_dist, "min_stop": min_sp},
             )
@@ -582,8 +619,9 @@ class ICTStrategy:
                 self._raided_sides.clear()
             return
         if stop_dist > max_sp:
+            dest = "DONE" if (self.config.first_setup_only and self._first_setup_used) else "WAIT_SWEEP"
             self._transition(
-                "WAIT_SWEEP", bar,
+                dest, bar,
                 f"停損距離 {stop_dist:.2f} pt > max_stop_points({max_sp})，放棄此 setup",
                 {"stop_dist": stop_dist, "max_stop": max_sp},
             )
@@ -591,6 +629,26 @@ class ICTStrategy:
                 self._locked_direction = None
                 self._raided_sides.clear()
             return
+
+        # ── min_rr 過濾 ─────────────────────────────────────────────────────────
+        if self.config.min_rr > 0.0:
+            # 計算 T1 距離（預覽，不分配口數）
+            targets_preview, t1_dist_preview = self._build_targets_v2(
+                entry_px, stop_dist, 1, direction
+            )
+            if t1_dist_preview < self.config.min_rr * stop_dist:
+                reason = (
+                    f"T1 距離 {t1_dist_preview:.2f} pt < min_rr({self.config.min_rr})×"
+                    f"stop({stop_dist:.2f})={self.config.min_rr * stop_dist:.2f}，放棄 setup"
+                )
+                if self.config.first_setup_only and self._first_setup_used:
+                    self._transition("DONE", bar, reason, {"t1_dist": t1_dist_preview, "min_rr": self.config.min_rr})
+                else:
+                    self._transition("WAIT_SWEEP", bar, reason, {"t1_dist": t1_dist_preview, "min_rr": self.config.min_rr})
+                if self._direction_bias == "BOTH":
+                    self._locked_direction = None
+                    self._raided_sides.clear()
+                return
 
         # ── 口數 ─────────────────────────────────────────────────────────────
         et = _to_et(bar.ts_utc)
@@ -601,8 +659,9 @@ class ICTStrategy:
         qty = int(self.risk.size_for(stop_dist) * size_factor)
         if qty < 1:
             # 風險預算開不出 1 口 → 誠實放棄，不可偷偷加大風險
+            dest = "DONE" if (self.config.first_setup_only and self._first_setup_used) else "WAIT_SWEEP"
             self._transition(
-                "WAIT_SWEEP", bar,
+                dest, bar,
                 f"放棄 setup：停損 {stop_dist:.2f} pt 在 "
                 f"{self.config.risk_per_trade_pct}% 風險下開不出 1 口"
                 f"（每口風險 ${stop_dist * self.risk.cfg.point_value:.0f}）",
@@ -863,9 +922,10 @@ class ICTStrategy:
             if self._direction_bias == "BOTH":
                 self._locked_direction = None
                 self._raided_sides.clear()
+            dest = "DONE" if (self.config.first_setup_only and self._first_setup_used) else "WAIT_SWEEP"
             self._transition(
-                "WAIT_SWEEP", bar,
-                f"進場超時（{self.config.entry_timeout_bars} 根），撤銷限價單，重回等待掃蕩",
+                dest, bar,
+                f"進場超時（{self.config.entry_timeout_bars} 根），撤銷限價單，{'收工（first_setup_only）' if dest == 'DONE' else '重回等待掃蕩'}",
                 {"timeout_bars": bars_since},
             )
             return
@@ -885,9 +945,10 @@ class ICTStrategy:
                 if self._direction_bias == "BOTH":
                     self._locked_direction = None
                     self._raided_sides.clear()
+                dest = "DONE" if (self.config.first_setup_only and self._first_setup_used) else "WAIT_SWEEP"
                 self._transition(
-                    "WAIT_SWEEP", bar,
-                    "FVG 被收盤穿越失效，撤銷限價單，重回等待掃蕩",
+                    dest, bar,
+                    f"FVG 被收盤穿越失效，撤銷限價單，{'收工（first_setup_only）' if dest == 'DONE' else '重回等待掃蕩'}",
                     {"fvg_top": fvg.top, "fvg_bottom": fvg.bottom},
                 )
                 return
@@ -984,16 +1045,18 @@ class ICTStrategy:
                 if self._direction_bias == "BOTH":
                     self._locked_direction = None
                     self._raided_sides.clear()  # 允許再次掃蕩任何方向
-                if self.risk.can_trade(self._session_state):
+                force_done = self.config.first_setup_only and self._first_setup_used
+                if not force_done and self.risk.can_trade(self._session_state):
                     self._transition(
                         "WAIT_SWEEP", bar,
                         f"交易結束（{trade.exit_reason}，{trade.r_multiple:+.2f}R），可再進場，等下一個掃蕩",
                         {"exit_reason": trade.exit_reason, "r": trade.r_multiple},
                     )
                 else:
+                    reason = "first_setup_only 收工" if force_done else "已達每節限制，收工"
                     self._transition(
                         "DONE", bar,
-                        f"交易結束（{trade.exit_reason}，{trade.r_multiple:+.2f}R），已達每節限制，收工",
+                        f"交易結束（{trade.exit_reason}，{trade.r_multiple:+.2f}R），{reason}",
                         {"exit_reason": trade.exit_reason, "r": trade.r_multiple},
                     )
 

@@ -161,6 +161,12 @@ class StrategyConfig:
     min_stop_points: float = 3.0  # 停損下限 §3
     max_stop_points: float = 40.0 # 停損上限 §3
 
+    # ── Silver Bullet 新增 ────────────────────────────────────────────────────
+    min_rr: float = 0.0          # 0=off; T1 dist < min_rr×stop_dist → abandon setup
+    first_setup_only: bool = False  # True: after first MSS chain ends (any way), → DONE
+    smt_filter: Literal["off", "require"] = "off"
+    smt_lookback_bars: int = 30   # SMT reference window when pool_created_t unavailable
+
     # ── 風控 ──────────────────────────────────────────────────────────────────
     max_trades_per_session: int = 2
     daily_loss_limit_r: float = -2.0
@@ -191,6 +197,18 @@ class StrategyConfig:
     fvg_half_filter: bool = False  # deprecated, 由 fvg_filter 控制
     # window 舊欄位（runner.py EOD 邏輯仍引用）
     window: str = "RTH_OPEN_3H"
+
+    @classmethod
+    def silver_bullet(cls) -> "StrategyConfig":
+        """Silver Bullet preset (§2.5)."""
+        return cls(
+            entry_window=("10:00", "11:00"),
+            late_window_thu_fri=False,
+            max_trades_per_session=1,
+            first_setup_only=True,
+            min_rr=2.0,
+            smt_filter="require",
+        )
 
     def as_dict(self) -> dict:
         """序列化為 JSON-friendly dict（供 meta.config snapshot）。"""

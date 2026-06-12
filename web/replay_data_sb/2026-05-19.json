@@ -8,10 +8,10 @@
     "config": {
       "bias_mode": "m13_raid",
       "entry_window": [
-        "09:30",
+        "10:00",
         "11:00"
       ],
-      "late_window_thu_fri": true,
+      "late_window_thu_fri": false,
       "flatten_time": "12:30",
       "day_filter": null,
       "thursday_size_factor": 1.0,
@@ -43,11 +43,11 @@
       "trail_be_at": 0.75,
       "min_stop_points": 3.0,
       "max_stop_points": 40.0,
-      "min_rr": 0.0,
-      "first_setup_only": false,
-      "smt_filter": "off",
+      "min_rr": 2.0,
+      "first_setup_only": true,
+      "smt_filter": "require",
       "smt_lookback_bars": 30,
-      "max_trades_per_session": 2,
+      "max_trades_per_session": 1,
       "daily_loss_limit_r": -2.0,
       "risk_per_trade_pct": 0.5,
       "account_equity": 50000.0,
@@ -3794,7 +3794,7 @@
   },
   "state_timeline": [
     {
-      "t": 1779197400,
+      "t": 1779199200,
       "state": "WAIT_SWEEP",
       "waiting_for": "等待掃蕩（bias=BOTH）",
       "detail": {
@@ -3802,104 +3802,19 @@
       }
     },
     {
-      "t": 1779197400,
+      "t": 1779199200,
       "state": "WAIT_MSS",
-      "waiting_for": "掃蕩確認（SWING_HIGH 28937.75），鎖定方向=SHORT，等 MSS（最多 15 根）",
-      "detail": {
-        "raid_kind": "SWING_HIGH",
-        "raid_level": 28937.75,
-        "locked_direction": "SHORT"
-      }
-    },
-    {
-      "t": 1779198360,
-      "state": "WAIT_SWEEP",
-      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
-      "detail": {
-        "timeout_bars": 16
-      }
-    },
-    {
-      "t": 1779198840,
-      "state": "WAIT_MSS",
-      "waiting_for": "掃蕩確認（SWING_HIGH 29009.25），鎖定方向=SHORT，等 MSS（最多 15 根）",
-      "detail": {
-        "raid_kind": "SWING_HIGH",
-        "raid_level": 29009.25,
-        "locked_direction": "SHORT"
-      }
-    },
-    {
-      "t": 1779199500,
-      "state": "WAIT_RETRACE",
-      "waiting_for": "MSS 確認（BEAR，破 28868.75），掛 Sell Limit @ 28962.25",
-      "detail": {
-        "mss_broken_level": 28868.75,
-        "fvg_top": 28971.5,
-        "fvg_bottom": 28962.25,
-        "fvg_ce": 28966.875,
-        "candle_stop": 29028.0
-      }
-    },
-    {
-      "t": 1779199500,
-      "state": "WAIT_SWEEP",
-      "waiting_for": "停損距離 65.75 pt > max_stop_points(40.0)，放棄此 setup",
-      "detail": {
-        "stop_dist": 65.75,
-        "max_stop": 40.0
-      }
-    },
-    {
-      "t": 1779199740,
-      "state": "WAIT_MSS",
-      "waiting_for": "掃蕩確認（SWING_LOW 28768.75），鎖定方向=LONG，等 MSS（最多 15 根）",
+      "waiting_for": "掃蕩確認（SWING_LOW 28916.00），鎖定方向=LONG，等 MSS（最多 15 根）",
       "detail": {
         "raid_kind": "SWING_LOW",
-        "raid_level": 28768.75,
+        "raid_level": 28916.0,
         "locked_direction": "LONG"
       }
     },
     {
-      "t": 1779200700,
-      "state": "WAIT_SWEEP",
-      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
-      "detail": {
-        "timeout_bars": 16
-      }
-    },
-    {
-      "t": 1779200820,
-      "state": "WAIT_MSS",
-      "waiting_for": "掃蕩確認（SWING_HIGH 28742.00），鎖定方向=SHORT，等 MSS（最多 15 根）",
-      "detail": {
-        "raid_kind": "SWING_HIGH",
-        "raid_level": 28742.0,
-        "locked_direction": "SHORT"
-      }
-    },
-    {
-      "t": 1779201780,
-      "state": "WAIT_SWEEP",
-      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
-      "detail": {
-        "timeout_bars": 16
-      }
-    },
-    {
-      "t": 1779202020,
-      "state": "WAIT_MSS",
-      "waiting_for": "掃蕩確認（SWING_LOW 28684.00），鎖定方向=LONG，等 MSS（最多 15 根）",
-      "detail": {
-        "raid_kind": "SWING_LOW",
-        "raid_level": 28684.0,
-        "locked_direction": "LONG"
-      }
-    },
-    {
-      "t": 1779202980,
-      "state": "WAIT_SWEEP",
-      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
+      "t": 1779200160,
+      "state": "DONE",
+      "waiting_for": "MSS 等待超時（15 根），收工（first_setup_only）",
       "detail": {
         "timeout_bars": 16
       }

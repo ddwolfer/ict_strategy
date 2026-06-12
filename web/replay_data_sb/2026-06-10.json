@@ -8,10 +8,10 @@
     "config": {
       "bias_mode": "m13_raid",
       "entry_window": [
-        "09:30",
+        "10:00",
         "11:00"
       ],
-      "late_window_thu_fri": true,
+      "late_window_thu_fri": false,
       "flatten_time": "12:30",
       "day_filter": null,
       "thursday_size_factor": 1.0,
@@ -43,11 +43,11 @@
       "trail_be_at": 0.75,
       "min_stop_points": 3.0,
       "max_stop_points": 40.0,
-      "min_rr": 0.0,
-      "first_setup_only": false,
-      "smt_filter": "off",
+      "min_rr": 2.0,
+      "first_setup_only": true,
+      "smt_filter": "require",
       "smt_lookback_bars": 30,
-      "max_trades_per_session": 2,
+      "max_trades_per_session": 1,
       "daily_loss_limit_r": -2.0,
       "risk_per_trade_pct": 0.5,
       "account_equity": 50000.0,
@@ -3589,7 +3589,7 @@
   },
   "state_timeline": [
     {
-      "t": 1781098200,
+      "t": 1781100000,
       "state": "WAIT_SWEEP",
       "waiting_for": "等待掃蕩（bias=BOTH）",
       "detail": {
@@ -3597,91 +3597,19 @@
       }
     },
     {
-      "t": 1781098200,
+      "t": 1781100060,
       "state": "WAIT_MSS",
-      "waiting_for": "掃蕩確認（SWING_HIGH 28952.50），鎖定方向=SHORT，等 MSS（最多 15 根）",
-      "detail": {
-        "raid_kind": "SWING_HIGH",
-        "raid_level": 28952.5,
-        "locked_direction": "SHORT"
-      }
-    },
-    {
-      "t": 1781099160,
-      "state": "WAIT_SWEEP",
-      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
-      "detail": {
-        "timeout_bars": 16
-      }
-    },
-    {
-      "t": 1781099400,
-      "state": "WAIT_MSS",
-      "waiting_for": "掃蕩確認（SWING_HIGH 29092.75），鎖定方向=SHORT，等 MSS（最多 15 根）",
-      "detail": {
-        "raid_kind": "SWING_HIGH",
-        "raid_level": 29092.75,
-        "locked_direction": "SHORT"
-      }
-    },
-    {
-      "t": 1781100360,
-      "state": "WAIT_SWEEP",
-      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
-      "detail": {
-        "timeout_bars": 16
-      }
-    },
-    {
-      "t": 1781100600,
-      "state": "WAIT_MSS",
-      "waiting_for": "掃蕩確認（SWING_HIGH 29104.25），鎖定方向=SHORT，等 MSS（最多 15 根）",
-      "detail": {
-        "raid_kind": "SWING_HIGH",
-        "raid_level": 29104.25,
-        "locked_direction": "SHORT"
-      }
-    },
-    {
-      "t": 1781101560,
-      "state": "WAIT_SWEEP",
-      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
-      "detail": {
-        "timeout_bars": 16
-      }
-    },
-    {
-      "t": 1781101740,
-      "state": "WAIT_MSS",
-      "waiting_for": "掃蕩確認（SWING_LOW 29152.75），鎖定方向=LONG，等 MSS（最多 15 根）",
+      "waiting_for": "掃蕩確認（SWING_LOW 28984.00），鎖定方向=LONG，等 MSS（最多 15 根）",
       "detail": {
         "raid_kind": "SWING_LOW",
-        "raid_level": 29152.75,
+        "raid_level": 28984.0,
         "locked_direction": "LONG"
       }
     },
     {
-      "t": 1781102700,
-      "state": "WAIT_SWEEP",
-      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
-      "detail": {
-        "timeout_bars": 16
-      }
-    },
-    {
-      "t": 1781102760,
-      "state": "WAIT_MSS",
-      "waiting_for": "掃蕩確認（SWING_LOW 29093.25），鎖定方向=LONG，等 MSS（最多 15 根）",
-      "detail": {
-        "raid_kind": "SWING_LOW",
-        "raid_level": 29093.25,
-        "locked_direction": "LONG"
-      }
-    },
-    {
-      "t": 1781103720,
-      "state": "WAIT_SWEEP",
-      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
+      "t": 1781101020,
+      "state": "DONE",
+      "waiting_for": "MSS 等待超時（15 根），收工（first_setup_only）",
       "detail": {
         "timeout_bars": 16
       }
@@ -3692,1353 +3620,1353 @@
   "equity": [
     {
       "t": 1781092800,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781092860,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781092920,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781092980,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093040,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093100,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093160,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093220,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093280,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093340,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093400,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093460,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093520,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093580,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093640,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093700,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093760,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093820,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093880,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781093940,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094000,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094060,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094120,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094180,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094240,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094300,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094360,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094420,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094480,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094540,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094600,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094660,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094720,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094780,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094840,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094900,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781094960,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095020,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095080,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095140,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095200,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095260,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095320,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095380,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095440,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095500,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095560,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095620,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095680,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095740,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095800,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095860,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095920,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781095980,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096040,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096100,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096160,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096220,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096280,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096340,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096400,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096460,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096520,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096580,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096640,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096700,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096760,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096820,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096880,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781096940,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097000,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097060,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097120,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097180,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097240,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097300,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097360,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097420,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097480,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097540,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097600,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097660,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097720,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097780,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097840,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097900,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781097960,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098020,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098080,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098140,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098200,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098260,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098320,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098380,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098440,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098500,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098560,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098620,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098680,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098740,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098800,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098860,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098920,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781098980,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099040,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099100,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099160,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099220,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099280,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099340,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099400,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099460,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099520,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099580,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099640,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099700,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099760,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099820,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099880,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781099940,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100000,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100060,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100120,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100180,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100240,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100300,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100360,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100420,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100480,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100540,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100600,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100660,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100720,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100780,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100840,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100900,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781100960,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101020,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101080,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101140,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101200,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101260,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101320,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101380,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101440,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101500,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101560,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101620,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101680,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101740,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101800,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101860,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101920,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781101980,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102040,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102100,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102160,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102220,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102280,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102340,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102400,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102460,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102520,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102580,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102640,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102700,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102760,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102820,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102880,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781102940,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103000,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103060,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103120,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103180,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103240,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103300,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103360,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103420,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103480,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103540,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103600,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103660,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103720,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103780,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103840,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103900,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781103960,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104020,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104080,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104140,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104200,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104260,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104320,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104380,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104440,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104500,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104560,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104620,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104680,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104740,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104800,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104860,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104920,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781104980,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105040,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105100,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105160,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105220,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105280,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105340,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105400,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105460,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105520,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105580,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105640,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105700,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105760,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105820,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105880,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781105940,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106000,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106060,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106120,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106180,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106240,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106300,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106360,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106420,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106480,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106540,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106600,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106660,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106720,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106780,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106840,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106900,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781106960,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107020,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107080,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107140,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107200,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107260,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107320,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107380,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107440,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107500,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107560,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107620,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107680,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107740,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107800,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107860,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107920,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781107980,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108040,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108100,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108160,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108220,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108280,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108340,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108400,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108460,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108520,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108580,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108640,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108700,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108760,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108820,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108880,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     },
     {
       "t": 1781108940,
-      "realized": 50288.8,
-      "total": 50288.8
+      "realized": 50000.0,
+      "total": 50000.0
     }
   ],
   "stats": {

@@ -5,6 +5,7 @@
 """
 from __future__ import annotations
 
+import argparse
 import json
 from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
@@ -13,6 +14,7 @@ from zoneinfo import ZoneInfo
 from engine.core.types import Bar, TICK, POINT_VALUE
 from engine.core.sessions import trading_date, is_in_window, _to_et, ET
 from engine.data.loader import load_bars, list_trading_days
+from engine.data.loader import load_bars as _load_bars_generic
 from engine.detectors.fvg import FVGDetector
 from engine.detectors.mss import MSSDetector
 from engine.detectors.pools import LiquidityPoolTracker
@@ -25,6 +27,8 @@ from engine.backtest.decision_log import DayResult, _ts
 
 _REPLAY_DIR = Path(__file__).parent.parent.parent / "web" / "replay_data"
 _DEFAULT_CSV = Path(__file__).parent.parent.parent / "data" / "cache" / "nq_1m.csv"
+_DEFAULT_ES_CSV = Path(__file__).parent.parent.parent / "data" / "cache" / "es_1m.csv"
+_SB_REPLAY_DIR = Path(__file__).parent.parent.parent / "web" / "replay_data_sb"
 
 
 def _et_hm(h: int, m: int) -> time:
@@ -50,6 +54,7 @@ def run_day(
     config: StrategyConfig,
     all_bars: list[Bar],
     initial_equity: float = 50_000.0,
+    es_bars_map: dict | None = None,
 ) -> DayResult:
     """跑單日回測，回傳 DayResult。
 
@@ -105,7 +110,20 @@ def run_day(
     )
     risk_mgr = RiskManager(risk_cfg)
 
-    strategy = ICTStrategy(config=config, bias=bias, broker=broker, risk_manager=risk_mgr)
+    # Build ES bars slice for this day (only feed bars within the day window)
+    day_es_bars: dict = {}
+    if es_bars_map:
+        for b in day_bars:
+            es_b = es_bars_map.get(b.ts_utc)
+            if es_b is not None:
+                day_es_bars[b.ts_utc] = es_b
+        # Also include history for SMT lookback (last 200 bars before day)
+        history_es = {b_h.ts_utc: es_bars_map[b_h.ts_utc]
+                      for b_h in history_bars[-200:] if b_h.ts_utc in es_bars_map}
+        day_es_bars.update(history_es)
+
+    strategy = ICTStrategy(config=config, bias=bias, broker=broker, risk_manager=risk_mgr,
+                           es_bars=day_es_bars if day_es_bars else None)
 
     # ── 獨立 pool / fvg 追蹤（用於 annotations 輸出）────────────────────────
     ann_pool = LiquidityPoolTracker(n=config.swing_n, r=config.raid_recover_bars)
@@ -175,10 +193,24 @@ def run_all(
     csv_path: Path | str = _DEFAULT_CSV,
     out_dir: Path | None = None,
     verbose: bool = True,
+    es_csv_path: Path | str | None = None,
 ) -> dict:
     """跑全量回測，寫出 replay_data JSON，回傳統計摘要。"""
     cfg = config or StrategyConfig()
     out_dir = out_dir or _REPLAY_DIR
+
+    # Load ES bars if SMT filter active
+    es_bars_map: dict = {}
+    if cfg.smt_filter != "off":
+        _es_path = es_csv_path or _DEFAULT_ES_CSV
+        if Path(_es_path).exists():
+            es_bars_list = _load_bars_generic(_es_path)
+            es_bars_map = {b.ts_utc: b for b in es_bars_list}
+            if verbose:
+                print(f"載入 ES {len(es_bars_list):,} 根 1 分 K（SMT 過濾器）")
+        else:
+            if verbose:
+                print(f"警告：ES CSV 不存在（{_es_path}），SMT 過濾器停用")
 
     all_bars = load_bars(csv_path)
     trading_days = list_trading_days(csv_path)
@@ -199,7 +231,8 @@ def run_all(
     max_dd = 0.0
 
     for day in trading_days:
-        result = run_day(day, cfg, all_bars, initial_equity=running_equity)
+        result = run_day(day, cfg, all_bars, initial_equity=running_equity,
+                         es_bars_map=es_bars_map if es_bars_map else None)
 
         # 更新權益
         day_pnl = sum(t.pnl_usd for t in result.closed_trades)
@@ -288,4 +321,18 @@ def run_all(
 # ─── CLI ─────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    run_all(verbose=True)
+    parser = argparse.ArgumentParser(description="ICT NQ 1m 回測 Runner")
+    parser.add_argument(
+        "--preset",
+        choices=["silver_bullet"],
+        default=None,
+        help="使用 preset config（如 silver_bullet）",
+    )
+    args = parser.parse_args()
+
+    if args.preset == "silver_bullet":
+        cfg = StrategyConfig.silver_bullet()
+        print("[SB] Using Silver Bullet preset")
+        run_all(config=cfg, out_dir=_SB_REPLAY_DIR, verbose=True)
+    else:
+        run_all(verbose=True)

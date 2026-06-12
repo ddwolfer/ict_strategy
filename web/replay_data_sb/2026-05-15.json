@@ -8,10 +8,10 @@
     "config": {
       "bias_mode": "m13_raid",
       "entry_window": [
-        "09:30",
+        "10:00",
         "11:00"
       ],
-      "late_window_thu_fri": true,
+      "late_window_thu_fri": false,
       "flatten_time": "12:30",
       "day_filter": null,
       "thursday_size_factor": 1.0,
@@ -43,11 +43,11 @@
       "trail_be_at": 0.75,
       "min_stop_points": 3.0,
       "max_stop_points": 40.0,
-      "min_rr": 0.0,
-      "first_setup_only": false,
-      "smt_filter": "off",
+      "min_rr": 2.0,
+      "first_setup_only": true,
+      "smt_filter": "require",
       "smt_lookback_bars": 30,
-      "max_trades_per_session": 2,
+      "max_trades_per_session": 1,
       "daily_loss_limit_r": -2.0,
       "risk_per_trade_pct": 0.5,
       "account_equity": 50000.0,
@@ -3448,7 +3448,7 @@
   },
   "state_timeline": [
     {
-      "t": 1778851800,
+      "t": 1778853600,
       "state": "DONE",
       "waiting_for": "偏向 NO_TRADE（日 K 不足 3 根，無法計算 Dealing Range），今日不進場",
       "detail": {}
