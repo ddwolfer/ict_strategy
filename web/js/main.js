@@ -423,6 +423,9 @@ window.__seekTo = (idx) => {
       const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
       const hitDesc = hit ? (hit.id || hit.tagName) : 'null';
 
+      // 跳到震盪段中段檢查 zone 數量（疊框問題的觀測點）
+      engine.seekTo(145);
+
       report.textContent = [
         sliderSeekOK ? 'AUTOTEST_OK' : 'AUTOTEST_FAIL(slider)',
         `idx=${engine.currentIndex}`,

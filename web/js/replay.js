@@ -164,22 +164,33 @@ export class ReplayEngine {
   get visibleZones() {
     const t = this.currentT;
     if (t === null) return [];
-    const GHOST_SEC = 300; // 回補/失效後殘影保留 5 分鐘
+    const GHOST_SEC = 300;       // 非 fresh 後殘影保留 5 分鐘
+    const MIN_HEIGHT = 0.75;     // 過濾 < 3 ticks 的微型 FVG（噪音）
+    const MAX_FRESH = 12;        // 同時最多顯示的 fresh 區數量
     const out = [];
     for (const z of this._data.annotations.zones) {
       if (z.from_t > t) continue;
+      if ((z.top - z.bottom) < MIN_HEIGHT) continue;
       let status = 'fresh';
       let endT = null;
       for (const sc of (z.status_changes || [])) {
         if (sc.t <= t) {
           status = sc.status;
-          if (endT === null && (sc.status === 'filled' || sc.status === 'invalidated')) {
+          // ICT 語意：FVG 第一次被回踩（touched）機會就已用掉，
+          // 開始殘影倒數；filled/invalidated 亦同
+          if (endT === null && sc.status !== 'fresh') {
             endT = sc.t;
           }
         }
       }
       if (endT !== null && t > endT + GHOST_SEC) continue; // 殘影期過 → 消失
       out.push({ ...z, _status: status, _end_t: endT });
+    }
+    // fresh 區也設上限：只留最新的 N 個（未被觸碰的舊缺口通常離價太遠）
+    const fresh = out.filter(z => z._status === 'fresh');
+    if (fresh.length > MAX_FRESH) {
+      const cutoff = fresh.sort((a, b) => b.from_t - a.from_t)[MAX_FRESH - 1].from_t;
+      return out.filter(z => z._status !== 'fresh' || z.from_t >= cutoff);
     }
     return out;
   }

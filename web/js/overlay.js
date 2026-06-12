@@ -28,8 +28,8 @@ function _scaleAlpha(rgba, factor) {
 function getZoneStyle(zone) {
   const base = ZONE_STYLES[zone.kind] ?? { fill: 'rgba(255,255,255,0.05)', border: 'rgba(255,255,255,0.2)' };
   const status = zone._status ?? (zone.filled || zone.invalidated ? 'filled' : 'fresh');
-  // fresh 全亮；touched 七成；filled/invalidated 殘影三成
-  const factor = status === 'fresh' ? 1.0 : status === 'touched' ? 0.7 : 0.3;
+  // fresh 全亮；touched（機會已用掉）45%；filled/invalidated 殘影 25%
+  const factor = status === 'fresh' ? 1.0 : status === 'touched' ? 0.45 : 0.25;
   if (factor === 1.0) return base;
   return { fill: _scaleAlpha(base.fill, factor), border: _scaleAlpha(base.border, factor) };
 }
