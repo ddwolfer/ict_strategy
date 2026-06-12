@@ -1,0 +1,24 @@
+{
+ "LONDON+NQ IS(21-24)": {
+  "total_days": 919,
+  "total_trades": 411,
+  "total_wins": 211,
+  "win_rate": 0.51338199513382,
+  "total_r": 58.4235,
+  "pnl_usd": 8042.0,
+  "final_equity": 58042.0,
+  "max_drawdown_usd": 3480.0,
+  "ambiguous_count": 35
+ },
+ "LONDON+NQ OOS(25-26)": {
+  "total_days": 374,
+  "total_trades": 187,
+  "total_wins": 96,
+  "win_rate": 0.5133689839572193,
+  "total_r": 23.62,
+  "pnl_usd": 3761.5,
+  "final_equity": 53761.5,
+  "max_drawdown_usd": 2091.0,
+  "ambiguous_count": 15
+ }
+}

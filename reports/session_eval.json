@@ -1,0 +1,46 @@
+{
+ "NY_PM IS(21-24)": {
+  "total_days": 919,
+  "total_trades": 235,
+  "total_wins": 97,
+  "win_rate": 0.4127659574468085,
+  "total_r": 24.5018,
+  "pnl_usd": 1137.46,
+  "final_equity": 51137.46,
+  "max_drawdown_usd": 2854.82,
+  "ambiguous_count": 19
+ },
+ "NY_PM OOS(25-26)": {
+  "total_days": 374,
+  "total_trades": 97,
+  "total_wins": 42,
+  "win_rate": 0.4329896907216495,
+  "total_r": 0.993,
+  "pnl_usd": -1121.24,
+  "final_equity": 48878.76,
+  "max_drawdown_usd": 1851.8,
+  "ambiguous_count": 5
+ },
+ "LONDON IS(21-24)": {
+  "total_days": 919,
+  "total_trades": 448,
+  "total_wins": 224,
+  "win_rate": 0.5,
+  "total_r": 56.0744,
+  "pnl_usd": -2436.82,
+  "final_equity": 47563.18,
+  "max_drawdown_usd": 5897.06,
+  "ambiguous_count": 38
+ },
+ "LONDON OOS(25-26)": {
+  "total_days": 374,
+  "total_trades": 215,
+  "total_wins": 102,
+  "win_rate": 0.4744186046511628,
+  "total_r": 14.2266,
+  "pnl_usd": -2331.9,
+  "final_equity": 47668.1,
+  "max_drawdown_usd": 4501.32,
+  "ambiguous_count": 14
+ }
+}
