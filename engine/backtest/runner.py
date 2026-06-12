@@ -21,6 +21,7 @@ from engine.detectors.pools import LiquidityPoolTracker
 from engine.model.config import StrategyConfig
 from engine.model.bias import DailyBias, compute_bias
 from engine.model.strategy import ICTStrategy, StateChanged
+from engine.model.orb import ORBStrategy
 from engine.sim.broker import SimBroker, BrokerConfig
 from engine.sim.risk import RiskManager, RiskConfig, SessionState
 from engine.backtest.decision_log import DayResult, _ts
@@ -163,8 +164,13 @@ def run_day(
                       for b_h in history_bars[-200:] if b_h.ts_utc in es_bars_map}
         day_es_bars.update(history_es)
 
-    strategy = ICTStrategy(config=config, bias=bias, broker=broker, risk_manager=risk_mgr,
-                           es_bars=day_es_bars if day_es_bars else None)
+    if config.strategy_type == "orb":
+        strategy: ICTStrategy | ORBStrategy = ORBStrategy(
+            config=config, bias=bias, broker=broker, risk_manager=risk_mgr
+        )
+    else:
+        strategy = ICTStrategy(config=config, bias=bias, broker=broker, risk_manager=risk_mgr,
+                               es_bars=day_es_bars if day_es_bars else None)
 
     # ── 獨立 pool / fvg 追蹤（用於 annotations 輸出）────────────────────────
     ann_pool = LiquidityPoolTracker(n=config.swing_n, r=config.raid_recover_bars)
@@ -430,9 +436,19 @@ if __name__ == "__main__":
         default=None,
         help="交易時段（§2.4）：NY_AM（預設）/ NY_PM / LONDON",
     )
+    parser.add_argument(
+        "--strategy",
+        choices=["ict", "orb"],
+        default=None,
+        help="策略類型：ict（預設）/ orb（Opening Range Breakout）",
+    )
     args = parser.parse_args()
 
-    if args.preset == "silver_bullet":
+    if args.strategy == "orb":
+        cfg = StrategyConfig.for_orb()
+        print("[ORB] Using Opening Range Breakout strategy")
+        run_all(config=cfg, verbose=True)
+    elif args.preset == "silver_bullet":
         cfg = StrategyConfig.silver_bullet()
         print("[SB] Using Silver Bullet preset")
         run_all(config=cfg, out_dir=_SB_REPLAY_DIR, verbose=True)

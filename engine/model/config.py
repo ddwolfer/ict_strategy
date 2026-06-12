@@ -4,6 +4,8 @@ v2 新增：bias_mode, entry_window, late_window_thu_fri, flatten_time,
          fvg_filter, stop_mode, targets_mode=m13_liquidity, trail_half_at,
          trail_be_at, min_stop_points, max_stop_points。
 v3 新增：session, context_start, for_session() classmethod（§2.4 多時段）。
+v4 新增：strategy_type, ORB 專屬欄位（or_minutes, orb_one_shot,
+         orb_stop, orb_tp_r），for_orb() classmethod。
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
@@ -231,6 +233,21 @@ class StrategyConfig:
     # window 舊欄位（runner.py EOD 邏輯仍引用）
     window: str = "RTH_OPEN_3H"
 
+    # ── 策略選擇 ─────────────────────────────────────────────────────────────
+    strategy_type: Literal["ict", "orb"] = "ict"
+
+    # ── ORB 專屬設定 ─────────────────────────────────────────────────────────
+    # or_minutes：Opening Range 分鐘數（論文版 30 分）
+    or_minutes: int = 30
+    # orb_one_shot：每日只取第一次突破（True = 論文版）
+    orb_one_shot: bool = True
+    # orb_stop：停損模式
+    #   "or_opposite" = OR 對側（突破高 → 停損 OR 低，反之亦然）
+    #   "or_mid"      = OR 中點
+    orb_stop: Literal["or_opposite", "or_mid"] = "or_opposite"
+    # orb_tp_r：停利 R 倍數；None = 不設固定 TP，持有到 EOD（論文版）
+    orb_tp_r: float | None = None
+
     @classmethod
     def silver_bullet(cls) -> "StrategyConfig":
         """Silver Bullet preset (§2.5)."""
@@ -261,6 +278,39 @@ class StrategyConfig:
         params = dict(_SESSION_DEFAULTS[session])   # 複製預設值
         params["session"] = session
         params.update(overrides)                     # 使用者覆蓋
+        return cls(**params)
+
+    @classmethod
+    def for_orb(cls, **overrides) -> "StrategyConfig":
+        """ORB 策略工廠（Zarattini & Aziz 30 分 NQ ORB，EOD 出場版）。
+
+        時間設定對應 NY 日盤：
+        - context_start 08:00（載入前置 K 棒供偏向計算）
+        - entry_window  10:00–15:30（OR 結束後開始偵測，最晚進場 15:30）
+        - flatten_time  15:55（EOD 強平，論文版）
+        """
+        params: dict = {
+            "strategy_type": "orb",
+            "session": "NY_AM",
+            "context_start": "08:00",
+            "entry_window": ("10:00", "15:30"),
+            "flatten_time": "15:55",
+            "late_window_thu_fri": False,
+            "or_minutes": 30,
+            "orb_one_shot": True,
+            "orb_stop": "or_opposite",
+            "orb_tp_r": None,
+            # OR 過濾用 min/max_stop_points（沿用 ICT 欄位）
+            # NQ 30 分 OR 在高波動期（2024-2026）可達 200–500 pt，預設放寬至 500
+            "min_stop_points": 3.0,
+            "max_stop_points": 500.0,
+            # 風控
+            "max_trades_per_session": 1,
+            "risk_per_trade_pct": 0.5,
+            "account_equity": 50_000.0,
+            "instrument": "MNQ",
+        }
+        params.update(overrides)
         return cls(**params)
 
     def as_dict(self) -> dict:
