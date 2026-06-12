@@ -624,3 +624,51 @@ class TestEntryWindow:
 
         assert strategy.state == "DONE"
         assert broker.position is None
+
+
+class TestMaxTargetR:
+    """m13_liquidity 目標 R 上限：極端遠的流動性層改用 R fallback。"""
+
+    def _strategy(self, **cfg_kw):
+        from engine.model.config import StrategyConfig
+        from engine.model.strategy import ICTStrategy
+        from engine.model.bias import DailyBias
+        from engine.sim.broker import SimBroker, BrokerConfig
+        from engine.sim.risk import RiskManager, RiskConfig
+        cfg = StrategyConfig(**cfg_kw)
+        bias = DailyBias(direction="BOTH", reason="test", dealing_range=None,
+                         dol_level=None, swing_highs=[], swing_lows=[])
+        broker = SimBroker(BrokerConfig(slippage_ticks=0, commission_per_side=0.0))
+        risk = RiskManager(RiskConfig(point_value=cfg.point_value))
+        return ICTStrategy(config=cfg, bias=bias, broker=broker, risk_manager=risk)
+
+    def test_far_onl_pdl_fall_back_to_r_multiples(self):
+        strat = self._strategy(max_target_r=5.0, dol_early_exit_ticks=0)
+        # 空單：entry 29293、stop_dist 30 → max 目標距離 150 點
+        # ONL/PDL 在 500 點外 → 必須被換成 2R/3R fallback
+        strat._onl = 28799.75
+        strat._pdl = 28799.75
+        targets, t1_dist = strat._build_m13_liquidity_targets(
+            entry_px=29293.0, stop_dist=30.0, total_qty=4, direction="SHORT")
+        prices = [p for p, _ in targets]
+        assert all(abs(p - 29293.0) <= 5.0 * 30.0 for p in prices), prices
+        # fallback 2R/3R 應出現
+        assert 29293.0 - 60.0 in prices or 29293.0 - 90.0 in prices, prices
+
+    def test_near_liquidity_still_used(self):
+        strat = self._strategy(max_target_r=5.0, dol_early_exit_ticks=0)
+        strat._onl = 29200.0   # 93 點 ≈ 3.1R，在上限內
+        strat._pdl = 29150.0   # 143 點 ≈ 4.8R，在上限內
+        targets, _ = strat._build_m13_liquidity_targets(
+            entry_px=29293.0, stop_dist=30.0, total_qty=4, direction="SHORT")
+        prices = [p for p, _ in targets]
+        assert 29200.0 in prices and 29150.0 in prices, prices
+
+    def test_targets_tick_aligned(self):
+        strat = self._strategy(max_target_r=5.0, dol_early_exit_ticks=10)
+        strat._onl = 29200.10   # 故意給非 tick 值
+        strat._pdl = 29150.0
+        targets, _ = strat._build_m13_liquidity_targets(
+            entry_px=29293.0, stop_dist=30.0, total_qty=4, direction="SHORT")
+        for p, _q in targets:
+            assert abs(p / 0.25 - round(p / 0.25)) < 1e-9, f"{p} 未對齊 tick"

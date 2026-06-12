@@ -654,21 +654,30 @@ class ICTStrategy:
         """
         early = self.config.dol_early_exit_ticks * TICK
         fracs = self.config.tp_fractions   # (0.5, 0.25, 1.0)
+        one_r = stop_dist
+        max_target_dist = self.config.max_target_r * one_r
 
         def _adjusted(raw_price: float) -> float:
-            """加入提前出場偏移。"""
-            if direction == "SHORT":
-                return raw_price + early   # 空單目標在下方，提早提高一點
-            else:
-                return raw_price - early   # 多單目標在上方，提早降低一點
+            """加入提前出場偏移，並對齊 tick。"""
+            p = raw_price + early if direction == "SHORT" else raw_price - early
+            return round(round(p / TICK) * TICK, 10)
 
-        # ── T1：最近的對側內部流動性，>1R，取最近者 ─────────────────────────
+        def _cap(p: float | None) -> float | None:
+            """流動性目標超過 max_target_r → 視為缺層（改用 R 倍數 fallback）。
+
+            極端日（如大跌隔天）的隔夜/前日極值可能在 10R 以外，
+            掛在那裡等於尾倉永不出場，最後被移動停損收走。
+            """
+            if p is not None and abs(p - entry_px) > max_target_dist:
+                return None
+            return p
+
+        # ── T1：最近的對側內部流動性，>1R 且 <=max_target_r，取最近者 ────────
         t1_raw: float | None = None
-        one_r = stop_dist
         internal_liq = self._get_internal_liquidity(entry_px, direction)
         for lvl in internal_liq:
             dist = abs(lvl - entry_px)
-            if dist > one_r:
+            if one_r < dist <= max_target_dist:
                 t1_raw = lvl
                 break  # 已從最近到最遠排序
         if t1_raw is None:
@@ -678,19 +687,19 @@ class ICTStrategy:
         t1_dist = abs(t1_raw - entry_px)
         t1_price = _adjusted(t1_raw)
 
-        # ── T2：前時段極值 ────────────────────────────────────────────────────
+        # ── T2：前時段極值（超過 R 上限視為缺層）──────────────────────────────
         t2_raw: float | None = None
         if direction == "SHORT":
-            t2_raw = self._onl   # 空單→隔夜低
+            t2_raw = _cap(self._onl)   # 空單→隔夜低
         else:
-            t2_raw = self._onh   # 多單→隔夜高
+            t2_raw = _cap(self._onh)   # 多單→隔夜高
 
-        # ── T3：前日極值 ──────────────────────────────────────────────────────
+        # ── T3：前日極值（超過 R 上限視為缺層）────────────────────────────────
         t3_raw: float | None = None
         if direction == "SHORT":
-            t3_raw = self._pdl
+            t3_raw = _cap(self._pdl)
         else:
-            t3_raw = self._pdh
+            t3_raw = _cap(self._pdh)
 
         # ── 有效性驗證 + 順延 ─────────────────────────────────────────────────
         # 空單：目標需 < entry_px；多單：目標需 > entry_px
@@ -924,6 +933,7 @@ class ICTStrategy:
     def _update_stop(self, pos, new_stop: float, bar: Bar, msg: str) -> None:
         """更新 position 停損價（只允許往有利方向移動），並記錄移動時點。"""
         direction = self._effective_direction()
+        new_stop = round(round(new_stop / TICK) * TICK, 10)  # 對齊 tick
         moved = False
         if direction == "SHORT":
             if new_stop < pos.stop_price:

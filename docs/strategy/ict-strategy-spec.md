@@ -114,7 +114,9 @@ swing low 被破才算 MSS」的 1 分 K 對應），且位移留下 bearish FVG
   T2 = 前一時段極值（AM 空單 → 隔夜低點）平 25%、
   T3 = 前日極值（PDL/PDH）平剩餘；每個目標前 `dol_early_exit`
   （預設 10 ticks）提前掛單（M11「不當 Mr. Wizard」）；
-  缺某層目標時順延下一層，全缺時 fallback 到 r_multiple 模式
+  缺某層目標時順延下一層，全缺時 fallback 到 r_multiple 模式；
+  各層距離上限 `max_target_r`（預設 5R）——極端日（大跌隔天）的隔夜/前日
+  極值可能在 10R 外，掛在那裡尾倉永不出場，超限改用 R 倍數 fallback
 - 備選模式：`fixed_points`（M6/M7 模板 20/40/60 點；注意 M12 的指數換算為
   20 ticks = 5 handles，兩種尺度衝突，故僅作備選並於回測比較）、
   `r_multiple`（TP1=1R/TP2=2R/TP3=3R）

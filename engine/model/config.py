@@ -149,6 +149,10 @@ class StrategyConfig:
 
     # ── 停利 / 停損 ──────────────────────────────────────────────────────────
     targets_mode: Literal["m13_liquidity", "fixed_points", "r_multiple"] = "m13_liquidity"
+    # m13_liquidity 各層流動性目標的距離上限（R 倍數）。超過視為缺層、
+    # 改用 R 倍數 fallback——防止極端日（大跌隔天）把尾倉掛在 10R 外的
+    # 前日低點，浮盈全程不落袋最後被移動停損收走。
+    max_target_r: float = 5.0
     tp_points: tuple[float, float, float] = (20.0, 40.0, 60.0)
     tp_fractions: tuple[float, float, float] = (0.5, 0.25, 1.0)
     dol_early_exit_ticks: int = 10

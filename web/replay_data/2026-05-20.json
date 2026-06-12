@@ -27,6 +27,7 @@
       "stop_mode": "fvg_candle",
       "stop_buffer_ticks": 8,
       "targets_mode": "m13_liquidity",
+      "max_target_r": 5.0,
       "tp_points": [
         20.0,
         40.0,

@@ -27,6 +27,7 @@
       "stop_mode": "fvg_candle",
       "stop_buffer_ticks": 8,
       "targets_mode": "m13_liquidity",
+      "max_target_r": 5.0,
       "tp_points": [
         20.0,
         40.0,
@@ -3621,1353 +3622,1353 @@
   "equity": [
     {
       "t": 1780574400,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780574460,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780574520,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780574580,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780574640,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780574700,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780574760,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780574820,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780574880,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780574940,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575000,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575060,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575120,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575180,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575240,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575300,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575360,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575420,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575480,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575540,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575600,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575660,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575720,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575780,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575840,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575900,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780575960,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576020,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576080,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576140,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576200,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576260,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576320,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576380,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576440,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576500,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576560,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576620,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576680,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576740,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576800,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576860,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576920,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780576980,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577040,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577100,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577160,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577220,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577280,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577340,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577400,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577460,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577520,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577580,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577640,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577700,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577760,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577820,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577880,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780577940,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578000,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578060,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578120,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578180,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578240,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578300,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578360,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578420,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578480,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578540,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578600,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578660,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578720,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578780,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578840,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578900,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780578960,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579020,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579080,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579140,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579200,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579260,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579320,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579380,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579440,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579500,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579560,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579620,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579680,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579740,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579800,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579860,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579920,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780579980,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580040,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580100,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580160,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580220,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580280,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580340,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580400,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580460,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580520,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580580,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580640,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580700,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580760,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580820,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580880,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780580940,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581000,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581060,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581120,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581180,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581240,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581300,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581360,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581420,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581480,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581540,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581600,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581660,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581720,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581780,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581840,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581900,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780581960,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582020,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582080,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582140,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582200,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582260,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582320,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582380,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582440,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582500,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582560,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582620,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582680,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582740,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582800,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582860,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582920,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780582980,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583040,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583100,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583160,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583220,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583280,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583340,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583400,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583460,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583520,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583580,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583640,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583700,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583760,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583820,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583880,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780583940,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584000,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584060,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584120,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584180,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584240,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584300,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584360,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584420,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584480,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584540,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584600,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584660,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584720,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584780,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584840,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584900,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780584960,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585020,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585080,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585140,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585200,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585260,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585320,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585380,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585440,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585500,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585560,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585620,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585680,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585740,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585800,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585860,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585920,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780585980,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586040,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586100,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586160,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586220,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586280,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586340,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586400,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586460,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586520,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586580,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586640,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586700,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586760,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586820,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586880,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780586940,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587000,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587060,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587120,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587180,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587240,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587300,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587360,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587420,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587480,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587540,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587600,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587660,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587720,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587780,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587840,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587900,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780587960,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588020,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588080,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588140,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588200,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588260,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588320,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588380,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588440,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588500,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588560,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588620,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588680,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588740,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588800,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588860,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588920,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780588980,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589040,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589100,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589160,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589220,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589280,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589340,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589400,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589460,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589520,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589580,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589640,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589700,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589760,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589820,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589880,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780589940,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780590000,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780590060,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780590120,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780590180,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780590240,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780590300,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780590360,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780590420,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780590480,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     },
     {
       "t": 1780590540,
-      "realized": 49981.7,
-      "total": 49981.7
+      "realized": 50217.2,
+      "total": 50217.2
     }
   ],
   "stats": {
