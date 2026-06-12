@@ -1,0 +1,46 @@
+{
+ "ORB IS": {
+  "total_days": 919,
+  "total_trades": 742,
+  "total_wins": 366,
+  "win_rate": 0.49326145552560646,
+  "total_r": 97.0203,
+  "pnl_usd": 19821.54,
+  "final_equity": 69821.54,
+  "max_drawdown_usd": 4232.8,
+  "ambiguous_count": 0
+ },
+ "ORB OOS": {
+  "total_days": 374,
+  "total_trades": 137,
+  "total_wins": 71,
+  "win_rate": 0.5182481751824818,
+  "total_r": 17.4212,
+  "pnl_usd": 3857.0,
+  "final_equity": 53857.0,
+  "max_drawdown_usd": 1701.22,
+  "ambiguous_count": 0
+ },
+ "AM+ATR¹h IS": {
+  "total_days": 919,
+  "total_trades": 125,
+  "total_wins": 60,
+  "win_rate": 0.48,
+  "total_r": 24.9745,
+  "pnl_usd": 4675.4,
+  "final_equity": 54675.4,
+  "max_drawdown_usd": 1918.08,
+  "ambiguous_count": 9
+ },
+ "AM+ATR¹h OOS": {
+  "total_days": 374,
+  "total_trades": 55,
+  "total_wins": 27,
+  "win_rate": 0.4909090909090909,
+  "total_r": 1.7678,
+  "pnl_usd": -49.58,
+  "final_equity": 49950.42,
+  "max_drawdown_usd": 1299.52,
+  "ambiguous_count": 4
+ }
+}
