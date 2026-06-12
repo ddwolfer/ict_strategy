@@ -21,16 +21,17 @@ const ZONE_STYLES = {
   OTE_ZONE: { fill: 'rgba(167, 139, 250, 0.10)', border: 'rgba(167, 139, 250, 0.3)' },
 };
 
+function _scaleAlpha(rgba, factor) {
+  return rgba.replace(/[\d.]+\)$/, m => (parseFloat(m) * factor).toFixed(3) + ')');
+}
+
 function getZoneStyle(zone) {
   const base = ZONE_STYLES[zone.kind] ?? { fill: 'rgba(255,255,255,0.05)', border: 'rgba(255,255,255,0.2)' };
-  if (zone.filled || zone.invalidated) {
-    // Halve alpha for expired zones
-    return {
-      fill:   base.fill.replace(/[\d.]+\)$/, m => (parseFloat(m) * 0.5).toFixed(3) + ')'),
-      border: base.border.replace(/[\d.]+\)$/, m => (parseFloat(m) * 0.5).toFixed(3) + ')'),
-    };
-  }
-  return base;
+  const status = zone._status ?? (zone.filled || zone.invalidated ? 'filled' : 'fresh');
+  // fresh 全亮；touched 七成；filled/invalidated 殘影三成
+  const factor = status === 'fresh' ? 1.0 : status === 'touched' ? 0.7 : 0.3;
+  if (factor === 1.0) return base;
+  return { fill: _scaleAlpha(base.fill, factor), border: _scaleAlpha(base.border, factor) };
 }
 
 // ── OverlayManager ────────────────────────────────────────────────────────────
@@ -171,9 +172,14 @@ export class OverlayManager {
   _drawZone(ctx, ts, series, zone) {
     // Convert time boundaries
     const xFrom = ts.timeToCoordinate(toNYWallTime(zone.from_t));
-    // to_t: if null/undefined, extend to right edge of canvas
-    const xTo = zone.to_t != null
-      ? ts.timeToCoordinate(toNYWallTime(zone.to_t))
+    // 右緣：回補/失效時點優先，否則只畫到「當前回放時間」——
+    // 絕不延伸到畫布右緣（歷史 FVG 會疊成一片）
+    let endT = zone._end_t ?? zone.to_t;
+    if (endT == null || (this._currentT != null && endT > this._currentT)) {
+      endT = this._currentT;
+    }
+    const xTo = endT != null
+      ? ts.timeToCoordinate(toNYWallTime(endT))
       : this._container.clientWidth;
 
     // Convert price boundaries

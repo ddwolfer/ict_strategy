@@ -164,10 +164,15 @@ html, body {
 #progress-slider {
   flex: 1;
   min-width: 60px;
-  height: 2px;
+  /* 命中區要夠大才拖得到；軌道視覺上仍是 2px 細線（漸層置中） */
+  height: 16px;
   -webkit-appearance: none;
   appearance: none;
-  background: var(--border);
+  background: linear-gradient(to bottom,
+    transparent calc(50% - 1px),
+    var(--border) calc(50% - 1px),
+    var(--border) calc(50% + 1px),
+    transparent calc(50% + 1px));
   cursor: pointer;
   outline: none;
 }
@@ -175,18 +180,24 @@ html, body {
 #progress-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
   background: var(--text);
-  cursor: pointer;
+  cursor: grab;
+}
+
+#progress-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
 }
 
 #progress-slider::-moz-range-thumb {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
   background: var(--text);
   border: none;
-  cursor: pointer;
+  cursor: grab;
 }
 
 #progress-label {

@@ -152,7 +152,10 @@ export class ReplayEngine {
   get visibleLevels() {
     const t = this.currentT;
     if (t === null) return [];
-    return this._data.annotations.levels.filter(l => l.from_t <= t);
+    const GHOST_SEC = 300; // 被掃後標籤保留 5 分鐘
+    return this._data.annotations.levels.filter(l =>
+      l.from_t <= t && !(l.swept_t != null && l.swept_t <= t && t > l.swept_t + GHOST_SEC)
+    );
   }
 
   /**
@@ -161,7 +164,24 @@ export class ReplayEngine {
   get visibleZones() {
     const t = this.currentT;
     if (t === null) return [];
-    return this._data.annotations.zones.filter(z => z.from_t <= t);
+    const GHOST_SEC = 300; // 回補/失效後殘影保留 5 分鐘
+    const out = [];
+    for (const z of this._data.annotations.zones) {
+      if (z.from_t > t) continue;
+      let status = 'fresh';
+      let endT = null;
+      for (const sc of (z.status_changes || [])) {
+        if (sc.t <= t) {
+          status = sc.status;
+          if (endT === null && (sc.status === 'filled' || sc.status === 'invalidated')) {
+            endT = sc.t;
+          }
+        }
+      }
+      if (endT !== null && t > endT + GHOST_SEC) continue; // 殘影期過 → 消失
+      out.push({ ...z, _status: status, _end_t: endT });
+    }
+    return out;
   }
 
   /**

@@ -231,15 +231,17 @@ speedSelect.addEventListener('change', () => {
 let _sliderRaf = null;
 progressSlider.addEventListener('input', () => {
   if (!engine) return;
+  // 必須先抓值：engine.pause() 會觸發更新並把滑桿值寫回舊位置，
+  // 若延後到 rAF 才讀，讀到的是被改回去的舊值（= 拖了會彈回去）
+  const target = parseInt(progressSlider.value);
   engine.pause();
-  // Cancel any pending rAF seek so we use the latest slider value
   if (_sliderRaf !== null) {
     cancelAnimationFrame(_sliderRaf);
   }
   _sliderRaf = requestAnimationFrame(() => {
     _sliderRaf = null;
     if (!engine) return;
-    engine.seekTo(parseInt(progressSlider.value));
+    engine.seekTo(target);
   });
 });
 
@@ -409,12 +411,26 @@ window.__seekTo = (idx) => {
       engine.seekTo(60);   // 往回拖
       engine.seekTo(150);
       const st = engine.visibleStates?.at?.(-1) ?? engine.currentState ?? null;
+
+      // 滑桿完整鏈路測試：合成 input 事件 → 應 seek 到 30
+      progressSlider.value = '30';
+      progressSlider.dispatchEvent(new Event('input', { bubbles: true }));
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      const sliderSeekOK = engine.currentIndex === 30;
+
+      // 滑桿是否被其他元素蓋住（pointer 命中測試）
+      const rect = progressSlider.getBoundingClientRect();
+      const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      const hitDesc = hit ? (hit.id || hit.tagName) : 'null';
+
       report.textContent = [
-        'AUTOTEST_OK',
+        sliderSeekOK ? 'AUTOTEST_OK' : 'AUTOTEST_FAIL(slider)',
         `idx=${engine.currentIndex}`,
-        `bars=${engine.visibleBars.length}`,
-        `markers=${engine.visibleMarkers.length}`,
-        `state=${JSON.stringify(st)}`,
+        `sliderSeek=${sliderSeekOK}`,
+        `sliderHit=${hitDesc}`,
+        `sliderRect=${Math.round(rect.width)}x${Math.round(rect.height)}`,
+        `zones=${engine.visibleZones.length}`,
+        `state=${JSON.stringify(st?.state)}`,
         `activeTrade=${JSON.stringify(engine.activeTrade?.id ?? null)}`,
       ].join(' | ');
     } catch (err) {
