@@ -6,23 +6,26 @@
     "tick": 0.25,
     "point_value": 20.0,
     "config": {
-      "window": "RTH_OPEN_3H",
-      "day_filter": [
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu"
+      "bias_mode": "m13_raid",
+      "entry_window": [
+        "09:30",
+        "11:00"
       ],
-      "thursday_size_factor": 0.5,
-      "use_day_filter": true,
+      "late_window_thu_fri": true,
+      "flatten_time": "12:30",
+      "day_filter": null,
+      "thursday_size_factor": 1.0,
       "min_dol_points": 30.0,
       "raid_recover_bars": 3,
       "mss_timeout_bars": 15,
       "entry_timeout_bars": 20,
+      "displacement_window": 20,
+      "displacement_mult": 2.0,
       "entry_level": "proximal",
-      "fvg_half_filter": true,
+      "fvg_filter": "leg_equilibrium",
+      "stop_mode": "fvg_candle",
       "stop_buffer_ticks": 8,
-      "targets_mode": "fixed_points",
+      "targets_mode": "m13_liquidity",
       "tp_points": [
         20.0,
         40.0,
@@ -31,21 +34,31 @@
       "tp_fractions": [
         0.5,
         0.25,
-        0.8
+        1.0
       ],
       "dol_early_exit_ticks": 10,
-      "objective_for_trailing": "tp2",
+      "trail_half_at": 0.5,
+      "trail_be_at": 0.75,
+      "min_stop_points": 3.0,
+      "max_stop_points": 40.0,
       "max_trades_per_session": 2,
       "daily_loss_limit_r": -2.0,
       "risk_per_trade_pct": 0.5,
       "account_equity": 50000.0,
       "slippage_ticks": 1,
       "commission_per_side": 2.25,
-      "swing_n": 1
+      "swing_n": 1,
+      "use_day_filter": false,
+      "fvg_half_filter": false,
+      "window": "RTH_OPEN_3H"
     },
-    "bias_direction": "NO_TRADE",
-    "bias_reason": "現價 29457.75 未突破任何 swing（需 Buy 突破 swing high 或 Sell 跌破 swing low）",
-    "dol_level": null
+    "bias_direction": "BOTH",
+    "bias_reason": "m13_raid：雙向等掃蕩；DR=28527.25–30754.75 eq=29641.00；PDH=29544.25 PDL=28577.50",
+    "dol_level": null,
+    "pdh": 29544.25,
+    "pdl": 28577.5,
+    "onh": 28936.0,
+    "onl": 28265.75
   },
   "bars": [],
   "session_start_t": 0,

@@ -56,6 +56,7 @@ class DayResult:
     bias: DailyBias
     config: StrategyConfig
     equity_points: list[tuple[int, float, float]]   # (t, realized, total)
+    mss_events: list = field(default_factory=list)  # MSS events（圖上標記用）
 
     def stats(self) -> dict:
         trades = self.closed_trades
@@ -103,8 +104,15 @@ class DayResult:
         level_id = 1
         level_map: dict[tuple, str] = {}
 
+        # 只輸出主要水位——micro swing 太密會塞爆前端
+        MAJOR_KINDS = {
+            "PDH", "PDL", "ONH", "ONL",
+            "SESSION_HIGH", "SESSION_LOW", "EQUAL_HIGHS", "EQUAL_LOWS",
+        }
         for evt in self.pool_events:
             from engine.core.types import PoolCreated, PoolSwept, Raid
+            if getattr(evt, "kind", None) not in MAJOR_KINDS:
+                continue
             if isinstance(evt, (PoolCreated,)):
                 lid = f"L{level_id}"
                 level_id += 1
@@ -146,7 +154,7 @@ class DayResult:
         markers = []
         for evt in self.pool_events:
             from engine.core.types import Raid
-            if isinstance(evt, Raid):
+            if isinstance(evt, Raid) and evt.kind in MAJOR_KINDS:
                 markers.append({
                     "t": _ts(evt.confirmed_at),
                     "kind": "RAID",
@@ -154,6 +162,38 @@ class DayResult:
                     "price": evt.level,
                     "text": f"Raid {evt.kind} {evt.level:.2f}",
                 })
+
+        # markers: MSS 事件
+        from engine.core.types import MSS
+        for evt in getattr(self, "mss_events", []):
+            if isinstance(evt, MSS):
+                markers.append({
+                    "t": _ts(evt.confirmed_at),
+                    "kind": "MSS",
+                    "side": evt.direction,
+                    "price": evt.broken_swing_level,
+                    "text": f"MSS{'↓' if evt.direction == 'BEAR' else '↑'} 破 {evt.broken_swing_level:.2f}",
+                })
+
+        # markers: 進出場（前端箭頭依賴 annotations.markers）
+        for t in self.closed_trades:
+            markers.append({
+                "t": _ts(t.entry_time),
+                "kind": "ENTRY",
+                "side": "BULL" if t.side == "BUY" else "BEAR",
+                "price": t.entry_price,
+                "text": f"{'多' if t.side == 'BUY' else '空'}單進場 {t.entry_price:.2f}",
+            })
+            for f in t.exit_fills:
+                kind = {"TARGET": "EXIT_TARGET", "STOP": "EXIT_STOP"}.get(f.reason, "EXIT_EOD")
+                markers.append({
+                    "t": _ts(f.ts),
+                    "kind": kind,
+                    "side": "BULL" if t.side == "BUY" else "BEAR",
+                    "price": f.price,
+                    "text": f"{f.reason} {f.price:.2f} x{f.qty}",
+                })
+        markers.sort(key=lambda m: m["t"])
 
         # state_timeline
         state_tl = []
@@ -227,13 +267,17 @@ class DayResult:
             "meta": {
                 "symbol": "NQ=F",
                 "date": str(self.date),
-                "window": cfg.window,
+                "window": getattr(cfg, "window", "RTH_OPEN_3H"),
                 "tick": TICK,
                 "point_value": POINT_VALUE,
                 "config": cfg.as_dict(),
                 "bias_direction": bias.direction,
                 "bias_reason": bias.reason,
                 "dol_level": bias.dol_level,
+                "pdh": getattr(bias, "prev_day_high", None),
+                "pdl": getattr(bias, "prev_day_low", None),
+                "onh": getattr(bias, "overnight_high", None),
+                "onl": getattr(bias, "overnight_low", None),
             },
             "bars": [_bar_to_dict(b) for b in self.bars],
             "session_start_t": self.session_start_t,

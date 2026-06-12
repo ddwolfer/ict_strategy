@@ -14,6 +14,7 @@ from engine.core.types import Bar, TICK, POINT_VALUE
 from engine.core.sessions import trading_date, is_in_window, _to_et, ET
 from engine.data.loader import load_bars, list_trading_days
 from engine.detectors.fvg import FVGDetector
+from engine.detectors.mss import MSSDetector
 from engine.detectors.pools import LiquidityPoolTracker
 from engine.model.config import StrategyConfig
 from engine.model.bias import DailyBias, compute_bias
@@ -107,12 +108,19 @@ def run_day(
     # ── 獨立 pool / fvg 追蹤（用於 annotations 輸出）────────────────────────
     ann_pool = LiquidityPoolTracker(n=config.swing_n, r=config.raid_recover_bars)
     ann_fvg = FVGDetector()
+    ann_mss = MSSDetector(
+        n=config.swing_n,
+        window=config.displacement_window,
+        mult=config.displacement_mult,
+    )
     all_pool_evts: list = []
     all_fvg_evts: list = []
+    all_mss_evts: list = []
 
     # ── 餵歷史 context 給 annotation detectors（可選：建立正確 PDH/PDL）──────
     for b in history_bars[-200:]:  # 最多 200 根避免太慢
         ann_pool.on_bar(b)
+        ann_mss.on_bar(b)
 
     # ── 逐根跑 ───────────────────────────────────────────────────────────────
     equity_points: list[tuple[int, float, float]] = []
@@ -124,6 +132,7 @@ def run_day(
         fvg_evts = ann_fvg.on_bar(b)
         all_pool_evts.extend(pool_evts)
         all_fvg_evts.extend(fvg_evts)
+        all_mss_evts.extend(ann_mss.on_bar(b))
 
         # 策略 on_bar
         strategy.on_bar(b)
@@ -150,6 +159,7 @@ def run_day(
         closed_trades=broker.trades,
         pool_events=all_pool_evts,
         fvg_snapshots=all_fvg_evts,
+        mss_events=all_mss_evts,
         broker=broker,
         strategy=strategy,
         bias=bias,
@@ -210,6 +220,7 @@ def run_all(
         summary = {
             "date": str(day),
             "bias": result.bias.direction,
+            "bias_reason": result.bias.reason[:60] if result.bias.reason else "",
             "trades": stats["trades"],
             "wins": stats["wins"],
             "pnl_usd": stats["pnl_usd"],
@@ -223,7 +234,10 @@ def run_all(
 
         if verbose:
             flag = "RED" if stats["pnl_usd"] < 0 else ("---" if stats["trades"] == 0 else "GRN")
-            print(f"  {day} [{result.bias.direction:8s}] {flag} "
+            bias_label = result.bias.direction
+            if bias_label == "BOTH":
+                bias_label = "BOTH    "
+            print(f"  {day} [{bias_label:8s}] {flag} "
                   f"T={stats['trades']} W={stats['wins']} "
                   f"R={stats['total_r']:+.2f} PnL={stats['pnl_usd']:+.0f}")
 

@@ -6,23 +6,26 @@
     "tick": 0.25,
     "point_value": 20.0,
     "config": {
-      "window": "RTH_OPEN_3H",
-      "day_filter": [
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu"
+      "bias_mode": "m13_raid",
+      "entry_window": [
+        "09:30",
+        "11:00"
       ],
-      "thursday_size_factor": 0.5,
-      "use_day_filter": true,
+      "late_window_thu_fri": true,
+      "flatten_time": "12:30",
+      "day_filter": null,
+      "thursday_size_factor": 1.0,
       "min_dol_points": 30.0,
       "raid_recover_bars": 3,
       "mss_timeout_bars": 15,
       "entry_timeout_bars": 20,
+      "displacement_window": 20,
+      "displacement_mult": 2.0,
       "entry_level": "proximal",
-      "fvg_half_filter": true,
+      "fvg_filter": "leg_equilibrium",
+      "stop_mode": "fvg_candle",
       "stop_buffer_ticks": 8,
-      "targets_mode": "fixed_points",
+      "targets_mode": "m13_liquidity",
       "tp_points": [
         20.0,
         40.0,
@@ -31,21 +34,31 @@
       "tp_fractions": [
         0.5,
         0.25,
-        0.8
+        1.0
       ],
       "dol_early_exit_ticks": 10,
-      "objective_for_trailing": "tp2",
+      "trail_half_at": 0.5,
+      "trail_be_at": 0.75,
+      "min_stop_points": 3.0,
+      "max_stop_points": 40.0,
       "max_trades_per_session": 2,
       "daily_loss_limit_r": -2.0,
       "risk_per_trade_pct": 0.5,
       "account_equity": 50000.0,
       "slippage_ticks": 1,
       "commission_per_side": 2.25,
-      "swing_n": 1
+      "swing_n": 1,
+      "use_day_filter": false,
+      "fvg_half_filter": false,
+      "window": "RTH_OPEN_3H"
     },
     "bias_direction": "NO_TRADE",
-    "bias_reason": "日 K 僅 1 根，不足以計算 swing（需至少 3 根）",
-    "dol_level": null
+    "bias_reason": "日 K 不足 3 根，無法計算 Dealing Range",
+    "dol_level": null,
+    "pdh": null,
+    "pdl": null,
+    "onh": null,
+    "onl": null
   },
   "bars": [
     {
@@ -2224,177 +2237,6 @@
       },
       {
         "id": "L2",
-        "kind": "SWING_HIGH",
-        "price": 29688.5,
-        "from_t": 1778846400,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 29688.50"
-      },
-      {
-        "id": "L3",
-        "kind": "SWING_LOW",
-        "price": 29229.25,
-        "from_t": 1778846640,
-        "to_t": null,
-        "swept_t": 1778846760,
-        "label": "SWING_LOW 29229.25"
-      },
-      {
-        "id": "L4",
-        "kind": "SWING_HIGH",
-        "price": 29244.5,
-        "from_t": 1778846700,
-        "to_t": null,
-        "swept_t": 1778851500,
-        "label": "SWING_HIGH 29244.50"
-      },
-      {
-        "id": "L5",
-        "kind": "SWING_LOW",
-        "price": 29206.5,
-        "from_t": 1778846940,
-        "to_t": null,
-        "swept_t": 1778847120,
-        "label": "SWING_LOW 29206.50"
-      },
-      {
-        "id": "L6",
-        "kind": "SWING_HIGH",
-        "price": 29237.25,
-        "from_t": 1778847060,
-        "to_t": null,
-        "swept_t": 1778847720,
-        "label": "SWING_HIGH 29237.25"
-      },
-      {
-        "id": "L7",
-        "kind": "SWING_LOW",
-        "price": 29168.75,
-        "from_t": 1778847300,
-        "to_t": null,
-        "swept_t": 1778848200,
-        "label": "SWING_LOW 29168.75"
-      },
-      {
-        "id": "L8",
-        "kind": "SWING_HIGH",
-        "price": 29212.0,
-        "from_t": 1778847480,
-        "to_t": null,
-        "swept_t": 1778847600,
-        "label": "SWING_HIGH 29212.00"
-      },
-      {
-        "id": "L9",
-        "kind": "SWING_LOW",
-        "price": 29194.5,
-        "from_t": 1778847540,
-        "to_t": null,
-        "swept_t": 1778848020,
-        "label": "SWING_LOW 29194.50"
-      },
-      {
-        "id": "L10",
-        "kind": "SWING_HIGH",
-        "price": 29243.25,
-        "from_t": 1778847840,
-        "to_t": null,
-        "swept_t": 1778851500,
-        "label": "SWING_HIGH 29243.25"
-      },
-      {
-        "id": "L11",
-        "kind": "SWING_LOW",
-        "price": 29199.25,
-        "from_t": 1778847960,
-        "to_t": null,
-        "swept_t": 1778852040,
-        "label": "SWING_LOW 29199.25"
-      },
-      {
-        "id": "L12",
-        "kind": "SWING_HIGH",
-        "price": 29214.25,
-        "from_t": 1778848020,
-        "to_t": null,
-        "swept_t": 1778851260,
-        "label": "SWING_HIGH 29214.25"
-      },
-      {
-        "id": "L13",
-        "kind": "SWING_LOW",
-        "price": 29188.0,
-        "from_t": 1778848080,
-        "to_t": null,
-        "swept_t": 1778848200,
-        "label": "SWING_LOW 29188.00"
-      },
-      {
-        "id": "L14",
-        "kind": "SWING_LOW",
-        "price": 29155.5,
-        "from_t": 1778848260,
-        "to_t": null,
-        "swept_t": 1778848560,
-        "label": "SWING_LOW 29155.50"
-      },
-      {
-        "id": "L15",
-        "kind": "SWING_HIGH",
-        "price": 29185.25,
-        "from_t": 1778848440,
-        "to_t": null,
-        "swept_t": 1778848860,
-        "label": "SWING_HIGH 29185.25"
-      },
-      {
-        "id": "L16",
-        "kind": "SWING_LOW",
-        "price": 29142.75,
-        "from_t": 1778848680,
-        "to_t": null,
-        "swept_t": 1778849280,
-        "label": "SWING_LOW 29142.75"
-      },
-      {
-        "id": "L17",
-        "kind": "SWING_HIGH",
-        "price": 29190.5,
-        "from_t": 1778848920,
-        "to_t": null,
-        "swept_t": 1778849760,
-        "label": "SWING_HIGH 29190.50"
-      },
-      {
-        "id": "L18",
-        "kind": "SWING_LOW",
-        "price": 29162.0,
-        "from_t": 1778848980,
-        "to_t": null,
-        "swept_t": 1778849040,
-        "label": "SWING_LOW 29162.00"
-      },
-      {
-        "id": "L19",
-        "kind": "SWING_LOW",
-        "price": 29147.75,
-        "from_t": 1778849160,
-        "to_t": null,
-        "swept_t": 1778849220,
-        "label": "SWING_LOW 29147.75"
-      },
-      {
-        "id": "L20",
-        "kind": "SWING_HIGH",
-        "price": 29165.5,
-        "from_t": 1778849220,
-        "to_t": null,
-        "swept_t": 1778849400,
-        "label": "SWING_HIGH 29165.50"
-      },
-      {
-        "id": "L21",
         "kind": "EQUAL_LOWS",
         "price": 29142.5,
         "from_t": 1778849340,
@@ -2403,52 +2245,7 @@
         "label": "EQUAL_LOWS 29142.50"
       },
       {
-        "id": "L22",
-        "kind": "SWING_LOW",
-        "price": 29142.5,
-        "from_t": 1778849340,
-        "to_t": null,
-        "swept_t": 1778852700,
-        "label": "SWING_LOW 29142.50"
-      },
-      {
-        "id": "L23",
-        "kind": "SWING_LOW",
-        "price": 29170.25,
-        "from_t": 1778849700,
-        "to_t": null,
-        "swept_t": 1778850000,
-        "label": "SWING_LOW 29170.25"
-      },
-      {
-        "id": "L24",
-        "kind": "SWING_HIGH",
-        "price": 29196.5,
-        "from_t": 1778849820,
-        "to_t": null,
-        "swept_t": 1778849880,
-        "label": "SWING_HIGH 29196.50"
-      },
-      {
-        "id": "L25",
-        "kind": "SWING_HIGH",
-        "price": 29203.5,
-        "from_t": 1778849940,
-        "to_t": null,
-        "swept_t": 1778851080,
-        "label": "SWING_HIGH 29203.50"
-      },
-      {
-        "id": "L26",
-        "kind": "SWING_HIGH",
-        "price": 29171.75,
-        "from_t": 1778850180,
-        "to_t": null,
-        "swept_t": 1778850240,
-        "label": "SWING_HIGH 29171.75"
-      },
-      {
-        "id": "L27",
+        "id": "L3",
         "kind": "EQUAL_HIGHS",
         "price": 29185.75,
         "from_t": 1778850360,
@@ -2457,79 +2254,7 @@
         "label": "EQUAL_HIGHS 29185.75"
       },
       {
-        "id": "L28",
-        "kind": "SWING_HIGH",
-        "price": 29185.75,
-        "from_t": 1778850360,
-        "to_t": null,
-        "swept_t": 1778850420,
-        "label": "SWING_HIGH 29185.75"
-      },
-      {
-        "id": "L29",
-        "kind": "SWING_HIGH",
-        "price": 29187.75,
-        "from_t": 1778850480,
-        "to_t": null,
-        "swept_t": 1778850960,
-        "label": "SWING_HIGH 29187.75"
-      },
-      {
-        "id": "L30",
-        "kind": "SWING_LOW",
-        "price": 29160.5,
-        "from_t": 1778850540,
-        "to_t": null,
-        "swept_t": 1778852220,
-        "label": "SWING_LOW 29160.50"
-      },
-      {
-        "id": "L31",
-        "kind": "SWING_HIGH",
-        "price": 29182.25,
-        "from_t": 1778850720,
-        "to_t": null,
-        "swept_t": 1778850960,
-        "label": "SWING_HIGH 29182.25"
-      },
-      {
-        "id": "L32",
-        "kind": "SWING_LOW",
-        "price": 29161.25,
-        "from_t": 1778850780,
-        "to_t": null,
-        "swept_t": 1778852220,
-        "label": "SWING_LOW 29161.25"
-      },
-      {
-        "id": "L33",
-        "kind": "SWING_LOW",
-        "price": 29167.25,
-        "from_t": 1778851020,
-        "to_t": null,
-        "swept_t": 1778852220,
-        "label": "SWING_LOW 29167.25"
-      },
-      {
-        "id": "L34",
-        "kind": "SWING_HIGH",
-        "price": 29215.0,
-        "from_t": 1778851320,
-        "to_t": null,
-        "swept_t": 1778851500,
-        "label": "SWING_HIGH 29215.00"
-      },
-      {
-        "id": "L35",
-        "kind": "SWING_LOW",
-        "price": 29196.0,
-        "from_t": 1778851380,
-        "to_t": null,
-        "swept_t": 1778852040,
-        "label": "SWING_LOW 29196.00"
-      },
-      {
-        "id": "L36",
+        "id": "L4",
         "kind": "EQUAL_HIGHS",
         "price": 29212.25,
         "from_t": 1778851440,
@@ -2538,16 +2263,7 @@
         "label": "EQUAL_HIGHS 29212.25"
       },
       {
-        "id": "L37",
-        "kind": "SWING_HIGH",
-        "price": 29212.25,
-        "from_t": 1778851440,
-        "to_t": null,
-        "swept_t": 1778851500,
-        "label": "SWING_HIGH 29212.25"
-      },
-      {
-        "id": "L38",
+        "id": "L5",
         "kind": "EQUAL_LOWS",
         "price": 29199.25,
         "from_t": 1778851500,
@@ -2556,25 +2272,7 @@
         "label": "EQUAL_LOWS 29199.25"
       },
       {
-        "id": "L39",
-        "kind": "SWING_LOW",
-        "price": 29199.25,
-        "from_t": 1778851500,
-        "to_t": null,
-        "swept_t": 1778852040,
-        "label": "SWING_LOW 29199.25"
-      },
-      {
-        "id": "L40",
-        "kind": "SWING_LOW",
-        "price": 29222.75,
-        "from_t": 1778851680,
-        "to_t": null,
-        "swept_t": 1778851860,
-        "label": "SWING_LOW 29222.75"
-      },
-      {
-        "id": "L41",
+        "id": "L6",
         "kind": "PDH",
         "price": 29752.5,
         "from_t": 1778851800,
@@ -2583,7 +2281,7 @@
         "label": "PDH 29752.50"
       },
       {
-        "id": "L42",
+        "id": "L7",
         "kind": "PDL",
         "price": 29640.5,
         "from_t": 1778851800,
@@ -2592,7 +2290,7 @@
         "label": "PDL 29640.50"
       },
       {
-        "id": "L43",
+        "id": "L8",
         "kind": "SESSION_HIGH",
         "price": 29291.0,
         "from_t": 1778851800,
@@ -2601,7 +2299,7 @@
         "label": "SESSION_HIGH 29291.00"
       },
       {
-        "id": "L44",
+        "id": "L9",
         "kind": "SESSION_LOW",
         "price": 29240.25,
         "from_t": 1778851800,
@@ -2610,61 +2308,7 @@
         "label": "SESSION_LOW 29240.25"
       },
       {
-        "id": "L45",
-        "kind": "SWING_HIGH",
-        "price": 29291.0,
-        "from_t": 1778851860,
-        "to_t": null,
-        "swept_t": 1778854380,
-        "label": "SWING_HIGH 29291.00"
-      },
-      {
-        "id": "L46",
-        "kind": "SWING_LOW",
-        "price": 29202.75,
-        "from_t": 1778851920,
-        "to_t": null,
-        "swept_t": 1778852040,
-        "label": "SWING_LOW 29202.75"
-      },
-      {
-        "id": "L47",
-        "kind": "SWING_HIGH",
-        "price": 29270.25,
-        "from_t": 1778851980,
-        "to_t": null,
-        "swept_t": 1778853240,
-        "label": "SWING_HIGH 29270.25"
-      },
-      {
-        "id": "L48",
-        "kind": "SWING_HIGH",
-        "price": 29258.25,
-        "from_t": 1778852100,
-        "to_t": null,
-        "swept_t": 1778853240,
-        "label": "SWING_HIGH 29258.25"
-      },
-      {
-        "id": "L49",
-        "kind": "SWING_LOW",
-        "price": 29188.75,
-        "from_t": 1778852100,
-        "to_t": null,
-        "swept_t": 1778852220,
-        "label": "SWING_LOW 29188.75"
-      },
-      {
-        "id": "L50",
-        "kind": "SWING_LOW",
-        "price": 29151.0,
-        "from_t": 1778852340,
-        "to_t": null,
-        "swept_t": 1778852700,
-        "label": "SWING_LOW 29151.00"
-      },
-      {
-        "id": "L51",
+        "id": "L10",
         "kind": "EQUAL_HIGHS",
         "price": 29243.75,
         "from_t": 1778852460,
@@ -2673,16 +2317,7 @@
         "label": "EQUAL_HIGHS 29243.75"
       },
       {
-        "id": "L52",
-        "kind": "SWING_HIGH",
-        "price": 29243.75,
-        "from_t": 1778852460,
-        "to_t": null,
-        "swept_t": 1778853240,
-        "label": "SWING_HIGH 29243.75"
-      },
-      {
-        "id": "L53",
+        "id": "L11",
         "kind": "EQUAL_LOWS",
         "price": 29168.25,
         "from_t": 1778852580,
@@ -2691,70 +2326,7 @@
         "label": "EQUAL_LOWS 29168.25"
       },
       {
-        "id": "L54",
-        "kind": "SWING_LOW",
-        "price": 29168.25,
-        "from_t": 1778852580,
-        "to_t": null,
-        "swept_t": 1778852640,
-        "label": "SWING_LOW 29168.25"
-      },
-      {
-        "id": "L55",
-        "kind": "SWING_LOW",
-        "price": 29089.75,
-        "from_t": 1778852880,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29089.75"
-      },
-      {
-        "id": "L56",
-        "kind": "SWING_HIGH",
-        "price": 29238.75,
-        "from_t": 1778853060,
-        "to_t": null,
-        "swept_t": 1778853240,
-        "label": "SWING_HIGH 29238.75"
-      },
-      {
-        "id": "L57",
-        "kind": "SWING_LOW",
-        "price": 29163.25,
-        "from_t": 1778853120,
-        "to_t": null,
-        "swept_t": 1778853480,
-        "label": "SWING_LOW 29163.25"
-      },
-      {
-        "id": "L58",
-        "kind": "SWING_HIGH",
-        "price": 29288.0,
-        "from_t": 1778853420,
-        "to_t": null,
-        "swept_t": 1778854380,
-        "label": "SWING_HIGH 29288.00"
-      },
-      {
-        "id": "L59",
-        "kind": "SWING_LOW",
-        "price": 29132.0,
-        "from_t": 1778853660,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29132.00"
-      },
-      {
-        "id": "L60",
-        "kind": "SWING_HIGH",
-        "price": 29213.25,
-        "from_t": 1778853780,
-        "to_t": null,
-        "swept_t": 1778854080,
-        "label": "SWING_HIGH 29213.25"
-      },
-      {
-        "id": "L61",
+        "id": "L12",
         "kind": "EQUAL_LOWS",
         "price": 29142.75,
         "from_t": 1778853900,
@@ -2763,7 +2335,7 @@
         "label": "EQUAL_LOWS 29142.75"
       },
       {
-        "id": "L62",
+        "id": "L13",
         "kind": "EQUAL_LOWS",
         "price": 29142.5,
         "from_t": 1778853900,
@@ -2772,16 +2344,7 @@
         "label": "EQUAL_LOWS 29142.50"
       },
       {
-        "id": "L63",
-        "kind": "SWING_LOW",
-        "price": 29143.0,
-        "from_t": 1778853900,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29143.00"
-      },
-      {
-        "id": "L64",
+        "id": "L14",
         "kind": "EQUAL_HIGHS",
         "price": 29190.75,
         "from_t": 1778853960,
@@ -2790,196 +2353,7 @@
         "label": "EQUAL_HIGHS 29190.75"
       },
       {
-        "id": "L65",
-        "kind": "SWING_HIGH",
-        "price": 29190.75,
-        "from_t": 1778853960,
-        "to_t": null,
-        "swept_t": 1778854080,
-        "label": "SWING_HIGH 29190.75"
-      },
-      {
-        "id": "L66",
-        "kind": "SWING_LOW",
-        "price": 29193.25,
-        "from_t": 1778854320,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29193.25"
-      },
-      {
-        "id": "L67",
-        "kind": "SWING_LOW",
-        "price": 29274.25,
-        "from_t": 1778854560,
-        "to_t": null,
-        "swept_t": 1778855340,
-        "label": "SWING_LOW 29274.25"
-      },
-      {
-        "id": "L68",
-        "kind": "SWING_HIGH",
-        "price": 29363.25,
-        "from_t": 1778854800,
-        "to_t": null,
-        "swept_t": 1778854860,
-        "label": "SWING_HIGH 29363.25"
-      },
-      {
-        "id": "L69",
-        "kind": "SWING_LOW",
-        "price": 29333.5,
-        "from_t": 1778854860,
-        "to_t": null,
-        "swept_t": 1778855100,
-        "label": "SWING_LOW 29333.50"
-      },
-      {
-        "id": "L70",
-        "kind": "SWING_HIGH",
-        "price": 29381.0,
-        "from_t": 1778854920,
-        "to_t": null,
-        "swept_t": 1778854980,
-        "label": "SWING_HIGH 29381.00"
-      },
-      {
-        "id": "L71",
-        "kind": "SWING_LOW",
-        "price": 29352.5,
-        "from_t": 1778854980,
-        "to_t": null,
-        "swept_t": 1778855040,
-        "label": "SWING_LOW 29352.50"
-      },
-      {
-        "id": "L72",
-        "kind": "SWING_HIGH",
-        "price": 29382.75,
-        "from_t": 1778855040,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 29382.75"
-      },
-      {
-        "id": "L73",
-        "kind": "SWING_HIGH",
-        "price": 29324.0,
-        "from_t": 1778855340,
-        "to_t": null,
-        "swept_t": 1778855460,
-        "label": "SWING_HIGH 29324.00"
-      },
-      {
-        "id": "L74",
-        "kind": "SWING_LOW",
-        "price": 29269.75,
-        "from_t": 1778855400,
-        "to_t": null,
-        "swept_t": 1778856600,
-        "label": "SWING_LOW 29269.75"
-      },
-      {
-        "id": "L75",
-        "kind": "SWING_HIGH",
-        "price": 29328.75,
-        "from_t": 1778855520,
-        "to_t": null,
-        "swept_t": 1778855640,
-        "label": "SWING_HIGH 29328.75"
-      },
-      {
-        "id": "L76",
-        "kind": "SWING_LOW",
-        "price": 29286.0,
-        "from_t": 1778855580,
-        "to_t": null,
-        "swept_t": 1778856420,
-        "label": "SWING_LOW 29286.00"
-      },
-      {
-        "id": "L77",
-        "kind": "SWING_HIGH",
-        "price": 29347.75,
-        "from_t": 1778855700,
-        "to_t": null,
-        "swept_t": 1778855820,
-        "label": "SWING_HIGH 29347.75"
-      },
-      {
-        "id": "L78",
-        "kind": "SWING_LOW",
-        "price": 29302.25,
-        "from_t": 1778855820,
-        "to_t": null,
-        "swept_t": 1778856360,
-        "label": "SWING_LOW 29302.25"
-      },
-      {
-        "id": "L79",
-        "kind": "SWING_HIGH",
-        "price": 29360.5,
-        "from_t": 1778856060,
-        "to_t": null,
-        "swept_t": 1778858520,
-        "label": "SWING_HIGH 29360.50"
-      },
-      {
-        "id": "L80",
-        "kind": "SWING_LOW",
-        "price": 29326.0,
-        "from_t": 1778856180,
-        "to_t": null,
-        "swept_t": 1778856300,
-        "label": "SWING_LOW 29326.00"
-      },
-      {
-        "id": "L81",
-        "kind": "SWING_HIGH",
-        "price": 29354.0,
-        "from_t": 1778856360,
-        "to_t": null,
-        "swept_t": 1778858460,
-        "label": "SWING_HIGH 29354.00"
-      },
-      {
-        "id": "L82",
-        "kind": "SWING_LOW",
-        "price": 29281.0,
-        "from_t": 1778856540,
-        "to_t": null,
-        "swept_t": 1778856600,
-        "label": "SWING_LOW 29281.00"
-      },
-      {
-        "id": "L83",
-        "kind": "SWING_LOW",
-        "price": 29249.75,
-        "from_t": 1778856660,
-        "to_t": null,
-        "swept_t": 1778856720,
-        "label": "SWING_LOW 29249.75"
-      },
-      {
-        "id": "L84",
-        "kind": "SWING_LOW",
-        "price": 29247.5,
-        "from_t": 1778856780,
-        "to_t": null,
-        "swept_t": 1778857620,
-        "label": "SWING_LOW 29247.50"
-      },
-      {
-        "id": "L85",
-        "kind": "SWING_HIGH",
-        "price": 29327.0,
-        "from_t": 1778856960,
-        "to_t": null,
-        "swept_t": 1778857020,
-        "label": "SWING_HIGH 29327.00"
-      },
-      {
-        "id": "L86",
+        "id": "L15",
         "kind": "EQUAL_HIGHS",
         "price": 29329.25,
         "from_t": 1778857080,
@@ -2988,16 +2362,7 @@
         "label": "EQUAL_HIGHS 29329.25"
       },
       {
-        "id": "L87",
-        "kind": "SWING_HIGH",
-        "price": 29329.25,
-        "from_t": 1778857080,
-        "to_t": null,
-        "swept_t": 1778858400,
-        "label": "SWING_HIGH 29329.25"
-      },
-      {
-        "id": "L88",
+        "id": "L16",
         "kind": "EQUAL_LOWS",
         "price": 29274.0,
         "from_t": 1778857260,
@@ -3006,97 +2371,7 @@
         "label": "EQUAL_LOWS 29274.00"
       },
       {
-        "id": "L89",
-        "kind": "SWING_LOW",
-        "price": 29274.0,
-        "from_t": 1778857260,
-        "to_t": null,
-        "swept_t": 1778857320,
-        "label": "SWING_LOW 29274.00"
-      },
-      {
-        "id": "L90",
-        "kind": "SWING_HIGH",
-        "price": 29312.0,
-        "from_t": 1778857320,
-        "to_t": null,
-        "swept_t": 1778857740,
-        "label": "SWING_HIGH 29312.00"
-      },
-      {
-        "id": "L91",
-        "kind": "SWING_LOW",
-        "price": 29251.5,
-        "from_t": 1778857440,
-        "to_t": null,
-        "swept_t": 1778857560,
-        "label": "SWING_LOW 29251.50"
-      },
-      {
-        "id": "L92",
-        "kind": "SWING_HIGH",
-        "price": 29297.75,
-        "from_t": 1778857500,
-        "to_t": null,
-        "swept_t": 1778857740,
-        "label": "SWING_HIGH 29297.75"
-      },
-      {
-        "id": "L93",
-        "kind": "SWING_LOW",
-        "price": 29240.5,
-        "from_t": 1778857680,
-        "to_t": null,
-        "swept_t": 1778860200,
-        "label": "SWING_LOW 29240.50"
-      },
-      {
-        "id": "L94",
-        "kind": "SWING_HIGH",
-        "price": 29325.5,
-        "from_t": 1778857860,
-        "to_t": null,
-        "swept_t": 1778858400,
-        "label": "SWING_HIGH 29325.50"
-      },
-      {
-        "id": "L95",
-        "kind": "SWING_LOW",
-        "price": 29277.25,
-        "from_t": 1778857980,
-        "to_t": null,
-        "swept_t": 1778858040,
-        "label": "SWING_LOW 29277.25"
-      },
-      {
-        "id": "L96",
-        "kind": "SWING_HIGH",
-        "price": 29307.75,
-        "from_t": 1778858040,
-        "to_t": null,
-        "swept_t": 1778858220,
-        "label": "SWING_HIGH 29307.75"
-      },
-      {
-        "id": "L97",
-        "kind": "SWING_LOW",
-        "price": 29265.0,
-        "from_t": 1778858100,
-        "to_t": null,
-        "swept_t": 1778860140,
-        "label": "SWING_LOW 29265.00"
-      },
-      {
-        "id": "L98",
-        "kind": "SWING_LOW",
-        "price": 29305.75,
-        "from_t": 1778858400,
-        "to_t": null,
-        "swept_t": 1778858700,
-        "label": "SWING_LOW 29305.75"
-      },
-      {
-        "id": "L99",
+        "id": "L17",
         "kind": "EQUAL_HIGHS",
         "price": 29361.0,
         "from_t": 1778858580,
@@ -3105,79 +2380,7 @@
         "label": "EQUAL_HIGHS 29361.00"
       },
       {
-        "id": "L100",
-        "kind": "SWING_HIGH",
-        "price": 29361.0,
-        "from_t": 1778858580,
-        "to_t": null,
-        "swept_t": 1778859060,
-        "label": "SWING_HIGH 29361.00"
-      },
-      {
-        "id": "L101",
-        "kind": "SWING_LOW",
-        "price": 29294.25,
-        "from_t": 1778858760,
-        "to_t": null,
-        "swept_t": 1778859840,
-        "label": "SWING_LOW 29294.25"
-      },
-      {
-        "id": "L102",
-        "kind": "SWING_HIGH",
-        "price": 29344.5,
-        "from_t": 1778858880,
-        "to_t": null,
-        "swept_t": 1778859000,
-        "label": "SWING_HIGH 29344.50"
-      },
-      {
-        "id": "L103",
-        "kind": "SWING_LOW",
-        "price": 29304.5,
-        "from_t": 1778858940,
-        "to_t": null,
-        "swept_t": 1778859780,
-        "label": "SWING_LOW 29304.50"
-      },
-      {
-        "id": "L104",
-        "kind": "SWING_HIGH",
-        "price": 29372.0,
-        "from_t": 1778859180,
-        "to_t": null,
-        "swept_t": 1778859360,
-        "label": "SWING_HIGH 29372.00"
-      },
-      {
-        "id": "L105",
-        "kind": "SWING_LOW",
-        "price": 29336.0,
-        "from_t": 1778859360,
-        "to_t": null,
-        "swept_t": 1778859540,
-        "label": "SWING_LOW 29336.00"
-      },
-      {
-        "id": "L106",
-        "kind": "SWING_HIGH",
-        "price": 29382.0,
-        "from_t": 1778859420,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 29382.00"
-      },
-      {
-        "id": "L107",
-        "kind": "SWING_LOW",
-        "price": 29314.5,
-        "from_t": 1778859660,
-        "to_t": null,
-        "swept_t": 1778859780,
-        "label": "SWING_LOW 29314.50"
-      },
-      {
-        "id": "L108",
+        "id": "L18",
         "kind": "EQUAL_HIGHS",
         "price": 29344.5,
         "from_t": 1778859780,
@@ -3186,16 +2389,7 @@
         "label": "EQUAL_HIGHS 29344.50"
       },
       {
-        "id": "L109",
-        "kind": "SWING_HIGH",
-        "price": 29344.5,
-        "from_t": 1778859780,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 29344.50"
-      },
-      {
-        "id": "L110",
+        "id": "L19",
         "kind": "EQUAL_LOWS",
         "price": 29269.25,
         "from_t": 1778859960,
@@ -3204,79 +2398,7 @@
         "label": "EQUAL_LOWS 29269.25"
       },
       {
-        "id": "L111",
-        "kind": "SWING_LOW",
-        "price": 29269.25,
-        "from_t": 1778859960,
-        "to_t": null,
-        "swept_t": 1778860080,
-        "label": "SWING_LOW 29269.25"
-      },
-      {
-        "id": "L112",
-        "kind": "SWING_HIGH",
-        "price": 29301.25,
-        "from_t": 1778860140,
-        "to_t": null,
-        "swept_t": 1778862060,
-        "label": "SWING_HIGH 29301.25"
-      },
-      {
-        "id": "L113",
-        "kind": "SWING_LOW",
-        "price": 29238.0,
-        "from_t": 1778860260,
-        "to_t": null,
-        "swept_t": 1778860380,
-        "label": "SWING_LOW 29238.00"
-      },
-      {
-        "id": "L114",
-        "kind": "SWING_LOW",
-        "price": 29228.0,
-        "from_t": 1778860440,
-        "to_t": null,
-        "swept_t": 1778860500,
-        "label": "SWING_LOW 29228.00"
-      },
-      {
-        "id": "L115",
-        "kind": "SWING_LOW",
-        "price": 29212.0,
-        "from_t": 1778860560,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29212.00"
-      },
-      {
-        "id": "L116",
-        "kind": "SWING_HIGH",
-        "price": 29273.5,
-        "from_t": 1778860680,
-        "to_t": null,
-        "swept_t": 1778860740,
-        "label": "SWING_HIGH 29273.50"
-      },
-      {
-        "id": "L117",
-        "kind": "SWING_LOW",
-        "price": 29234.0,
-        "from_t": 1778860680,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29234.00"
-      },
-      {
-        "id": "L118",
-        "kind": "SWING_HIGH",
-        "price": 29313.0,
-        "from_t": 1778861040,
-        "to_t": null,
-        "swept_t": 1778862240,
-        "label": "SWING_HIGH 29313.00"
-      },
-      {
-        "id": "L119",
+        "id": "L20",
         "kind": "EQUAL_LOWS",
         "price": 29264.75,
         "from_t": 1778861100,
@@ -3285,25 +2407,7 @@
         "label": "EQUAL_LOWS 29264.75"
       },
       {
-        "id": "L120",
-        "kind": "SWING_LOW",
-        "price": 29264.75,
-        "from_t": 1778861100,
-        "to_t": null,
-        "swept_t": 1778861160,
-        "label": "SWING_LOW 29264.75"
-      },
-      {
-        "id": "L121",
-        "kind": "SWING_HIGH",
-        "price": 29292.5,
-        "from_t": 1778861160,
-        "to_t": null,
-        "swept_t": 1778861280,
-        "label": "SWING_HIGH 29292.50"
-      },
-      {
-        "id": "L122",
+        "id": "L21",
         "kind": "EQUAL_HIGHS",
         "price": 29301.25,
         "from_t": 1778861400,
@@ -3312,16 +2416,7 @@
         "label": "EQUAL_HIGHS 29301.25"
       },
       {
-        "id": "L123",
-        "kind": "SWING_HIGH",
-        "price": 29301.25,
-        "from_t": 1778861400,
-        "to_t": null,
-        "swept_t": 1778862060,
-        "label": "SWING_HIGH 29301.25"
-      },
-      {
-        "id": "L124",
+        "id": "L22",
         "kind": "EQUAL_LOWS",
         "price": 29251.5,
         "from_t": 1778861520,
@@ -3330,67 +2425,13 @@
         "label": "EQUAL_LOWS 29251.50"
       },
       {
-        "id": "L125",
-        "kind": "SWING_LOW",
-        "price": 29251.5,
-        "from_t": 1778861520,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29251.50"
-      },
-      {
-        "id": "L126",
-        "kind": "SWING_HIGH",
-        "price": 29290.25,
-        "from_t": 1778861700,
-        "to_t": null,
-        "swept_t": 1778862060,
-        "label": "SWING_HIGH 29290.25"
-      },
-      {
-        "id": "L127",
-        "kind": "SWING_LOW",
-        "price": 29253.25,
-        "from_t": 1778861880,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29253.25"
-      },
-      {
-        "id": "L128",
-        "kind": "SWING_LOW",
-        "price": 29263.75,
-        "from_t": 1778862000,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29263.75"
-      },
-      {
-        "id": "L129",
-        "kind": "SWING_HIGH",
-        "price": 29336.5,
-        "from_t": 1778862360,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 29336.50"
-      },
-      {
-        "id": "L130",
+        "id": "L23",
         "kind": "EQUAL_HIGHS",
         "price": 29336.5,
         "from_t": 1778862540,
         "to_t": null,
         "swept_t": null,
         "label": "EQUAL_HIGHS 29336.50"
-      },
-      {
-        "id": "L131",
-        "kind": "SWING_HIGH",
-        "price": 29336.25,
-        "from_t": 1778862540,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 29336.25"
       }
     ],
     "zones": [
@@ -4237,88 +3278,25 @@
     ],
     "markers": [
       {
-        "t": 1778847120,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29206.5,
-        "text": "Raid SWING_LOW 29206.50"
+        "t": 1778846760,
+        "kind": "MSS",
+        "side": "BEAR",
+        "price": 29229.25,
+        "text": "MSS↓ 破 29229.25"
       },
       {
-        "t": 1778847780,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29237.25,
-        "text": "Raid SWING_HIGH 29237.25"
+        "t": 1778848200,
+        "kind": "MSS",
+        "side": "BEAR",
+        "price": 29188.0,
+        "text": "MSS↓ 破 29188.00"
       },
       {
-        "t": 1778848020,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29194.5,
-        "text": "Raid SWING_LOW 29194.50"
-      },
-      {
-        "t": 1778848260,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29168.75,
-        "text": "Raid SWING_LOW 29168.75"
-      },
-      {
-        "t": 1778848680,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29155.5,
-        "text": "Raid SWING_LOW 29155.50"
-      },
-      {
-        "t": 1778848920,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29185.25,
-        "text": "Raid SWING_HIGH 29185.25"
-      },
-      {
-        "t": 1778849220,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29147.75,
-        "text": "Raid SWING_LOW 29147.75"
-      },
-      {
-        "t": 1778849280,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29142.75,
-        "text": "Raid SWING_LOW 29142.75"
-      },
-      {
-        "t": 1778849400,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29165.5,
-        "text": "Raid SWING_HIGH 29165.50"
-      },
-      {
-        "t": 1778849760,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29190.5,
-        "text": "Raid SWING_HIGH 29190.50"
-      },
-      {
-        "t": 1778849880,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29196.5,
-        "text": "Raid SWING_HIGH 29196.50"
-      },
-      {
-        "t": 1778850420,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29171.75,
-        "text": "Raid SWING_HIGH 29171.75"
+        "t": 1778850000,
+        "kind": "MSS",
+        "side": "BEAR",
+        "price": 29170.25,
+        "text": "MSS↓ 破 29170.25"
       },
       {
         "t": 1778850420,
@@ -4328,46 +3306,25 @@
         "text": "Raid EQUAL_HIGHS 29185.75"
       },
       {
-        "t": 1778850420,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29185.75,
-        "text": "Raid SWING_HIGH 29185.75"
-      },
-      {
-        "t": 1778851140,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29203.5,
-        "text": "Raid SWING_HIGH 29203.50"
-      },
-      {
-        "t": 1778851260,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29214.25,
-        "text": "Raid SWING_HIGH 29214.25"
+        "t": 1778850960,
+        "kind": "MSS",
+        "side": "BULL",
+        "price": 29182.25,
+        "text": "MSS↑ 破 29182.25"
       },
       {
         "t": 1778851500,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29244.5,
-        "text": "Raid SWING_HIGH 29244.50"
+        "kind": "MSS",
+        "side": "BULL",
+        "price": 29212.25,
+        "text": "MSS↑ 破 29212.25"
       },
       {
-        "t": 1778851500,
-        "kind": "RAID",
-        "side": "BUY",
+        "t": 1778851680,
+        "kind": "MSS",
+        "side": "BULL",
         "price": 29243.25,
-        "text": "Raid SWING_HIGH 29243.25"
-      },
-      {
-        "t": 1778851860,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29222.75,
-        "text": "Raid SWING_LOW 29222.75"
+        "text": "MSS↑ 破 29243.25"
       },
       {
         "t": 1778851860,
@@ -4380,57 +3337,15 @@
         "t": 1778852040,
         "kind": "RAID",
         "side": "SELL",
-        "price": 29196.0,
-        "text": "Raid SWING_LOW 29196.00"
-      },
-      {
-        "t": 1778852040,
-        "kind": "RAID",
-        "side": "SELL",
         "price": 29199.25,
         "text": "Raid EQUAL_LOWS 29199.25"
       },
       {
-        "t": 1778852040,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29199.25,
-        "text": "Raid SWING_LOW 29199.25"
-      },
-      {
-        "t": 1778852040,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29202.75,
-        "text": "Raid SWING_LOW 29202.75"
-      },
-      {
         "t": 1778852220,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29160.5,
-        "text": "Raid SWING_LOW 29160.50"
-      },
-      {
-        "t": 1778852220,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29161.25,
-        "text": "Raid SWING_LOW 29161.25"
-      },
-      {
-        "t": 1778852400,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29167.25,
-        "text": "Raid SWING_LOW 29167.25"
-      },
-      {
-        "t": 1778852400,
-        "kind": "RAID",
-        "side": "SELL",
+        "kind": "MSS",
+        "side": "BEAR",
         "price": 29188.75,
-        "text": "Raid SWING_LOW 29188.75"
+        "text": "MSS↓ 破 29188.75"
       },
       {
         "t": 1778852820,
@@ -4440,67 +3355,11 @@
         "text": "Raid EQUAL_LOWS 29142.50"
       },
       {
-        "t": 1778852820,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29142.5,
-        "text": "Raid SWING_LOW 29142.50"
-      },
-      {
-        "t": 1778852880,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29151.0,
-        "text": "Raid SWING_LOW 29151.00"
-      },
-      {
-        "t": 1778853240,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29270.25,
-        "text": "Raid SWING_HIGH 29270.25"
-      },
-      {
-        "t": 1778853420,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29258.25,
-        "text": "Raid SWING_HIGH 29258.25"
-      },
-      {
         "t": 1778853420,
         "kind": "RAID",
         "side": "BUY",
         "price": 29243.75,
         "text": "Raid EQUAL_HIGHS 29243.75"
-      },
-      {
-        "t": 1778853420,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29243.75,
-        "text": "Raid SWING_HIGH 29243.75"
-      },
-      {
-        "t": 1778853420,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29238.75,
-        "text": "Raid SWING_HIGH 29238.75"
-      },
-      {
-        "t": 1778853480,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29163.25,
-        "text": "Raid SWING_LOW 29163.25"
-      },
-      {
-        "t": 1778854140,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29213.25,
-        "text": "Raid SWING_HIGH 29213.25"
       },
       {
         "t": 1778854380,
@@ -4510,88 +3369,11 @@
         "text": "Raid SESSION_HIGH 29291.00"
       },
       {
-        "t": 1778854380,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29291.0,
-        "text": "Raid SWING_HIGH 29291.00"
-      },
-      {
-        "t": 1778854380,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29288.0,
-        "text": "Raid SWING_HIGH 29288.00"
-      },
-      {
-        "t": 1778854860,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29363.25,
-        "text": "Raid SWING_HIGH 29363.25"
-      },
-      {
-        "t": 1778854980,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29381.0,
-        "text": "Raid SWING_HIGH 29381.00"
-      },
-      {
-        "t": 1778855340,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29274.25,
-        "text": "Raid SWING_LOW 29274.25"
-      },
-      {
-        "t": 1778855460,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29324.0,
-        "text": "Raid SWING_HIGH 29324.00"
-      },
-      {
-        "t": 1778855760,
-        "kind": "RAID",
-        "side": "BUY",
+        "t": 1778855640,
+        "kind": "MSS",
+        "side": "BULL",
         "price": 29328.75,
-        "text": "Raid SWING_HIGH 29328.75"
-      },
-      {
-        "t": 1778855820,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29347.75,
-        "text": "Raid SWING_HIGH 29347.75"
-      },
-      {
-        "t": 1778856420,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29286.0,
-        "text": "Raid SWING_LOW 29286.00"
-      },
-      {
-        "t": 1778856600,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29269.75,
-        "text": "Raid SWING_LOW 29269.75"
-      },
-      {
-        "t": 1778856720,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29249.75,
-        "text": "Raid SWING_LOW 29249.75"
-      },
-      {
-        "t": 1778857020,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29327.0,
-        "text": "Raid SWING_HIGH 29327.00"
+        "text": "MSS↑ 破 29328.75"
       },
       {
         "t": 1778857380,
@@ -4601,60 +3383,18 @@
         "text": "Raid EQUAL_LOWS 29274.00"
       },
       {
-        "t": 1778857380,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29274.0,
-        "text": "Raid SWING_LOW 29274.00"
-      },
-      {
-        "t": 1778857560,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29251.5,
-        "text": "Raid SWING_LOW 29251.50"
-      },
-      {
-        "t": 1778857620,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29247.5,
-        "text": "Raid SWING_LOW 29247.50"
-      },
-      {
-        "t": 1778857860,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29312.0,
-        "text": "Raid SWING_HIGH 29312.00"
-      },
-      {
-        "t": 1778857860,
-        "kind": "RAID",
-        "side": "BUY",
+        "t": 1778857740,
+        "kind": "MSS",
+        "side": "BULL",
         "price": 29297.75,
-        "text": "Raid SWING_HIGH 29297.75"
+        "text": "MSS↑ 破 29297.75"
       },
       {
-        "t": 1778858040,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29277.25,
-        "text": "Raid SWING_LOW 29277.25"
-      },
-      {
-        "t": 1778858460,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29354.0,
-        "text": "Raid SWING_HIGH 29354.00"
-      },
-      {
-        "t": 1778858520,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29360.5,
-        "text": "Raid SWING_HIGH 29360.50"
+        "t": 1778858400,
+        "kind": "MSS",
+        "side": "BULL",
+        "price": 29325.5,
+        "text": "MSS↑ 破 29325.50"
       },
       {
         "t": 1778858580,
@@ -4664,27 +3404,6 @@
         "text": "Raid EQUAL_HIGHS 29329.25"
       },
       {
-        "t": 1778858580,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29329.25,
-        "text": "Raid SWING_HIGH 29329.25"
-      },
-      {
-        "t": 1778858760,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29305.75,
-        "text": "Raid SWING_LOW 29305.75"
-      },
-      {
-        "t": 1778859180,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29344.5,
-        "text": "Raid SWING_HIGH 29344.50"
-      },
-      {
         "t": 1778859180,
         "kind": "RAID",
         "side": "BUY",
@@ -4692,32 +3411,11 @@
         "text": "Raid EQUAL_HIGHS 29361.00"
       },
       {
-        "t": 1778859180,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29361.0,
-        "text": "Raid SWING_HIGH 29361.00"
-      },
-      {
-        "t": 1778859360,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29372.0,
-        "text": "Raid SWING_HIGH 29372.00"
-      },
-      {
-        "t": 1778859600,
-        "kind": "RAID",
-        "side": "SELL",
+        "t": 1778859540,
+        "kind": "MSS",
+        "side": "BEAR",
         "price": 29336.0,
-        "text": "Raid SWING_LOW 29336.00"
-      },
-      {
-        "t": 1778859780,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29304.5,
-        "text": "Raid SWING_LOW 29304.50"
+        "text": "MSS↓ 破 29336.00"
       },
       {
         "t": 1778860080,
@@ -4727,48 +3425,6 @@
         "text": "Raid EQUAL_LOWS 29269.25"
       },
       {
-        "t": 1778860080,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29269.25,
-        "text": "Raid SWING_LOW 29269.25"
-      },
-      {
-        "t": 1778860140,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29265.0,
-        "text": "Raid SWING_LOW 29265.00"
-      },
-      {
-        "t": 1778860200,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29240.5,
-        "text": "Raid SWING_LOW 29240.50"
-      },
-      {
-        "t": 1778860440,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29238.0,
-        "text": "Raid SWING_LOW 29238.00"
-      },
-      {
-        "t": 1778860500,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29228.0,
-        "text": "Raid SWING_LOW 29228.00"
-      },
-      {
-        "t": 1778860980,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29301.25,
-        "text": "Raid SWING_HIGH 29301.25"
-      },
-      {
         "t": 1778861220,
         "kind": "RAID",
         "side": "SELL",
@@ -4776,32 +3432,11 @@
         "text": "Raid EQUAL_LOWS 29264.75"
       },
       {
-        "t": 1778861220,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29264.75,
-        "text": "Raid SWING_LOW 29264.75"
-      },
-      {
-        "t": 1778861400,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29292.5,
-        "text": "Raid SWING_HIGH 29292.50"
-      },
-      {
         "t": 1778862060,
         "kind": "RAID",
         "side": "BUY",
         "price": 29301.25,
         "text": "Raid EQUAL_HIGHS 29301.25"
-      },
-      {
-        "t": 1778862060,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29301.25,
-        "text": "Raid SWING_HIGH 29301.25"
       }
     ]
   },
@@ -4809,7 +3444,7 @@
     {
       "t": 1778851800,
       "state": "DONE",
-      "waiting_for": "偏向 NO_TRADE（日 K 僅 1 根，不足以計算 swing（需至少 3 根）），今日不進場",
+      "waiting_for": "偏向 NO_TRADE（日 K 不足 3 根，無法計算 Dealing Range），今日不進場",
       "detail": {}
     }
   ],

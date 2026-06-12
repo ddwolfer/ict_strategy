@@ -6,23 +6,26 @@
     "tick": 0.25,
     "point_value": 20.0,
     "config": {
-      "window": "RTH_OPEN_3H",
-      "day_filter": [
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu"
+      "bias_mode": "m13_raid",
+      "entry_window": [
+        "09:30",
+        "11:00"
       ],
-      "thursday_size_factor": 0.5,
-      "use_day_filter": true,
+      "late_window_thu_fri": true,
+      "flatten_time": "12:30",
+      "day_filter": null,
+      "thursday_size_factor": 1.0,
       "min_dol_points": 30.0,
       "raid_recover_bars": 3,
       "mss_timeout_bars": 15,
       "entry_timeout_bars": 20,
+      "displacement_window": 20,
+      "displacement_mult": 2.0,
       "entry_level": "proximal",
-      "fvg_half_filter": true,
+      "fvg_filter": "leg_equilibrium",
+      "stop_mode": "fvg_candle",
       "stop_buffer_ticks": 8,
-      "targets_mode": "fixed_points",
+      "targets_mode": "m13_liquidity",
       "tp_points": [
         20.0,
         40.0,
@@ -31,21 +34,31 @@
       "tp_fractions": [
         0.5,
         0.25,
-        0.8
+        1.0
       ],
       "dol_early_exit_ticks": 10,
-      "objective_for_trailing": "tp2",
+      "trail_half_at": 0.5,
+      "trail_be_at": 0.75,
+      "min_stop_points": 3.0,
+      "max_stop_points": 40.0,
       "max_trades_per_session": 2,
       "daily_loss_limit_r": -2.0,
       "risk_per_trade_pct": 0.5,
       "account_equity": 50000.0,
       "slippage_ticks": 1,
       "commission_per_side": 2.25,
-      "swing_n": 1
+      "swing_n": 1,
+      "use_day_filter": false,
+      "fvg_half_filter": false,
+      "window": "RTH_OPEN_3H"
     },
-    "bias_direction": "NO_TRADE",
-    "bias_reason": "現價 29551.25 未突破任何 swing（需 Buy 突破 swing high 或 Sell 跌破 swing low）",
-    "dol_level": null
+    "bias_direction": "BOTH",
+    "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–29686.75 eq=29268.50；PDH=29749.00 PDL=29490.25",
+    "dol_level": null,
+    "pdh": 29749.0,
+    "pdl": 29490.25,
+    "onh": 29665.25,
+    "onl": 29436.0
   },
   "bars": [
     {
@@ -2215,78 +2228,6 @@
     "levels": [
       {
         "id": "L1",
-        "kind": "SWING_LOW",
-        "price": 29519.75,
-        "from_t": 1779796800,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29519.75"
-      },
-      {
-        "id": "L2",
-        "kind": "SWING_HIGH",
-        "price": 29874.75,
-        "from_t": 1779796920,
-        "to_t": null,
-        "swept_t": 1779796980,
-        "label": "SWING_HIGH 29874.75"
-      },
-      {
-        "id": "L3",
-        "kind": "SWING_LOW",
-        "price": 29866.25,
-        "from_t": 1779796980,
-        "to_t": null,
-        "swept_t": 1779797280,
-        "label": "SWING_LOW 29866.25"
-      },
-      {
-        "id": "L4",
-        "kind": "SWING_HIGH",
-        "price": 29877.75,
-        "from_t": 1779797040,
-        "to_t": null,
-        "swept_t": 1779797100,
-        "label": "SWING_HIGH 29877.75"
-      },
-      {
-        "id": "L5",
-        "kind": "SWING_LOW",
-        "price": 29869.5,
-        "from_t": 1779797100,
-        "to_t": null,
-        "swept_t": 1779797280,
-        "label": "SWING_LOW 29869.50"
-      },
-      {
-        "id": "L6",
-        "kind": "SWING_HIGH",
-        "price": 29882.5,
-        "from_t": 1779797160,
-        "to_t": null,
-        "swept_t": 1779798120,
-        "label": "SWING_HIGH 29882.50"
-      },
-      {
-        "id": "L7",
-        "kind": "SWING_HIGH",
-        "price": 29884.75,
-        "from_t": 1779797280,
-        "to_t": null,
-        "swept_t": 1779798120,
-        "label": "SWING_HIGH 29884.75"
-      },
-      {
-        "id": "L8",
-        "kind": "SWING_LOW",
-        "price": 29851.0,
-        "from_t": 1779797340,
-        "to_t": null,
-        "swept_t": 1779802440,
-        "label": "SWING_LOW 29851.00"
-      },
-      {
-        "id": "L9",
         "kind": "EQUAL_LOWS",
         "price": 29869.5,
         "from_t": 1779797580,
@@ -2295,34 +2236,7 @@
         "label": "EQUAL_LOWS 29869.50"
       },
       {
-        "id": "L10",
-        "kind": "SWING_LOW",
-        "price": 29870.0,
-        "from_t": 1779797580,
-        "to_t": null,
-        "swept_t": 1779797700,
-        "label": "SWING_LOW 29870.00"
-      },
-      {
-        "id": "L11",
-        "kind": "SWING_HIGH",
-        "price": 29876.5,
-        "from_t": 1779797700,
-        "to_t": null,
-        "swept_t": 1779797880,
-        "label": "SWING_HIGH 29876.50"
-      },
-      {
-        "id": "L12",
-        "kind": "SWING_LOW",
-        "price": 29864.25,
-        "from_t": 1779797760,
-        "to_t": null,
-        "swept_t": 1779802440,
-        "label": "SWING_LOW 29864.25"
-      },
-      {
-        "id": "L13",
+        "id": "L2",
         "kind": "EQUAL_LOWS",
         "price": 29869.25,
         "from_t": 1779797880,
@@ -2331,16 +2245,7 @@
         "label": "EQUAL_LOWS 29869.25"
       },
       {
-        "id": "L14",
-        "kind": "SWING_LOW",
-        "price": 29869.25,
-        "from_t": 1779797880,
-        "to_t": null,
-        "swept_t": 1779802380,
-        "label": "SWING_LOW 29869.25"
-      },
-      {
-        "id": "L15",
+        "id": "L3",
         "kind": "EQUAL_HIGHS",
         "price": 29882.5,
         "from_t": 1779798060,
@@ -2349,196 +2254,7 @@
         "label": "EQUAL_HIGHS 29882.50"
       },
       {
-        "id": "L16",
-        "kind": "SWING_HIGH",
-        "price": 29882.5,
-        "from_t": 1779798060,
-        "to_t": null,
-        "swept_t": 1779798120,
-        "label": "SWING_HIGH 29882.50"
-      },
-      {
-        "id": "L17",
-        "kind": "SWING_HIGH",
-        "price": 29886.5,
-        "from_t": 1779798240,
-        "to_t": null,
-        "swept_t": 1779798300,
-        "label": "SWING_HIGH 29886.50"
-      },
-      {
-        "id": "L18",
-        "kind": "SWING_LOW",
-        "price": 29879.0,
-        "from_t": 1779798300,
-        "to_t": null,
-        "swept_t": 1779802380,
-        "label": "SWING_LOW 29879.00"
-      },
-      {
-        "id": "L19",
-        "kind": "SWING_HIGH",
-        "price": 29895.75,
-        "from_t": 1779798420,
-        "to_t": null,
-        "swept_t": 1779798480,
-        "label": "SWING_HIGH 29895.75"
-      },
-      {
-        "id": "L20",
-        "kind": "SWING_LOW",
-        "price": 29886.75,
-        "from_t": 1779798540,
-        "to_t": null,
-        "swept_t": 1779802200,
-        "label": "SWING_LOW 29886.75"
-      },
-      {
-        "id": "L21",
-        "kind": "SWING_HIGH",
-        "price": 29902.5,
-        "from_t": 1779798600,
-        "to_t": null,
-        "swept_t": 1779798780,
-        "label": "SWING_HIGH 29902.50"
-      },
-      {
-        "id": "L22",
-        "kind": "SWING_LOW",
-        "price": 29891.0,
-        "from_t": 1779798720,
-        "to_t": null,
-        "swept_t": 1779802140,
-        "label": "SWING_LOW 29891.00"
-      },
-      {
-        "id": "L23",
-        "kind": "SWING_HIGH",
-        "price": 29909.75,
-        "from_t": 1779798900,
-        "to_t": null,
-        "swept_t": 1779799140,
-        "label": "SWING_HIGH 29909.75"
-      },
-      {
-        "id": "L24",
-        "kind": "SWING_LOW",
-        "price": 29899.25,
-        "from_t": 1779798960,
-        "to_t": null,
-        "swept_t": 1779799020,
-        "label": "SWING_LOW 29899.25"
-      },
-      {
-        "id": "L25",
-        "kind": "SWING_LOW",
-        "price": 29897.5,
-        "from_t": 1779799080,
-        "to_t": null,
-        "swept_t": 1779802080,
-        "label": "SWING_LOW 29897.50"
-      },
-      {
-        "id": "L26",
-        "kind": "SWING_HIGH",
-        "price": 29930.5,
-        "from_t": 1779799380,
-        "to_t": null,
-        "swept_t": 1779802200,
-        "label": "SWING_HIGH 29930.50"
-      },
-      {
-        "id": "L27",
-        "kind": "SWING_LOW",
-        "price": 29915.75,
-        "from_t": 1779799560,
-        "to_t": null,
-        "swept_t": 1779799680,
-        "label": "SWING_LOW 29915.75"
-      },
-      {
-        "id": "L28",
-        "kind": "SWING_HIGH",
-        "price": 29923.25,
-        "from_t": 1779799620,
-        "to_t": null,
-        "swept_t": 1779799860,
-        "label": "SWING_HIGH 29923.25"
-      },
-      {
-        "id": "L29",
-        "kind": "SWING_LOW",
-        "price": 29913.0,
-        "from_t": 1779799740,
-        "to_t": null,
-        "swept_t": 1779799920,
-        "label": "SWING_LOW 29913.00"
-      },
-      {
-        "id": "L30",
-        "kind": "SWING_HIGH",
-        "price": 29924.0,
-        "from_t": 1779799920,
-        "to_t": null,
-        "swept_t": 1779800160,
-        "label": "SWING_HIGH 29924.00"
-      },
-      {
-        "id": "L31",
-        "kind": "SWING_LOW",
-        "price": 29910.25,
-        "from_t": 1779799980,
-        "to_t": null,
-        "swept_t": 1779800460,
-        "label": "SWING_LOW 29910.25"
-      },
-      {
-        "id": "L32",
-        "kind": "SWING_LOW",
-        "price": 29911.75,
-        "from_t": 1779800160,
-        "to_t": null,
-        "swept_t": 1779800400,
-        "label": "SWING_LOW 29911.75"
-      },
-      {
-        "id": "L33",
-        "kind": "SWING_HIGH",
-        "price": 29925.0,
-        "from_t": 1779800460,
-        "to_t": null,
-        "swept_t": 1779801420,
-        "label": "SWING_HIGH 29925.00"
-      },
-      {
-        "id": "L34",
-        "kind": "SWING_LOW",
-        "price": 29903.0,
-        "from_t": 1779800640,
-        "to_t": null,
-        "swept_t": 1779800700,
-        "label": "SWING_LOW 29903.00"
-      },
-      {
-        "id": "L35",
-        "kind": "SWING_HIGH",
-        "price": 29913.75,
-        "from_t": 1779800700,
-        "to_t": null,
-        "swept_t": 1779801120,
-        "label": "SWING_HIGH 29913.75"
-      },
-      {
-        "id": "L36",
-        "kind": "SWING_LOW",
-        "price": 29901.25,
-        "from_t": 1779800820,
-        "to_t": null,
-        "swept_t": 1779802080,
-        "label": "SWING_LOW 29901.25"
-      },
-      {
-        "id": "L37",
+        "id": "L4",
         "kind": "EQUAL_HIGHS",
         "price": 29910.0,
         "from_t": 1779800940,
@@ -2547,25 +2263,7 @@
         "label": "EQUAL_HIGHS 29910.00"
       },
       {
-        "id": "L38",
-        "kind": "SWING_HIGH",
-        "price": 29910.0,
-        "from_t": 1779800940,
-        "to_t": null,
-        "swept_t": 1779801060,
-        "label": "SWING_HIGH 29910.00"
-      },
-      {
-        "id": "L39",
-        "kind": "SWING_LOW",
-        "price": 29902.25,
-        "from_t": 1779801060,
-        "to_t": null,
-        "swept_t": 1779802080,
-        "label": "SWING_LOW 29902.25"
-      },
-      {
-        "id": "L40",
+        "id": "L5",
         "kind": "EQUAL_HIGHS",
         "price": 29923.25,
         "from_t": 1779801360,
@@ -2574,25 +2272,7 @@
         "label": "EQUAL_HIGHS 29923.25"
       },
       {
-        "id": "L41",
-        "kind": "SWING_HIGH",
-        "price": 29923.0,
-        "from_t": 1779801360,
-        "to_t": null,
-        "swept_t": 1779801420,
-        "label": "SWING_HIGH 29923.00"
-      },
-      {
-        "id": "L42",
-        "kind": "SWING_HIGH",
-        "price": 29925.75,
-        "from_t": 1779801480,
-        "to_t": null,
-        "swept_t": 1779801840,
-        "label": "SWING_HIGH 29925.75"
-      },
-      {
-        "id": "L43",
+        "id": "L6",
         "kind": "EQUAL_HIGHS",
         "price": 29924.5,
         "from_t": 1779801600,
@@ -2601,7 +2281,7 @@
         "label": "EQUAL_HIGHS 29924.50"
       },
       {
-        "id": "L44",
+        "id": "L7",
         "kind": "EQUAL_HIGHS",
         "price": 29925.0,
         "from_t": 1779801600,
@@ -2610,16 +2290,7 @@
         "label": "EQUAL_HIGHS 29925.00"
       },
       {
-        "id": "L45",
-        "kind": "SWING_HIGH",
-        "price": 29924.5,
-        "from_t": 1779801600,
-        "to_t": null,
-        "swept_t": 1779801720,
-        "label": "SWING_HIGH 29924.50"
-      },
-      {
-        "id": "L46",
+        "id": "L8",
         "kind": "EQUAL_LOWS",
         "price": 29915.5,
         "from_t": 1779801660,
@@ -2628,16 +2299,7 @@
         "label": "EQUAL_LOWS 29915.50"
       },
       {
-        "id": "L47",
-        "kind": "SWING_LOW",
-        "price": 29915.5,
-        "from_t": 1779801660,
-        "to_t": null,
-        "swept_t": 1779802020,
-        "label": "SWING_LOW 29915.50"
-      },
-      {
-        "id": "L48",
+        "id": "L9",
         "kind": "EQUAL_HIGHS",
         "price": 29925.25,
         "from_t": 1779801780,
@@ -2646,7 +2308,7 @@
         "label": "EQUAL_HIGHS 29925.25"
       },
       {
-        "id": "L49",
+        "id": "L10",
         "kind": "EQUAL_HIGHS",
         "price": 29925.75,
         "from_t": 1779801780,
@@ -2655,43 +2317,7 @@
         "label": "EQUAL_HIGHS 29925.75"
       },
       {
-        "id": "L50",
-        "kind": "SWING_HIGH",
-        "price": 29925.25,
-        "from_t": 1779801780,
-        "to_t": null,
-        "swept_t": 1779801840,
-        "label": "SWING_HIGH 29925.25"
-      },
-      {
-        "id": "L51",
-        "kind": "SWING_LOW",
-        "price": 29917.75,
-        "from_t": 1779801840,
-        "to_t": null,
-        "swept_t": 1779802020,
-        "label": "SWING_LOW 29917.75"
-      },
-      {
-        "id": "L52",
-        "kind": "SWING_HIGH",
-        "price": 29929.0,
-        "from_t": 1779801960,
-        "to_t": null,
-        "swept_t": 1779802200,
-        "label": "SWING_HIGH 29929.00"
-      },
-      {
-        "id": "L53",
-        "kind": "SWING_LOW",
-        "price": 29919.5,
-        "from_t": 1779801960,
-        "to_t": null,
-        "swept_t": 1779802020,
-        "label": "SWING_LOW 29919.50"
-      },
-      {
-        "id": "L54",
+        "id": "L11",
         "kind": "PDH",
         "price": 29718.0,
         "from_t": 1779802200,
@@ -2700,7 +2326,7 @@
         "label": "PDH 29718.00"
       },
       {
-        "id": "L55",
+        "id": "L12",
         "kind": "PDL",
         "price": 29532.0,
         "from_t": 1779802200,
@@ -2709,7 +2335,7 @@
         "label": "PDL 29532.00"
       },
       {
-        "id": "L56",
+        "id": "L13",
         "kind": "SESSION_HIGH",
         "price": 29935.0,
         "from_t": 1779802200,
@@ -2718,7 +2344,7 @@
         "label": "SESSION_HIGH 29935.00"
       },
       {
-        "id": "L57",
+        "id": "L14",
         "kind": "SESSION_LOW",
         "price": 29880.0,
         "from_t": 1779802200,
@@ -2727,151 +2353,7 @@
         "label": "SESSION_LOW 29880.00"
       },
       {
-        "id": "L58",
-        "kind": "SWING_HIGH",
-        "price": 29935.0,
-        "from_t": 1779802260,
-        "to_t": null,
-        "swept_t": 1779802980,
-        "label": "SWING_HIGH 29935.00"
-      },
-      {
-        "id": "L59",
-        "kind": "SWING_LOW",
-        "price": 29880.0,
-        "from_t": 1779802260,
-        "to_t": null,
-        "swept_t": 1779802380,
-        "label": "SWING_LOW 29880.00"
-      },
-      {
-        "id": "L60",
-        "kind": "SWING_HIGH",
-        "price": 29908.5,
-        "from_t": 1779802380,
-        "to_t": null,
-        "swept_t": 1779802860,
-        "label": "SWING_HIGH 29908.50"
-      },
-      {
-        "id": "L61",
-        "kind": "SWING_LOW",
-        "price": 29826.75,
-        "from_t": 1779802560,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29826.75"
-      },
-      {
-        "id": "L62",
-        "kind": "SWING_HIGH",
-        "price": 29864.75,
-        "from_t": 1779802740,
-        "to_t": null,
-        "swept_t": 1779802800,
-        "label": "SWING_HIGH 29864.75"
-      },
-      {
-        "id": "L63",
-        "kind": "SWING_LOW",
-        "price": 29848.75,
-        "from_t": 1779802800,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29848.75"
-      },
-      {
-        "id": "L64",
-        "kind": "SWING_HIGH",
-        "price": 29938.0,
-        "from_t": 1779803040,
-        "to_t": null,
-        "swept_t": 1779803100,
-        "label": "SWING_HIGH 29938.00"
-      },
-      {
-        "id": "L65",
-        "kind": "SWING_LOW",
-        "price": 29909.0,
-        "from_t": 1779803100,
-        "to_t": null,
-        "swept_t": 1779810840,
-        "label": "SWING_LOW 29909.00"
-      },
-      {
-        "id": "L66",
-        "kind": "SWING_HIGH",
-        "price": 29985.75,
-        "from_t": 1779803340,
-        "to_t": null,
-        "swept_t": 1779803760,
-        "label": "SWING_HIGH 29985.75"
-      },
-      {
-        "id": "L67",
-        "kind": "SWING_LOW",
-        "price": 29930.0,
-        "from_t": 1779803520,
-        "to_t": null,
-        "swept_t": 1779803580,
-        "label": "SWING_LOW 29930.00"
-      },
-      {
-        "id": "L68",
-        "kind": "SWING_HIGH",
-        "price": 29966.25,
-        "from_t": 1779803580,
-        "to_t": null,
-        "swept_t": 1779803700,
-        "label": "SWING_HIGH 29966.25"
-      },
-      {
-        "id": "L69",
-        "kind": "SWING_LOW",
-        "price": 29914.0,
-        "from_t": 1779803640,
-        "to_t": null,
-        "swept_t": 1779810840,
-        "label": "SWING_LOW 29914.00"
-      },
-      {
-        "id": "L70",
-        "kind": "SWING_LOW",
-        "price": 29968.5,
-        "from_t": 1779803880,
-        "to_t": null,
-        "swept_t": 1779809760,
-        "label": "SWING_LOW 29968.50"
-      },
-      {
-        "id": "L71",
-        "kind": "SWING_HIGH",
-        "price": 30020.0,
-        "from_t": 1779804060,
-        "to_t": null,
-        "swept_t": 1779804840,
-        "label": "SWING_HIGH 30020.00"
-      },
-      {
-        "id": "L72",
-        "kind": "SWING_LOW",
-        "price": 29976.0,
-        "from_t": 1779804240,
-        "to_t": null,
-        "swept_t": 1779809400,
-        "label": "SWING_LOW 29976.00"
-      },
-      {
-        "id": "L73",
-        "kind": "SWING_HIGH",
-        "price": 29998.75,
-        "from_t": 1779804360,
-        "to_t": null,
-        "swept_t": 1779804420,
-        "label": "SWING_HIGH 29998.75"
-      },
-      {
-        "id": "L74",
+        "id": "L15",
         "kind": "EQUAL_LOWS",
         "price": 29976.0,
         "from_t": 1779804420,
@@ -2880,160 +2362,7 @@
         "label": "EQUAL_LOWS 29976.00"
       },
       {
-        "id": "L75",
-        "kind": "SWING_LOW",
-        "price": 29976.5,
-        "from_t": 1779804420,
-        "to_t": null,
-        "swept_t": 1779809400,
-        "label": "SWING_LOW 29976.50"
-      },
-      {
-        "id": "L76",
-        "kind": "SWING_HIGH",
-        "price": 30010.25,
-        "from_t": 1779804540,
-        "to_t": null,
-        "swept_t": 1779804660,
-        "label": "SWING_HIGH 30010.25"
-      },
-      {
-        "id": "L77",
-        "kind": "SWING_HIGH",
-        "price": 30011.5,
-        "from_t": 1779804720,
-        "to_t": null,
-        "swept_t": 1779804840,
-        "label": "SWING_HIGH 30011.50"
-      },
-      {
-        "id": "L78",
-        "kind": "SWING_LOW",
-        "price": 29989.0,
-        "from_t": 1779804720,
-        "to_t": null,
-        "swept_t": 1779809400,
-        "label": "SWING_LOW 29989.00"
-      },
-      {
-        "id": "L79",
-        "kind": "SWING_LOW",
-        "price": 29994.0,
-        "from_t": 1779804840,
-        "to_t": null,
-        "swept_t": 1779809040,
-        "label": "SWING_LOW 29994.00"
-      },
-      {
-        "id": "L80",
-        "kind": "SWING_HIGH",
-        "price": 30033.0,
-        "from_t": 1779804960,
-        "to_t": null,
-        "swept_t": 1779805080,
-        "label": "SWING_HIGH 30033.00"
-      },
-      {
-        "id": "L81",
-        "kind": "SWING_LOW",
-        "price": 30008.0,
-        "from_t": 1779805020,
-        "to_t": null,
-        "swept_t": 1779808020,
-        "label": "SWING_LOW 30008.00"
-      },
-      {
-        "id": "L82",
-        "kind": "SWING_HIGH",
-        "price": 30061.5,
-        "from_t": 1779805260,
-        "to_t": null,
-        "swept_t": 1779805380,
-        "label": "SWING_HIGH 30061.50"
-      },
-      {
-        "id": "L83",
-        "kind": "SWING_LOW",
-        "price": 30033.5,
-        "from_t": 1779805320,
-        "to_t": null,
-        "swept_t": 1779807780,
-        "label": "SWING_LOW 30033.50"
-      },
-      {
-        "id": "L84",
-        "kind": "SWING_HIGH",
-        "price": 30080.75,
-        "from_t": 1779805560,
-        "to_t": null,
-        "swept_t": 1779805620,
-        "label": "SWING_HIGH 30080.75"
-      },
-      {
-        "id": "L85",
-        "kind": "SWING_HIGH",
-        "price": 30084.0,
-        "from_t": 1779805680,
-        "to_t": null,
-        "swept_t": 1779806100,
-        "label": "SWING_HIGH 30084.00"
-      },
-      {
-        "id": "L86",
-        "kind": "SWING_LOW",
-        "price": 30053.0,
-        "from_t": 1779805800,
-        "to_t": null,
-        "swept_t": 1779807600,
-        "label": "SWING_LOW 30053.00"
-      },
-      {
-        "id": "L87",
-        "kind": "SWING_HIGH",
-        "price": 30078.25,
-        "from_t": 1779805860,
-        "to_t": null,
-        "swept_t": 1779805920,
-        "label": "SWING_HIGH 30078.25"
-      },
-      {
-        "id": "L88",
-        "kind": "SWING_HIGH",
-        "price": 30081.5,
-        "from_t": 1779805980,
-        "to_t": null,
-        "swept_t": 1779806100,
-        "label": "SWING_HIGH 30081.50"
-      },
-      {
-        "id": "L89",
-        "kind": "SWING_LOW",
-        "price": 30064.5,
-        "from_t": 1779806040,
-        "to_t": null,
-        "swept_t": 1779807300,
-        "label": "SWING_LOW 30064.50"
-      },
-      {
-        "id": "L90",
-        "kind": "SWING_HIGH",
-        "price": 30118.75,
-        "from_t": 1779806280,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30118.75"
-      },
-      {
-        "id": "L91",
-        "kind": "SWING_LOW",
-        "price": 30095.0,
-        "from_t": 1779806280,
-        "to_t": null,
-        "swept_t": 1779806580,
-        "label": "SWING_LOW 30095.00"
-      },
-      {
-        "id": "L92",
+        "id": "L16",
         "kind": "EQUAL_HIGHS",
         "price": 30118.75,
         "from_t": 1779806460,
@@ -3042,25 +2371,7 @@
         "label": "EQUAL_HIGHS 30118.75"
       },
       {
-        "id": "L93",
-        "kind": "SWING_HIGH",
-        "price": 30118.25,
-        "from_t": 1779806460,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30118.25"
-      },
-      {
-        "id": "L94",
-        "kind": "SWING_LOW",
-        "price": 30098.25,
-        "from_t": 1779806460,
-        "to_t": null,
-        "swept_t": 1779806580,
-        "label": "SWING_LOW 30098.25"
-      },
-      {
-        "id": "L95",
+        "id": "L17",
         "kind": "EQUAL_LOWS",
         "price": 30094.75,
         "from_t": 1779806640,
@@ -3069,151 +2380,7 @@
         "label": "EQUAL_LOWS 30094.75"
       },
       {
-        "id": "L96",
-        "kind": "SWING_LOW",
-        "price": 30094.75,
-        "from_t": 1779806640,
-        "to_t": null,
-        "swept_t": 1779806820,
-        "label": "SWING_LOW 30094.75"
-      },
-      {
-        "id": "L97",
-        "kind": "SWING_HIGH",
-        "price": 30113.25,
-        "from_t": 1779806820,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30113.25"
-      },
-      {
-        "id": "L98",
-        "kind": "SWING_LOW",
-        "price": 30075.75,
-        "from_t": 1779806940,
-        "to_t": null,
-        "swept_t": 1779807000,
-        "label": "SWING_LOW 30075.75"
-      },
-      {
-        "id": "L99",
-        "kind": "SWING_LOW",
-        "price": 30074.0,
-        "from_t": 1779807060,
-        "to_t": null,
-        "swept_t": 1779807240,
-        "label": "SWING_LOW 30074.00"
-      },
-      {
-        "id": "L100",
-        "kind": "SWING_HIGH",
-        "price": 30095.25,
-        "from_t": 1779807120,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30095.25"
-      },
-      {
-        "id": "L101",
-        "kind": "SWING_HIGH",
-        "price": 30090.5,
-        "from_t": 1779807240,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30090.50"
-      },
-      {
-        "id": "L102",
-        "kind": "SWING_LOW",
-        "price": 30063.5,
-        "from_t": 1779807360,
-        "to_t": null,
-        "swept_t": 1779807420,
-        "label": "SWING_LOW 30063.50"
-      },
-      {
-        "id": "L103",
-        "kind": "SWING_HIGH",
-        "price": 30076.75,
-        "from_t": 1779807420,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30076.75"
-      },
-      {
-        "id": "L104",
-        "kind": "SWING_HIGH",
-        "price": 30076.0,
-        "from_t": 1779807540,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30076.00"
-      },
-      {
-        "id": "L105",
-        "kind": "SWING_LOW",
-        "price": 30032.75,
-        "from_t": 1779807840,
-        "to_t": null,
-        "swept_t": 1779807900,
-        "label": "SWING_LOW 30032.75"
-      },
-      {
-        "id": "L106",
-        "kind": "SWING_HIGH",
-        "price": 30058.25,
-        "from_t": 1779807900,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30058.25"
-      },
-      {
-        "id": "L107",
-        "kind": "SWING_LOW",
-        "price": 30003.75,
-        "from_t": 1779808080,
-        "to_t": null,
-        "swept_t": 1779808620,
-        "label": "SWING_LOW 30003.75"
-      },
-      {
-        "id": "L108",
-        "kind": "SWING_HIGH",
-        "price": 30046.5,
-        "from_t": 1779808140,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30046.50"
-      },
-      {
-        "id": "L109",
-        "kind": "SWING_HIGH",
-        "price": 30041.0,
-        "from_t": 1779808500,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30041.00"
-      },
-      {
-        "id": "L110",
-        "kind": "SWING_LOW",
-        "price": 29996.25,
-        "from_t": 1779808680,
-        "to_t": null,
-        "swept_t": 1779808860,
-        "label": "SWING_LOW 29996.25"
-      },
-      {
-        "id": "L111",
-        "kind": "SWING_HIGH",
-        "price": 30029.5,
-        "from_t": 1779808800,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30029.50"
-      },
-      {
-        "id": "L112",
+        "id": "L18",
         "kind": "EQUAL_LOWS",
         "price": 29994.0,
         "from_t": 1779808980,
@@ -3222,25 +2389,7 @@
         "label": "EQUAL_LOWS 29994.00"
       },
       {
-        "id": "L113",
-        "kind": "SWING_LOW",
-        "price": 29994.0,
-        "from_t": 1779808980,
-        "to_t": null,
-        "swept_t": 1779809040,
-        "label": "SWING_LOW 29994.00"
-      },
-      {
-        "id": "L114",
-        "kind": "SWING_LOW",
-        "price": 29992.5,
-        "from_t": 1779809100,
-        "to_t": null,
-        "swept_t": 1779809400,
-        "label": "SWING_LOW 29992.50"
-      },
-      {
-        "id": "L115",
+        "id": "L19",
         "kind": "EQUAL_HIGHS",
         "price": 30029.5,
         "from_t": 1779809220,
@@ -3249,61 +2398,7 @@
         "label": "EQUAL_HIGHS 30029.50"
       },
       {
-        "id": "L116",
-        "kind": "SWING_HIGH",
-        "price": 30029.5,
-        "from_t": 1779809220,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30029.50"
-      },
-      {
-        "id": "L117",
-        "kind": "SWING_LOW",
-        "price": 29974.25,
-        "from_t": 1779809460,
-        "to_t": null,
-        "swept_t": 1779809760,
-        "label": "SWING_LOW 29974.25"
-      },
-      {
-        "id": "L118",
-        "kind": "SWING_HIGH",
-        "price": 30003.5,
-        "from_t": 1779809580,
-        "to_t": null,
-        "swept_t": 1779809640,
-        "label": "SWING_HIGH 30003.50"
-      },
-      {
-        "id": "L119",
-        "kind": "SWING_HIGH",
-        "price": 30007.5,
-        "from_t": 1779809760,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 30007.50"
-      },
-      {
-        "id": "L120",
-        "kind": "SWING_LOW",
-        "price": 29960.25,
-        "from_t": 1779809820,
-        "to_t": null,
-        "swept_t": 1779810300,
-        "label": "SWING_LOW 29960.25"
-      },
-      {
-        "id": "L121",
-        "kind": "SWING_HIGH",
-        "price": 29990.0,
-        "from_t": 1779810000,
-        "to_t": null,
-        "swept_t": 1779810060,
-        "label": "SWING_HIGH 29990.00"
-      },
-      {
-        "id": "L122",
+        "id": "L20",
         "kind": "EQUAL_LOWS",
         "price": 29968.5,
         "from_t": 1779810060,
@@ -3312,166 +2407,13 @@
         "label": "EQUAL_LOWS 29968.50"
       },
       {
-        "id": "L123",
-        "kind": "SWING_LOW",
-        "price": 29969.0,
-        "from_t": 1779810060,
-        "to_t": null,
-        "swept_t": 1779810240,
-        "label": "SWING_LOW 29969.00"
-      },
-      {
-        "id": "L124",
-        "kind": "SWING_HIGH",
-        "price": 29993.0,
-        "from_t": 1779810180,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_HIGH 29993.00"
-      },
-      {
-        "id": "L125",
-        "kind": "SWING_HIGH",
-        "price": 29981.75,
-        "from_t": 1779810360,
-        "to_t": null,
-        "swept_t": 1779812760,
-        "label": "SWING_HIGH 29981.75"
-      },
-      {
-        "id": "L126",
-        "kind": "SWING_LOW",
-        "price": 29951.5,
-        "from_t": 1779810420,
-        "to_t": null,
-        "swept_t": 1779810540,
-        "label": "SWING_LOW 29951.50"
-      },
-      {
-        "id": "L127",
-        "kind": "SWING_HIGH",
-        "price": 29978.0,
-        "from_t": 1779810480,
-        "to_t": null,
-        "swept_t": 1779811560,
-        "label": "SWING_HIGH 29978.00"
-      },
-      {
-        "id": "L128",
-        "kind": "SWING_LOW",
-        "price": 29933.5,
-        "from_t": 1779810660,
-        "to_t": null,
-        "swept_t": 1779810720,
-        "label": "SWING_LOW 29933.50"
-      },
-      {
-        "id": "L129",
-        "kind": "SWING_LOW",
-        "price": 29886.0,
-        "from_t": 1779811020,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29886.00"
-      },
-      {
-        "id": "L130",
-        "kind": "SWING_HIGH",
-        "price": 29979.5,
-        "from_t": 1779811620,
-        "to_t": null,
-        "swept_t": 1779812760,
-        "label": "SWING_HIGH 29979.50"
-      },
-      {
-        "id": "L131",
-        "kind": "SWING_LOW",
-        "price": 29936.25,
-        "from_t": 1779811740,
-        "to_t": null,
-        "swept_t": 1779811800,
-        "label": "SWING_LOW 29936.25"
-      },
-      {
-        "id": "L132",
-        "kind": "SWING_HIGH",
-        "price": 29949.0,
-        "from_t": 1779811860,
-        "to_t": null,
-        "swept_t": 1779811920,
-        "label": "SWING_HIGH 29949.00"
-      },
-      {
-        "id": "L133",
-        "kind": "SWING_LOW",
-        "price": 29926.0,
-        "from_t": 1779811920,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29926.00"
-      },
-      {
-        "id": "L134",
-        "kind": "SWING_HIGH",
-        "price": 29957.75,
-        "from_t": 1779812040,
-        "to_t": null,
-        "swept_t": 1779812520,
-        "label": "SWING_HIGH 29957.75"
-      },
-      {
-        "id": "L135",
-        "kind": "SWING_LOW",
-        "price": 29928.0,
-        "from_t": 1779812220,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29928.00"
-      },
-      {
-        "id": "L136",
+        "id": "L21",
         "kind": "EQUAL_HIGHS",
         "price": 29957.75,
         "from_t": 1779812400,
         "to_t": null,
         "swept_t": 1779812520,
         "label": "EQUAL_HIGHS 29957.75"
-      },
-      {
-        "id": "L137",
-        "kind": "SWING_HIGH",
-        "price": 29957.5,
-        "from_t": 1779812400,
-        "to_t": null,
-        "swept_t": 1779812520,
-        "label": "SWING_HIGH 29957.50"
-      },
-      {
-        "id": "L138",
-        "kind": "SWING_LOW",
-        "price": 29937.0,
-        "from_t": 1779812460,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29937.00"
-      },
-      {
-        "id": "L139",
-        "kind": "SWING_HIGH",
-        "price": 29988.75,
-        "from_t": 1779812880,
-        "to_t": null,
-        "swept_t": 1779812940,
-        "label": "SWING_HIGH 29988.75"
-      },
-      {
-        "id": "L140",
-        "kind": "SWING_LOW",
-        "price": 29975.0,
-        "from_t": 1779812940,
-        "to_t": null,
-        "swept_t": null,
-        "label": "SWING_LOW 29975.00"
       }
     ],
     "zones": [
@@ -4206,39 +3148,11 @@
     ],
     "markers": [
       {
-        "t": 1779797040,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29874.75,
-        "text": "Raid SWING_HIGH 29874.75"
-      },
-      {
-        "t": 1779797220,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29877.75,
-        "text": "Raid SWING_HIGH 29877.75"
-      },
-      {
-        "t": 1779797220,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29882.5,
-        "text": "Raid SWING_HIGH 29882.50"
-      },
-      {
-        "t": 1779797340,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29866.25,
-        "text": "Raid SWING_LOW 29866.25"
-      },
-      {
-        "t": 1779797340,
-        "kind": "RAID",
-        "side": "SELL",
+        "t": 1779797280,
+        "kind": "MSS",
+        "side": "BEAR",
         "price": 29869.5,
-        "text": "Raid SWING_LOW 29869.50"
+        "text": "MSS↓ 破 29869.50"
       },
       {
         "t": 1779797700,
@@ -4248,95 +3162,18 @@
         "text": "Raid EQUAL_LOWS 29869.50"
       },
       {
-        "t": 1779797700,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29870.0,
-        "text": "Raid SWING_LOW 29870.00"
-      },
-      {
-        "t": 1779797880,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29876.5,
-        "text": "Raid SWING_HIGH 29876.50"
-      },
-      {
-        "t": 1779798180,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29884.75,
-        "text": "Raid SWING_HIGH 29884.75"
-      },
-      {
-        "t": 1779798480,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29895.75,
-        "text": "Raid SWING_HIGH 29895.75"
-      },
-      {
-        "t": 1779798900,
-        "kind": "RAID",
-        "side": "BUY",
+        "t": 1779798780,
+        "kind": "MSS",
+        "side": "BULL",
         "price": 29902.5,
-        "text": "Raid SWING_HIGH 29902.50"
+        "text": "MSS↑ 破 29902.50"
       },
       {
-        "t": 1779799020,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29899.25,
-        "text": "Raid SWING_LOW 29899.25"
-      },
-      {
-        "t": 1779799140,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29909.75,
-        "text": "Raid SWING_HIGH 29909.75"
-      },
-      {
-        "t": 1779799680,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29915.75,
-        "text": "Raid SWING_LOW 29915.75"
-      },
-      {
-        "t": 1779799860,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29923.25,
-        "text": "Raid SWING_HIGH 29923.25"
-      },
-      {
-        "t": 1779799920,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29913.0,
-        "text": "Raid SWING_LOW 29913.00"
-      },
-      {
-        "t": 1779800160,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29924.0,
-        "text": "Raid SWING_HIGH 29924.00"
-      },
-      {
-        "t": 1779800580,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29910.25,
-        "text": "Raid SWING_LOW 29910.25"
-      },
-      {
-        "t": 1779800700,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29903.0,
-        "text": "Raid SWING_LOW 29903.00"
+        "t": 1779800400,
+        "kind": "MSS",
+        "side": "BEAR",
+        "price": 29911.75,
+        "text": "MSS↓ 破 29911.75"
       },
       {
         "t": 1779801060,
@@ -4346,39 +3183,11 @@
         "text": "Raid EQUAL_HIGHS 29910.00"
       },
       {
-        "t": 1779801060,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29910.0,
-        "text": "Raid SWING_HIGH 29910.00"
-      },
-      {
-        "t": 1779801120,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29913.75,
-        "text": "Raid SWING_HIGH 29913.75"
-      },
-      {
-        "t": 1779801420,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29925.0,
-        "text": "Raid SWING_HIGH 29925.00"
-      },
-      {
         "t": 1779801420,
         "kind": "RAID",
         "side": "BUY",
         "price": 29923.25,
         "text": "Raid EQUAL_HIGHS 29923.25"
-      },
-      {
-        "t": 1779801420,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29923.0,
-        "text": "Raid SWING_HIGH 29923.00"
       },
       {
         "t": 1779801720,
@@ -4395,20 +3204,6 @@
         "text": "Raid EQUAL_HIGHS 29925.00"
       },
       {
-        "t": 1779801720,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29924.5,
-        "text": "Raid SWING_HIGH 29924.50"
-      },
-      {
-        "t": 1779801840,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29925.75,
-        "text": "Raid SWING_HIGH 29925.75"
-      },
-      {
         "t": 1779801840,
         "kind": "RAID",
         "side": "BUY",
@@ -4423,74 +3218,60 @@
         "text": "Raid EQUAL_HIGHS 29925.25"
       },
       {
-        "t": 1779801960,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29925.25,
-        "text": "Raid SWING_HIGH 29925.25"
+        "t": 1779802020,
+        "kind": "MSS",
+        "side": "BEAR",
+        "price": 29919.5,
+        "text": "MSS↓ 破 29919.50"
       },
       {
-        "t": 1779802140,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29897.5,
-        "text": "Raid SWING_LOW 29897.50"
-      },
-      {
-        "t": 1779802140,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29901.25,
-        "text": "Raid SWING_LOW 29901.25"
-      },
-      {
-        "t": 1779802140,
-        "kind": "RAID",
-        "side": "SELL",
+        "t": 1779802080,
+        "kind": "MSS",
+        "side": "BEAR",
         "price": 29902.25,
-        "text": "Raid SWING_LOW 29902.25"
+        "text": "MSS↓ 破 29902.25"
       },
       {
-        "t": 1779802140,
-        "kind": "RAID",
-        "side": "SELL",
+        "t": 1779802200,
+        "kind": "MSS",
+        "side": "BEAR",
         "price": 29891.0,
-        "text": "Raid SWING_LOW 29891.00"
+        "text": "MSS↓ 破 29891.00"
       },
       {
-        "t": 1779802200,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29930.5,
-        "text": "Raid SWING_HIGH 29930.50"
-      },
-      {
-        "t": 1779802200,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29929.0,
-        "text": "Raid SWING_HIGH 29929.00"
-      },
-      {
-        "t": 1779802260,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29886.75,
-        "text": "Raid SWING_LOW 29886.75"
+        "t": 1779802380,
+        "kind": "MSS",
+        "side": "BEAR",
+        "price": 29880.0,
+        "text": "MSS↓ 破 29880.00"
       },
       {
         "t": 1779802440,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29851.0,
-        "text": "Raid SWING_LOW 29851.00"
+        "kind": "MSS",
+        "side": "BEAR",
+        "price": 29864.25,
+        "text": "MSS↓ 破 29864.25"
       },
       {
-        "t": 1779802860,
-        "kind": "RAID",
-        "side": "BUY",
+        "t": 1779802500,
+        "kind": "MSS",
+        "side": "BEAR",
+        "price": 29851.0,
+        "text": "MSS↓ 破 29851.00"
+      },
+      {
+        "t": 1779802800,
+        "kind": "MSS",
+        "side": "BULL",
+        "price": 29864.75,
+        "text": "MSS↑ 破 29864.75"
+      },
+      {
+        "t": 1779802920,
+        "kind": "MSS",
+        "side": "BULL",
         "price": 29908.5,
-        "text": "Raid SWING_HIGH 29908.50"
+        "text": "MSS↑ 破 29908.50"
       },
       {
         "t": 1779802980,
@@ -4500,144 +3281,53 @@
         "text": "Raid SESSION_HIGH 29935.00"
       },
       {
-        "t": 1779802980,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29935.0,
-        "text": "Raid SWING_HIGH 29935.00"
+        "t": 1779803100,
+        "kind": "MSS",
+        "side": "BULL",
+        "price": 29938.0,
+        "text": "MSS↑ 破 29938.00"
       },
       {
-        "t": 1779803640,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29930.0,
-        "text": "Raid SWING_LOW 29930.00"
+        "t": 1779804840,
+        "kind": "MSS",
+        "side": "BULL",
+        "price": 30011.5,
+        "text": "MSS↑ 破 30011.50"
       },
       {
-        "t": 1779803760,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29985.75,
-        "text": "Raid SWING_HIGH 29985.75"
+        "t": 1779805080,
+        "kind": "MSS",
+        "side": "BULL",
+        "price": 30033.0,
+        "text": "MSS↑ 破 30033.00"
       },
       {
-        "t": 1779804420,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29998.75,
-        "text": "Raid SWING_HIGH 29998.75"
+        "t": 1779806100,
+        "kind": "MSS",
+        "side": "BULL",
+        "price": 30081.5,
+        "text": "MSS↑ 破 30081.50"
       },
       {
-        "t": 1779804660,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 30010.25,
-        "text": "Raid SWING_HIGH 30010.25"
+        "t": 1779806820,
+        "kind": "MSS",
+        "side": "BEAR",
+        "price": 30094.75,
+        "text": "MSS↓ 破 30094.75"
       },
       {
-        "t": 1779804900,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 30020.0,
-        "text": "Raid SWING_HIGH 30020.00"
-      },
-      {
-        "t": 1779805620,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 30080.75,
-        "text": "Raid SWING_HIGH 30080.75"
-      },
-      {
-        "t": 1779805920,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 30078.25,
-        "text": "Raid SWING_HIGH 30078.25"
-      },
-      {
-        "t": 1779806580,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 30095.0,
-        "text": "Raid SWING_LOW 30095.00"
-      },
-      {
-        "t": 1779806580,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 30098.25,
-        "text": "Raid SWING_LOW 30098.25"
-      },
-      {
-        "t": 1779807000,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 30075.75,
-        "text": "Raid SWING_LOW 30075.75"
-      },
-      {
-        "t": 1779807300,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 30064.5,
-        "text": "Raid SWING_LOW 30064.50"
-      },
-      {
-        "t": 1779807420,
-        "kind": "RAID",
-        "side": "SELL",
+        "t": 1779807540,
+        "kind": "MSS",
+        "side": "BEAR",
         "price": 30063.5,
-        "text": "Raid SWING_LOW 30063.50"
+        "text": "MSS↓ 破 30063.50"
       },
       {
-        "t": 1779807600,
-        "kind": "RAID",
-        "side": "SELL",
+        "t": 1779807660,
+        "kind": "MSS",
+        "side": "BEAR",
         "price": 30053.0,
-        "text": "Raid SWING_LOW 30053.00"
-      },
-      {
-        "t": 1779807780,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 30033.5,
-        "text": "Raid SWING_LOW 30033.50"
-      },
-      {
-        "t": 1779807900,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 30032.75,
-        "text": "Raid SWING_LOW 30032.75"
-      },
-      {
-        "t": 1779808020,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 30008.0,
-        "text": "Raid SWING_LOW 30008.00"
-      },
-      {
-        "t": 1779808680,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 30003.75,
-        "text": "Raid SWING_LOW 30003.75"
-      },
-      {
-        "t": 1779808860,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29996.25,
-        "text": "Raid SWING_LOW 29996.25"
-      },
-      {
-        "t": 1779809040,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29994.0,
-        "text": "Raid SWING_LOW 29994.00"
+        "text": "MSS↓ 破 30053.00"
       },
       {
         "t": 1779809040,
@@ -4647,20 +3337,6 @@
         "text": "Raid EQUAL_LOWS 29994.00"
       },
       {
-        "t": 1779809040,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29994.0,
-        "text": "Raid SWING_LOW 29994.00"
-      },
-      {
-        "t": 1779809400,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29976.0,
-        "text": "Raid SWING_LOW 29976.00"
-      },
-      {
         "t": 1779809400,
         "kind": "RAID",
         "side": "SELL",
@@ -4668,53 +3344,11 @@
         "text": "Raid EQUAL_LOWS 29976.00"
       },
       {
-        "t": 1779809400,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29976.5,
-        "text": "Raid SWING_LOW 29976.50"
-      },
-      {
-        "t": 1779809520,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29989.0,
-        "text": "Raid SWING_LOW 29989.00"
-      },
-      {
-        "t": 1779809580,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29992.5,
-        "text": "Raid SWING_LOW 29992.50"
-      },
-      {
-        "t": 1779809640,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 30003.5,
-        "text": "Raid SWING_HIGH 30003.50"
-      },
-      {
-        "t": 1779809820,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29968.5,
-        "text": "Raid SWING_LOW 29968.50"
-      },
-      {
-        "t": 1779809820,
-        "kind": "RAID",
-        "side": "SELL",
+        "t": 1779809760,
+        "kind": "MSS",
+        "side": "BEAR",
         "price": 29974.25,
-        "text": "Raid SWING_LOW 29974.25"
-      },
-      {
-        "t": 1779810060,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29990.0,
-        "text": "Raid SWING_HIGH 29990.00"
+        "text": "MSS↓ 破 29974.25"
       },
       {
         "t": 1779810240,
@@ -4724,69 +3358,112 @@
         "text": "Raid EQUAL_LOWS 29968.50"
       },
       {
-        "t": 1779810240,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29969.0,
-        "text": "Raid SWING_LOW 29969.00"
-      },
-      {
-        "t": 1779810300,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29960.25,
-        "text": "Raid SWING_LOW 29960.25"
-      },
-      {
-        "t": 1779810720,
-        "kind": "RAID",
-        "side": "SELL",
+        "t": 1779810780,
+        "kind": "MSS",
+        "side": "BEAR",
         "price": 29933.5,
-        "text": "Raid SWING_LOW 29933.50"
-      },
-      {
-        "t": 1779810840,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29909.0,
-        "text": "Raid SWING_LOW 29909.00"
-      },
-      {
-        "t": 1779811020,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29914.0,
-        "text": "Raid SWING_LOW 29914.00"
-      },
-      {
-        "t": 1779811560,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29978.0,
-        "text": "Raid SWING_HIGH 29978.00"
-      },
-      {
-        "t": 1779811860,
-        "kind": "RAID",
-        "side": "SELL",
-        "price": 29936.25,
-        "text": "Raid SWING_LOW 29936.25"
-      },
-      {
-        "t": 1779811920,
-        "kind": "RAID",
-        "side": "BUY",
-        "price": 29949.0,
-        "text": "Raid SWING_HIGH 29949.00"
+        "text": "MSS↓ 破 29933.50"
       }
     ]
   },
   "state_timeline": [
     {
       "t": 1779802200,
-      "state": "DONE",
-      "waiting_for": "偏向 NO_TRADE（現價 29551.25 未突破任何 swing（需 Buy 突破 swing high 或 Sell 跌破 swing low）），今日不進場",
-      "detail": {}
+      "state": "WAIT_SWEEP",
+      "waiting_for": "等待掃蕩（bias=BOTH）",
+      "detail": {
+        "bias": "BOTH"
+      }
+    },
+    {
+      "t": 1779802200,
+      "state": "WAIT_MSS",
+      "waiting_for": "掃蕩確認（SWING_HIGH 29930.50），鎖定方向=SHORT，等 MSS（最多 15 根）",
+      "detail": {
+        "raid_kind": "SWING_HIGH",
+        "raid_level": 29930.5,
+        "locked_direction": "SHORT"
+      }
+    },
+    {
+      "t": 1779803160,
+      "state": "WAIT_SWEEP",
+      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
+      "detail": {
+        "timeout_bars": 16
+      }
+    },
+    {
+      "t": 1779803640,
+      "state": "WAIT_MSS",
+      "waiting_for": "掃蕩確認（SWING_LOW 29930.00），鎖定方向=LONG，等 MSS（最多 15 根）",
+      "detail": {
+        "raid_kind": "SWING_LOW",
+        "raid_level": 29930.0,
+        "locked_direction": "LONG"
+      }
+    },
+    {
+      "t": 1779804600,
+      "state": "WAIT_SWEEP",
+      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
+      "detail": {
+        "timeout_bars": 16
+      }
+    },
+    {
+      "t": 1779804660,
+      "state": "WAIT_MSS",
+      "waiting_for": "掃蕩確認（SWING_HIGH 30010.25），鎖定方向=SHORT，等 MSS（最多 15 根）",
+      "detail": {
+        "raid_kind": "SWING_HIGH",
+        "raid_level": 30010.25,
+        "locked_direction": "SHORT"
+      }
+    },
+    {
+      "t": 1779805620,
+      "state": "WAIT_SWEEP",
+      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
+      "detail": {
+        "timeout_bars": 16
+      }
+    },
+    {
+      "t": 1779805920,
+      "state": "WAIT_MSS",
+      "waiting_for": "掃蕩確認（SWING_HIGH 30078.25），鎖定方向=SHORT，等 MSS（最多 15 根）",
+      "detail": {
+        "raid_kind": "SWING_HIGH",
+        "raid_level": 30078.25,
+        "locked_direction": "SHORT"
+      }
+    },
+    {
+      "t": 1779806880,
+      "state": "WAIT_SWEEP",
+      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
+      "detail": {
+        "timeout_bars": 16
+      }
+    },
+    {
+      "t": 1779807000,
+      "state": "WAIT_MSS",
+      "waiting_for": "掃蕩確認（SWING_LOW 30075.75），鎖定方向=LONG，等 MSS（最多 15 根）",
+      "detail": {
+        "raid_kind": "SWING_LOW",
+        "raid_level": 30075.75,
+        "locked_direction": "LONG"
+      }
+    },
+    {
+      "t": 1779807960,
+      "state": "WAIT_SWEEP",
+      "waiting_for": "MSS 等待超時（15 根），重回等待掃蕩",
+      "detail": {
+        "timeout_bars": 16
+      }
     }
   ],
   "orders": [],
@@ -4794,1353 +3471,1353 @@
   "equity": [
     {
       "t": 1779796800,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779796860,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779796920,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779796980,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797040,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797100,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797160,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797220,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797280,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797340,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797400,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797460,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797520,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797580,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797640,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797700,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797760,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797820,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797880,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779797940,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798000,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798060,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798120,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798180,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798240,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798300,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798360,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798420,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798480,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798540,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798600,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798660,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798720,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798780,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798840,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798900,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779798960,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799020,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799080,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799140,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799200,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799260,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799320,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799380,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799440,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799500,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799560,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799620,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799680,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799740,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799800,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799860,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799920,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779799980,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800040,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800100,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800160,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800220,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800280,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800340,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800400,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800460,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800520,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800580,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800640,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800700,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800760,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800820,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800880,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779800940,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801000,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801060,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801120,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801180,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801240,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801300,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801360,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801420,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801480,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801540,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801600,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801660,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801720,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801780,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801840,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801900,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779801960,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802020,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802080,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802140,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802200,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802260,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802320,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802380,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802440,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802500,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802560,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802620,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802680,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802740,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802800,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802860,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802920,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779802980,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803040,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803100,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803160,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803220,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803280,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803340,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803400,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803460,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803520,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803580,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803640,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803700,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803760,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803820,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803880,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779803940,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804000,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804060,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804120,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804180,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804240,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804300,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804360,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804420,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804480,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804540,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804600,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804660,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804720,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804780,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804840,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804900,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779804960,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805020,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805080,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805140,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805200,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805260,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805320,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805380,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805440,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805500,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805560,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805620,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805680,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805740,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805800,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805860,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805920,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779805980,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806040,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806100,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806160,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806220,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806280,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806340,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806400,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806460,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806520,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806580,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806640,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806700,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806760,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806820,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806880,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779806940,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807000,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807060,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807120,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807180,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807240,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807300,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807360,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807420,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807480,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807540,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807600,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807660,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807720,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807780,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807840,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807900,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779807960,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808020,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808080,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808140,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808200,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808260,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808320,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808380,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808440,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808500,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808560,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808620,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808680,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808740,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808800,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808860,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808920,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779808980,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809040,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809100,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809160,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809220,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809280,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809340,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809400,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809460,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809520,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809580,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809640,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809700,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809760,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809820,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809880,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779809940,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810000,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810060,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810120,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810180,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810240,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810300,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810360,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810420,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810480,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810540,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810600,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810660,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810720,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810780,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810840,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810900,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779810960,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811020,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811080,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811140,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811200,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811260,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811320,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811380,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811440,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811500,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811560,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811620,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811680,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811740,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811800,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811860,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811920,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779811980,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812040,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812100,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812160,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812220,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812280,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812340,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812400,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812460,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812520,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812580,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812640,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812700,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812760,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812820,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812880,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     },
     {
       "t": 1779812940,
-      "realized": 50000.0,
-      "total": 50000.0
+      "realized": 51856.0,
+      "total": 51856.0
     }
   ],
   "stats": {
