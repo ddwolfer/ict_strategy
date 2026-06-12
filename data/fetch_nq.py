@@ -12,9 +12,9 @@ import yfinance as yf
 
 CACHE = Path(__file__).parent / "cache"
 CACHE.mkdir(exist_ok=True)
-CSV = CACHE / "nq_1m.csv"
-
-SYMBOL = "NQ=F"
+import sys
+SYMBOL = sys.argv[1] if len(sys.argv) > 1 else "NQ=F"
+CSV = CACHE / (sys.argv[2] if len(sys.argv) > 2 else "nq_1m.csv")
 WINDOW_DAYS = 29  # stay inside yfinance's ~30d limit
 CHUNK_DAYS = 7    # stay inside the 8d-per-request limit
 

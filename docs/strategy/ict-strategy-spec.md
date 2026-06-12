@@ -76,6 +76,20 @@ v1 的 M1 Buy/Sell Program 日線程序（已實作）。對短資料集過嚴
   停利階梯素材）
 - M13 目標階梯素材：前一時段（隔夜）極值、前日極值
 
+## 2.5 Silver Bullet 模式（preset，使用者交易員朋友建議 + ICT Silver Bullet）
+
+`StrategyConfig.silver_bullet()` preset，與預設並存、回測 A/B：
+
+- 進場窗 **10:00–11:00 ET**（Silver Bullet 上午時段；9:30–10:00 只觀察、
+  其高低點照常列入流動性水位）
+- **每日只做 10:00 後第一個確認的 MSS**（`first_setup_only=True`：第一個
+  MSS 鏈路無論成交、過濾被拒或掛單失效，當日即收工）
+- **min_rr = 2.0**：T1 流動性目標距離不足 2R → 放棄 setup（每口都至少 1:2）
+- **SMT 過濾（`smt_filter="require"`）**：掃蕩當下比對 ES——
+  NQ 掃過水位但 ES「未同步創對應極值」（lookback 同水位形成期間）→
+  背離成立才可進場；ES 同步創極值 → 真突破嫌疑，放棄。
+  資料：data/cache/es_1m.csv（與 NQ 同步抓取，分鐘對齊，缺分鐘沿用前值）
+
 ## 3. 盤中狀態機（1 分 K）
 
 ```
