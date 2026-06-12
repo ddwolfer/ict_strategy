@@ -1,0 +1,24 @@
+{
+ "FriOff+fvgEv+max1": {
+  "total_days": 919,
+  "total_trades": 335,
+  "total_wins": 154,
+  "win_rate": 0.4597014925373134,
+  "total_r": 48.5455,
+  "pnl_usd": 7188.6,
+  "final_equity": 57188.6,
+  "max_drawdown_usd": 4077.08,
+  "ambiguous_count": 23
+ },
+ "FriOff+fvgEv+max1+0.8": {
+  "total_days": 919,
+  "total_trades": 190,
+  "total_wins": 89,
+  "win_rate": 0.46842105263157896,
+  "total_r": 37.9339,
+  "pnl_usd": 6895.94,
+  "final_equity": 56895.94,
+  "max_drawdown_usd": 2925.92,
+  "ambiguous_count": 13
+ }
+}

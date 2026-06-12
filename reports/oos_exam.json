@@ -1,0 +1,35 @@
+{
+ "OOS baseline": {
+  "total_days": 374,
+  "total_trades": 103,
+  "total_wins": 48,
+  "win_rate": 0.46601941747572817,
+  "total_r": -0.4296,
+  "pnl_usd": -1054.52,
+  "final_equity": 48945.48,
+  "max_drawdown_usd": 2567.08,
+  "ambiguous_count": 10
+ },
+ "OOS 冠軍組合": {
+  "total_days": 374,
+  "total_trades": 129,
+  "total_wins": 53,
+  "win_rate": 0.4108527131782946,
+  "total_r": -12.9504,
+  "pnl_usd": -4174.88,
+  "final_equity": 45825.12,
+  "max_drawdown_usd": 4977.4,
+  "ambiguous_count": 11
+ },
+ "OOS 冠軍+門檻0.8": {
+  "total_days": 374,
+  "total_trades": 75,
+  "total_wins": 32,
+  "win_rate": 0.4266666666666667,
+  "total_r": -3.3008,
+  "pnl_usd": -1554.76,
+  "final_equity": 48445.24,
+  "max_drawdown_usd": 3396.26,
+  "ambiguous_count": 6
+ }
+}
