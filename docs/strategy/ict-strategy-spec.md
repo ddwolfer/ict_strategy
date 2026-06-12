@@ -76,6 +76,20 @@ v1 的 M1 Buy/Sell Program 日線程序（已實作）。對短資料集過嚴
   停利階梯素材）
 - M13 目標階梯素材：前一時段（隔夜）極值、前日極值
 
+## 2.4 交易時段（session，v3 擴充）
+
+`session` config，三個時段共用同一條狀態機鏈路（M13 fractal 用法）：
+
+| session | context 起點 | 新倉窗（ET） | 強平 | Raid 觸發水位 | 出處 |
+|---|---|---|---|---|---|
+| `NY_AM`（預設） | 08:00 | 09:30–11:00 | 12:30 | ONH/ONL、PDH/PDL、盤中極值、等高低 | M13 AM |
+| `NY_PM` | 08:00（需 AM 水位） | 13:30–15:00 | 15:55 | AM session 高低、午休高低（以盤中極值與 swing 涵蓋）、PDH/PDL | M13 PM（13:30 首窗、14:00 PM trends、掃 AM/lunch stops） |
+| `LONDON` | 00:00 | 02:00–05:00 | 05:30 | 隔夜（亞洲段）極值、PDH/PDL、等高低 | M1/M11 London Open Killzone 02:00–05:00 |
+
+v1 簡化（誠實偏離）：PM 的 m13_liquidity T2 仍用 ONH/ONL（M13 原文為
+「同日 AM session 極值」）；London 的亞洲區間以隔夜極值近似。
+評估方法：三時段各跑 5 年 baseline（不調參），分年 + IS/OOS 切分檢視。
+
 ## 2.5 Silver Bullet 模式（preset，使用者交易員朋友建議 + ICT Silver Bullet）
 
 `StrategyConfig.silver_bullet()` preset，與預設並存、回測 A/B：
