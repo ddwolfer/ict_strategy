@@ -158,3 +158,86 @@ class TestNoLookaheadWithRealData:
             pytest.skip("Real data not available")
         from engine.detectors.displacement import DisplacementDetector
         check_no_lookahead(lambda: DisplacementDetector(window=20), bars, [25, 50, 100, 150, 200])
+
+
+# ─── SimBroker 無前視保證 ────────────────────────────────────────────────────
+
+class TestSimBrokerNoLookahead:
+    """SimBroker 不得使用未來 K 棒資料。
+
+    測試策略：固定一組 BARS，提交相同的 bracket；
+    分別以 BARS[:t] 與 BARS 餵入，確認前者產生的 Trade 結果
+    是後者的精確前綴（或相同）—— 早截斷不能改變已發生的成交。
+    """
+
+    @staticmethod
+    def _run_broker_on_bars(bars: list[Bar]) -> list:
+        """在一組 bars 上跑完整個流程，回傳 (events_per_bar, trades) 快照。"""
+        from engine.sim.broker import BrokerConfig, SimBroker
+        from engine.sim.orders import Bracket, Order
+
+        broker = SimBroker(BrokerConfig(slippage_ticks=0, commission_per_side=0))
+        # 以第一根 bar 附近的價格設定 bracket（不依賴未來資料）
+        ref_open = bars[0].open
+        entry_price = round(ref_open - 1.0, 2)   # BUY LIMIT 略低於開盤
+        stop_price = entry_price - 2.0
+        target_price = entry_price + 3.0
+
+        order = Order(side="BUY", type="LIMIT", price=entry_price, qty=1)
+        bracket = Bracket(entry=order, stop_price=stop_price, targets=[(target_price, 1)])
+        broker.submit(bracket)
+
+        all_events = []
+        for bar in bars:
+            evts = broker.on_bar(bar)
+            all_events.append(evts)
+        return all_events, broker.trades
+
+    def test_partial_run_is_prefix_of_full_run(self):
+        """bars[:30] 與 bars[:50] 的交易紀錄不矛盾（前者是後者的前綴）。"""
+        _, trades_full = self._run_broker_on_bars(BARS)
+        _, trades_partial = self._run_broker_on_bars(BARS[:30])
+
+        # partial 中發生的交易必須與 full 中對應位置一致
+        for i, t_partial in enumerate(trades_partial):
+            if i < len(trades_full):
+                t_full = trades_full[i]
+                assert t_partial.entry_price == t_full.entry_price, (
+                    f"Trade {i} entry_price mismatch: "
+                    f"partial={t_partial.entry_price} full={t_full.entry_price}"
+                )
+                assert t_partial.exit_fills[0].price == t_full.exit_fills[0].price, (
+                    f"Trade {i} exit price mismatch"
+                )
+
+    def test_event_sequence_prefix_property(self):
+        """bars[:20] 產生的 events（前 20 棒）應與 bars[:50] 前 20 棒一致。"""
+        events_full, _ = self._run_broker_on_bars(BARS)
+        events_partial, _ = self._run_broker_on_bars(BARS[:20])
+
+        # 比較前 20 棒的事件序列
+        for i in range(len(events_partial)):
+            assert len(events_partial[i]) == len(events_full[i]), (
+                f"Bar {i}: event count differs — "
+                f"partial={len(events_partial[i])} full={len(events_full[i])}"
+            )
+            for j, (ep, ef) in enumerate(zip(events_partial[i], events_full[i])):
+                assert type(ep) == type(ef), (
+                    f"Bar {i} event {j}: type mismatch {type(ep)} vs {type(ef)}"
+                )
+
+    def test_no_future_bar_data_in_fill(self):
+        """各棒的成交價只能落在 [bar.low, bar.high] 範圍內（含 open）。
+
+        這是保守成交規則的必要條件：fill_price 不能來自未來 K 棒。
+        """
+        from engine.sim.broker import OrderFilled, TradeClosed
+
+        events_list, trades = self._run_broker_on_bars(BARS)
+        for i, (bar, evts) in enumerate(zip(BARS, events_list)):
+            for evt in evts:
+                if isinstance(evt, OrderFilled):
+                    assert bar.low - 1e-9 <= evt.fill_price <= bar.high + 1e-9, (
+                        f"Bar {i}: fill_price {evt.fill_price} outside "
+                        f"[{bar.low}, {bar.high}]"
+                    )
