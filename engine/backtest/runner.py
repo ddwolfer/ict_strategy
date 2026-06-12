@@ -78,6 +78,7 @@ def run_day(
     es_bars_map: dict | None = None,
     history_bars: list[Bar] | None = None,
     day_all_bars: list[Bar] | None = None,
+    vol_gate_allowed: bool = True,
 ) -> DayResult:
     """跑單日回測，回傳 DayResult。
 
@@ -96,6 +97,10 @@ def run_day(
 
     # ── 計算偏向 ─────────────────────────────────────────────────────────────
     bias = compute_bias(history_bars, config)
+    if not vol_gate_allowed and bias.direction != "NO_TRADE":
+        from dataclasses import replace as _dc_replace
+        bias = _dc_replace(bias, direction="NO_TRADE",
+                           reason=f"ATR 制度閘門：昨日 ATR(14) 百分位低於 {config.atr_pct_threshold:.0%}，低波動制度不交易")
 
     # ── 今日 bars（context_start–flatten_time ET）──────────────────────────
     t_ctx_start = _parse_hm(config.context_start)
@@ -301,6 +306,38 @@ def run_all(
 
     all_trade_rows: list[dict] = []
 
+    # ATR 制度閘門：以全日線資料點對點預計算（每日只用嚴格過去的資料）
+    gate_map: dict = {}
+    if cfg.vol_gate == "atr_pct":
+        daily = []  # (day, high, low, close)
+        for d in all_days_ordered:
+            bs = days_map[d]
+            daily.append((d, max(b.high for b in bs), min(b.low for b in bs), bs[-1].close))
+        trs = []   # true range 序列（與 daily[1:] 對齊）
+        atrs: list = []
+        for k in range(1, len(daily)):
+            _d, h, l, c_prev = daily[k][0], daily[k][1], daily[k][2], daily[k-1][3]
+            tr = max(h - l, abs(h - c_prev), abs(l - c_prev))
+            trs.append(tr)
+            atrs.append(sum(trs[-14:]) / min(len(trs), 14))
+        # gate for day daily[k][0]（k>=1）：用截至前一日的 ATR（atrs[k-2]）在
+        # 之前 lookback 個 ATR 值中的百分位
+        for k in range(1, len(daily)):
+            d = daily[k][0]
+            if k - 2 < 0:
+                gate_map[d] = True   # 暖機期不擋
+                continue
+            cur = atrs[k - 2]
+            hist = atrs[max(0, k - 2 - cfg.atr_lookback_days):k - 2]
+            if len(hist) < 30:
+                gate_map[d] = True
+                continue
+            rank = sum(1 for v in hist if v <= cur) / len(hist)
+            gate_map[d] = rank >= cfg.atr_pct_threshold
+        if verbose:
+            blocked = sum(1 for v in gate_map.values() if not v)
+            print(f"ATR 制度閘門：{blocked}/{len(gate_map)} 個交易日被擋（門檻 {cfg.atr_pct_threshold:.0%}）")
+
     day_pos = {d: k for k, d in enumerate(all_days_ordered)}
     for i, day in enumerate(trading_days):
         pos = day_pos[day]
@@ -309,7 +346,8 @@ def run_all(
         result = run_day(day, cfg, all_bars, initial_equity=running_equity,
                          es_bars_map=es_bars_map if es_bars_map else None,
                          history_bars=history_bars,
-                         day_all_bars=days_map[day])
+                         day_all_bars=days_map[day],
+                         vol_gate_allowed=gate_map.get(day, True))
 
         for t in result.closed_trades:
             all_trade_rows.append({

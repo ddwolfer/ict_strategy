@@ -196,6 +196,13 @@ class StrategyConfig:
     # 0 = 關閉。掃蕩反轉策略在低波動緩漲市衰減（2023-25 實證），此為結構性過濾。
     min_on_range_ratio: float = 0.0
 
+    # ── ATR 制度閘門（文獻：日內反轉策略只在高波動制度出手）──────────────────
+    # "atr_pct"：昨日 ATR(14) 在過去 atr_lookback_days 的百分位 >= atr_pct_threshold
+    # 才允許當日交易。由 runner 以全日線資料點對點預計算（嚴格無前視）。
+    vol_gate: Literal["off", "atr_pct"] = "off"
+    atr_pct_threshold: float = 0.6
+    atr_lookback_days: int = 252
+
     # ── Silver Bullet 新增 ────────────────────────────────────────────────────
     min_rr: float = 0.0          # 0=off; T1 dist < min_rr×stop_dist → abandon setup
     first_setup_only: bool = False  # True: after first MSS chain ends (any way), → DONE
