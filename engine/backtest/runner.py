@@ -217,6 +217,13 @@ def run_all(
         if dd > max_dd:
             max_dd = dd
 
+        # 無時段 K 棒的日子（例如資料只到當日盤前）不輸出，
+        # 避免前端載入空資料
+        if not result.bars:
+            if verbose:
+                print(f"  {day} [skip] 無時段 K 棒，不輸出")
+            continue
+
         summary = {
             "date": str(day),
             "bias": result.bias.direction,

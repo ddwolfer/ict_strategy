@@ -3,7 +3,7 @@
  * Wires together: data loading, ReplayEngine, ChartManager, OverlayManager, SidebarManager.
  */
 
-import { loadIndex, loadDay, buildDemoDay } from './data.js';
+import { loadIndex, loadDay } from './data.js';
 import { ReplayEngine }   from './replay.js';
 import { ChartManager }   from './chart.js';
 import { OverlayManager } from './overlay.js';
@@ -95,11 +95,15 @@ async function loadAndStartDay(date) {
   if (overlayMgr) { overlayMgr.destroy(); overlayMgr = null; }
   if (chartMgr)   { chartMgr.destroy();   chartMgr   = null; }
 
-  // Attempt to load real data; fall back to demo data
+  // 載入真實回測資料；失敗或為空時明確報錯，絕不靜默使用合成資料
   let data = await loadDay(date);
   if (!data || !data.bars || data.bars.length === 0) {
-    console.info('[main] No data for', date, '— using demo data');
-    data = buildDemoDay(date);
+    showLoading(false);
+    chartContainer.innerHTML =
+      `<div style="display:flex;align-items:center;justify-content:center;height:100%;` +
+      `color:#f87171;font-size:14px;letter-spacing:.05em;">` +
+      `${date} 無回測資料（該日無時段 K 棒或 JSON 載入失敗）—— 請先執行 python -m engine.backtest.runner</div>`;
+    return;
   }
 
   // Initialize chart
