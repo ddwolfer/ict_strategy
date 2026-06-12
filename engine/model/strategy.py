@@ -293,21 +293,9 @@ class ICTStrategy:
                 self._transition("DONE", bar, f"交易窗結束（{self.config.flatten_time} ET）", {})
             return self._events
 
-        # ── 4. 兼容舊版 EOD 邏輯（window="RTH_OPEN_3H" 超出）───────────────
-        if not is_in_window(bar.ts_utc, self.config.window):
-            if self._session_started:
-                if self._state == "IN_POSITION":
-                    flatten_evts = self.broker.flatten(bar, reason="EOD")
-                    for bev in flatten_evts:
-                        self._handle_broker_event(bev, bar)
-                    self._transition("DONE", bar, "EOD 強制平倉（RTH_OPEN_3H 窗結束）", {})
-                elif self._state == "WAIT_RETRACE" and self._pending_bracket_id:
-                    self.broker.cancel(self._pending_bracket_id)
-                    self._pending_bracket_id = None
-                    self._transition("DONE", bar, "EOD 進場窗結束，撤銷待成交限價單", {})
-                elif self._state not in ("DONE",):
-                    self._transition("DONE", bar, "交易窗結束（RTH_OPEN_3H）", {})
-            return self._events
+        # ── 4. 兼容舊版 EOD 邏輯（已由 _flatten_time 取代；保留空區塊供追蹤）──
+        # NOTE: window="RTH_OPEN_3H" 欄位保留供舊測試讀取，但不再驅動狀態機。
+        # _flatten_time 已依 config.flatten_time 正確處理所有 session。
 
         # ── 5. 每日過濾（星期過濾）───────────────────────────────────────────
         if self.config.use_day_filter and self.config.day_filter is not None:

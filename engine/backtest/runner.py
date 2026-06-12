@@ -35,16 +35,36 @@ def _et_hm(h: int, m: int) -> time:
     return time(h, m)
 
 
-def _bars_for_day_window(all_bars: list[Bar], day: date) -> list[Bar]:
-    """取某交易日 08:00–12:30 ET 的 bars（含 context 段 08:00–09:29）。"""
+def _parse_hm(s: str) -> time:
+    """'HH:MM' → time。"""
+    h, m = int(s[:2]), int(s[3:])
+    return time(h, m)
+
+
+def _bars_for_day_window(
+    all_bars: list[Bar],
+    day: date,
+    config: "StrategyConfig | None" = None,
+) -> list[Bar]:
+    """取某交易日 context_start–flatten_time ET 的 bars。
+
+    context_start 預設 "08:00"（NY_AM/NY_PM）；LONDON 為 "00:00"。
+    flatten_time 預設 "12:30"（NY_AM）。
+    """
+    if config is not None:
+        t_start = _parse_hm(config.context_start)
+        t_end   = _parse_hm(config.flatten_time)
+    else:
+        t_start = time(8, 0)
+        t_end   = time(12, 30)
+
     result = []
     for b in all_bars:
         if trading_date(b.ts_utc) != day:
             continue
         et = _to_et(b.ts_utc)
         t = et.time()
-        # 08:00 <= t < 12:30
-        if time(8, 0) <= t < time(12, 30):
+        if t_start <= t < t_end:
             result.append(b)
     return sorted(result, key=lambda b: b.ts_utc)
 
@@ -76,16 +96,18 @@ def run_day(
     # ── 計算偏向 ─────────────────────────────────────────────────────────────
     bias = compute_bias(history_bars, config)
 
-    # ── 今日 bars（08:00–12:30 ET）──────────────────────────────────────────
+    # ── 今日 bars（context_start–flatten_time ET）──────────────────────────
+    t_ctx_start = _parse_hm(config.context_start)
+    t_flatten   = _parse_hm(config.flatten_time)
     if day_all_bars is not None:
         day_bars = []
         for b in day_all_bars:
             t = _to_et(b.ts_utc).time()
-            if time(8, 0) <= t < time(12, 30):
+            if t_ctx_start <= t < t_flatten:
                 day_bars.append(b)
         day_bars.sort(key=lambda b: b.ts_utc)
     else:
-        day_bars = _bars_for_day_window(all_bars, day)
+        day_bars = _bars_for_day_window(all_bars, day, config=config)
     if not day_bars:
         # 此交易日無資料
         return DayResult(
@@ -95,14 +117,20 @@ def run_day(
             bias=bias, config=config, equity_points=[],
         )
 
-    # ── session 時間戳 ──────────────────────────────────────────────────────
+    # ── session 時間戳（entry_window 開始到 flatten_time 前）──────────────
+    t_entry_start = _parse_hm(config.entry_window[0])
+    # flatten 前一分鐘作為 session_end_t 標記（前端分隔線用）
+    _ft_h, _ft_m = int(config.flatten_time[:2]), int(config.flatten_time[3:])
+    from datetime import timedelta as _td
+    import datetime as _dt
+    _ft_minus1 = (_dt.datetime(2000, 1, 1, _ft_h, _ft_m) - _td(minutes=1)).time()
     session_start_t = 0
     session_end_t = 0
     for b in day_bars:
         et = _to_et(b.ts_utc)
-        if et.time() >= time(9, 30) and session_start_t == 0:
+        if et.time() >= t_entry_start and session_start_t == 0:
             session_start_t = _ts(b.ts_utc)
-        if et.time() >= time(12, 29):
+        if et.time() >= _ft_minus1:
             session_end_t = _ts(b.ts_utc)
             break
 
@@ -396,11 +424,21 @@ if __name__ == "__main__":
         default=None,
         help="使用 preset config（如 silver_bullet）",
     )
+    parser.add_argument(
+        "--session",
+        choices=["NY_AM", "NY_PM", "LONDON"],
+        default=None,
+        help="交易時段（§2.4）：NY_AM（預設）/ NY_PM / LONDON",
+    )
     args = parser.parse_args()
 
     if args.preset == "silver_bullet":
         cfg = StrategyConfig.silver_bullet()
         print("[SB] Using Silver Bullet preset")
         run_all(config=cfg, out_dir=_SB_REPLAY_DIR, verbose=True)
+    elif args.session and args.session != "NY_AM":
+        cfg = StrategyConfig.for_session(args.session)
+        print(f"[SESSION] {args.session}: entry={cfg.entry_window} flatten={cfg.flatten_time}")
+        run_all(config=cfg, verbose=True)
     else:
         run_all(verbose=True)

@@ -11,6 +11,9 @@ SESSIONS: dict[str, tuple[time, time]] = {
     "RTH_OPEN_3H":      (time(9, 30), time(12, 30)),
     "SILVER_BULLET_AM": (time(10, 0), time(11, 0)),
     "RTH":              (time(9, 30), time(16, 0)),
+    # §2.4 多時段
+    "NY_PM":            (time(13, 30), time(15, 55)),
+    "LONDON":           (time(2, 0),   time(5, 30)),
     # OVERNIGHT spans midnight; handled specially
 }
 

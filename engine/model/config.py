@@ -3,10 +3,33 @@
 v2 新增：bias_mode, entry_window, late_window_thu_fri, flatten_time,
          fvg_filter, stop_mode, targets_mode=m13_liquidity, trail_half_at,
          trail_be_at, min_stop_points, max_stop_points。
+v3 新增：session, context_start, for_session() classmethod（§2.4 多時段）。
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Literal
+
+# ── 各 Session 預設參數（§2.4）────────────────────────────────────────────────
+_SESSION_DEFAULTS: dict[str, dict] = {
+    "NY_AM": {
+        "entry_window": ("09:30", "11:00"),
+        "flatten_time": "12:30",
+        "context_start": "08:00",
+        "late_window_thu_fri": True,
+    },
+    "NY_PM": {
+        "entry_window": ("13:30", "15:00"),
+        "flatten_time": "15:55",
+        "context_start": "08:00",
+        "late_window_thu_fri": False,
+    },
+    "LONDON": {
+        "entry_window": ("02:00", "05:00"),
+        "flatten_time": "05:30",
+        "context_start": "00:00",
+        "late_window_thu_fri": False,
+    },
+}
 
 
 @dataclass
@@ -117,6 +140,11 @@ class StrategyConfig:
     # ── 偏向模式 ──────────────────────────────────────────────────────────────
     bias_mode: Literal["m13_raid", "m1_program"] = "m13_raid"
 
+    # ── 時段識別（§2.4）─────────────────────────────────────────────────────
+    session: Literal["NY_AM", "NY_PM", "LONDON"] = "NY_AM"
+    # runner 日窗載入起點（ET，HH:MM）；LONDON 為 "00:00"，PM/AM 為 "08:00"
+    context_start: str = "08:00"
+
     # ── 時間窗 ────────────────────────────────────────────────────────────────
     entry_window: tuple[str, str] = ("09:30", "11:00")   # 新倉窗（ET）§1
     late_window_thu_fri: bool = True                      # 週四五延至 11:30 §1
@@ -214,6 +242,26 @@ class StrategyConfig:
             min_rr=2.0,
             smt_filter="require",
         )
+
+    @classmethod
+    def for_session(
+        cls,
+        session: Literal["NY_AM", "NY_PM", "LONDON"],
+        **overrides,
+    ) -> "StrategyConfig":
+        """§2.4 工廠：依 session 帶入預設時間窗，使用者仍可以 overrides 覆蓋。
+
+        設計原則：session 欄位純記錄、時間參數明確傳入，避免 __post_init__ 魔法。
+        例：
+            cfg = StrategyConfig.for_session("NY_PM")
+            cfg = StrategyConfig.for_session("LONDON", flatten_time="06:00")
+        """
+        if session not in _SESSION_DEFAULTS:
+            raise ValueError(f"未知 session：{session!r}，需為 NY_AM / NY_PM / LONDON")
+        params = dict(_SESSION_DEFAULTS[session])   # 複製預設值
+        params["session"] = session
+        params.update(overrides)                     # 使用者覆蓋
+        return cls(**params)
 
     def as_dict(self) -> dict:
         """序列化為 JSON-friendly dict（供 meta.config snapshot）。"""
