@@ -9,7 +9,7 @@
  *   series.priceToCoordinate(price)                  → y pixel
  */
 
-import { toNYWallTime } from './chart.js';
+import { toNYWallTime } from './chart.js?v=3';
 
 // ── Zone style definitions ───────────────────────────────────────────────────
 

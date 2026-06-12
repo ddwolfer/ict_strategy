@@ -3,11 +3,11 @@
  * Wires together: data loading, ReplayEngine, ChartManager, OverlayManager, SidebarManager.
  */
 
-import { loadIndex, loadDay } from './data.js';
-import { ReplayEngine }   from './replay.js';
-import { ChartManager }   from './chart.js';
-import { OverlayManager } from './overlay.js';
-import { SidebarManager } from './sidebar.js';
+import { loadIndex, loadDay } from './data.js?v=3';
+import { ReplayEngine }   from './replay.js?v=3';
+import { ChartManager }   from './chart.js?v=3';
+import { OverlayManager } from './overlay.js?v=3';
+import { SidebarManager } from './sidebar.js?v=3';
 
 // ── DOM References ─────────────────────────────────────────────────────────────
 
