@@ -306,12 +306,15 @@ dateBtn.addEventListener('click', (e) => {
   else closeCalendar();
 });
 
-// 點月曆以外處收合
-document.addEventListener('click', (e) => {
-  if (calendarPopover.classList.contains('hidden')) return;
-  if (!calendarPopover.contains(e.target) && e.target !== dateBtn && !dateBtn.contains(e.target)) {
-    closeCalendar();
-  }
+// 月曆內部點擊（換月/選年）不冒泡到 document，避免重繪後 e.target 脫離 DOM
+// 被誤判為「點在外面」而收起；只有點日期格會經 onSelect 主動 closeCalendar。
+calendarPopover.addEventListener('click', (e) => {
+  e.stopPropagation();
+});
+
+// 點月曆與日期鈕「以外」處才收合
+document.addEventListener('click', () => {
+  if (!calendarPopover.classList.contains('hidden')) closeCalendar();
 });
 
 btnPlay.addEventListener('click', () => {
@@ -561,18 +564,29 @@ window.__seekTo = (idx) => {
         calHit = el ? (el.className || el.tagName) : 'null';
         calOpenOK = !!el && calendarEl.contains(el);
       }
+
+      // 互動：點「下個月」應保持開啟（重繪不應誤收）；點外部才收起
+      let stayOpenOK = false, outsideCloseOK = false;
+      const navBtn = calendarEl.querySelector('.cal-nav');
+      if (navBtn) {
+        navBtn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        stayOpenOK = !calendarPopover.classList.contains('hidden');
+        document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        outsideCloseOK = calendarPopover.classList.contains('hidden');
+      }
       closeCalendar();
 
-      const allOK = sliderSeekOK && fvgModeOK && calOpenOK;
+      const calOK = calOpenOK && stayOpenOK && outsideCloseOK;
+      const allOK = sliderSeekOK && fvgModeOK && calOK;
       report.textContent = [
-        allOK ? 'AUTOTEST_OK' : `AUTOTEST_FAIL(slider=${sliderSeekOK},fvgMode=${fvgModeOK},cal=${calOpenOK})`,
+        allOK ? 'AUTOTEST_OK' : `AUTOTEST_FAIL(slider=${sliderSeekOK},fvgMode=${fvgModeOK},cal=${calOK})`,
         `idx=${engine.currentIndex}`,
         `sliderSeek=${sliderSeekOK}`,
         `sliderHit=${hitDesc}`,
         `sliderRect=${Math.round(rect.width)}x${Math.round(rect.height)}`,
         `zones=${engine.visibleZones.length}`,
         `fvgMode=${fvgModeOK}(entryZones=${entryZones})`,
-        `calendar=${calOpenOK}(hit=${calHit})`,
+        `calendar=${calOK}(hit=${calHit},stayOpen=${stayOpenOK},outClose=${outsideCloseOK})`,
         `state=${JSON.stringify(st?.state)}`,
         `activeTrade=${JSON.stringify(engine.activeTrade?.id ?? null)}`,
       ].join(' | ');
