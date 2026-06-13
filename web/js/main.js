@@ -255,7 +255,13 @@ function setDateLabel(date) {
   dateBtnLabel.textContent = date || '── 選擇日期 ──';
 }
 
-function openCalendar()  { calendarPopover.classList.remove('hidden'); }
+function positionCalendar() {
+  // fixed 定位：對齊日期按鈕左緣、貼其下方（避開工具列 overflow:hidden 裁切）
+  const r = dateBtn.getBoundingClientRect();
+  calendarPopover.style.top  = (r.bottom + 4) + 'px';
+  calendarPopover.style.left = Math.max(8, r.left) + 'px';
+}
+function openCalendar()  { positionCalendar(); calendarPopover.classList.remove('hidden'); }
 function closeCalendar() { calendarPopover.classList.add('hidden'); }
 
 /** 載入當前策略的 index、重建月曆、自動載入最近有交易的日子。 */
@@ -296,7 +302,8 @@ strategySelect.addEventListener('change', async () => {
 
 dateBtn.addEventListener('click', (e) => {
   e.stopPropagation();
-  calendarPopover.classList.toggle('hidden');
+  if (calendarPopover.classList.contains('hidden')) openCalendar();
+  else closeCalendar();
 });
 
 // 點月曆以外處收合
@@ -544,14 +551,28 @@ window.__seekTo = (idx) => {
       // 還原成預設模式
       engine.setZoneDisplay({ mode: 'compact', cap: 12 });
 
+      // 月曆彈窗：開啟後格子應可被命中（未被 #toolbar overflow:hidden 裁切）
+      openCalendar();
+      const firstCell = calendarEl.querySelector('.cal-day');
+      let calOpenOK = false, calHit = 'none';
+      if (firstCell) {
+        const cr = firstCell.getBoundingClientRect();
+        const el = document.elementFromPoint(cr.left + cr.width / 2, cr.top + cr.height / 2);
+        calHit = el ? (el.className || el.tagName) : 'null';
+        calOpenOK = !!el && calendarEl.contains(el);
+      }
+      closeCalendar();
+
+      const allOK = sliderSeekOK && fvgModeOK && calOpenOK;
       report.textContent = [
-        sliderSeekOK && fvgModeOK ? 'AUTOTEST_OK' : `AUTOTEST_FAIL(slider=${sliderSeekOK},fvgMode=${fvgModeOK})`,
+        allOK ? 'AUTOTEST_OK' : `AUTOTEST_FAIL(slider=${sliderSeekOK},fvgMode=${fvgModeOK},cal=${calOpenOK})`,
         `idx=${engine.currentIndex}`,
         `sliderSeek=${sliderSeekOK}`,
         `sliderHit=${hitDesc}`,
         `sliderRect=${Math.round(rect.width)}x${Math.round(rect.height)}`,
         `zones=${engine.visibleZones.length}`,
         `fvgMode=${fvgModeOK}(entryZones=${entryZones})`,
+        `calendar=${calOpenOK}(hit=${calHit})`,
         `state=${JSON.stringify(st?.state)}`,
         `activeTrade=${JSON.stringify(engine.activeTrade?.id ?? null)}`,
       ].join(' | ');
