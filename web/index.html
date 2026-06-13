@@ -14,9 +14,18 @@
   <div id="toolbar">
     <span id="symbol-label">NQ=F</span>
     <div id="toolbar-divider"></div>
-    <select id="date-select">
-      <option value="">── 選擇日期 ──</option>
-    </select>
+    <div id="strategy-wrapper">
+      <span class="ctrl-label">策略</span>
+      <select id="strategy-select"></select>
+      <span id="strategy-badge" class="st-badge"></span>
+    </div>
+    <div id="toolbar-divider"></div>
+    <div id="date-wrapper">
+      <button id="date-btn" title="選擇日期">📅 <span id="date-btn-label">── 選擇日期 ──</span> ▾</button>
+      <div id="calendar-popover" class="hidden">
+        <div id="calendar"></div>
+      </div>
+    </div>
     <div id="toolbar-divider"></div>
     <div id="playback-controls">
       <button id="btn-back" title="單步後退 [←]">&#9664;</button>
@@ -126,6 +135,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/main.js?v=3"></script>
+  <script type="module" src="js/main.js?v=4"></script>
 </body>
 </html>

@@ -3,15 +3,21 @@
  * Wires together: data loading, ReplayEngine, ChartManager, OverlayManager, SidebarManager.
  */
 
-import { loadIndex, loadDay } from './data.js?v=3';
+import { loadIndex, loadDay, STRATEGIES, STATUS_BADGE, getStrategy, setStrategy } from './data.js?v=4';
 import { ReplayEngine }   from './replay.js?v=3';
 import { ChartManager }   from './chart.js?v=3';
 import { OverlayManager } from './overlay.js?v=3';
 import { SidebarManager } from './sidebar.js?v=3';
+import { CalendarPicker } from './calendar.js?v=4';
 
 // ── DOM References ─────────────────────────────────────────────────────────────
 
-const dateSelect      = document.getElementById('date-select');
+const strategySelect  = document.getElementById('strategy-select');
+const strategyBadge   = document.getElementById('strategy-badge');
+const dateBtn         = document.getElementById('date-btn');
+const dateBtnLabel    = document.getElementById('date-btn-label');
+const calendarPopover = document.getElementById('calendar-popover');
+const calendarEl      = document.getElementById('calendar');
 const btnPlay         = document.getElementById('btn-play');
 const btnFwd          = document.getElementById('btn-fwd');
 const btnBack         = document.getElementById('btn-back');
@@ -157,6 +163,8 @@ function onEngineUpdateInner(eng) {
 
 async function loadAndStartDay(date) {
   showLoading(true);
+  setDateLabel(date);
+  if (calendar && calendar.byDate.has(date)) calendar.selectDate(date);
 
   // Tear down previous session
   if (engine) {
@@ -204,48 +212,99 @@ async function loadAndStartDay(date) {
   showLoading(false);
 }
 
-// ── Date Selector ─────────────────────────────────────────────────────────────
+/** 明確顯示載入錯誤於圖表區（前端絕不靜默偽造資料）。 */
+function showLoadError(msg) {
+  if (chartMgr)   { chartMgr.destroy();   chartMgr   = null; }
+  if (overlayMgr) { overlayMgr.destroy(); overlayMgr = null; }
+  chartContainer.innerHTML =
+    `<div style="display:flex;align-items:center;justify-content:center;height:100%;` +
+    `color:#f87171;font-size:14px;letter-spacing:.05em;text-align:center;padding:0 40px;">${msg}</div>`;
+}
 
-async function populateDateSelector() {
-  const index = await loadIndex();
-  // Support both formats: {dates: ["YYYY-MM-DD"]} and {days: [{date:"YYYY-MM-DD",...}]}
-  const rawDates = index.dates || (index.days ? index.days.map(d => d.date) : []);
+// ── Strategy Selector ─────────────────────────────────────────────────────────
 
-  // Clear existing options (keep placeholder)
-  while (dateSelect.options.length > 1) {
-    dateSelect.remove(1);
+const calendar = new CalendarPicker(calendarEl, {
+  onSelect: (date) => {
+    setDateLabel(date);
+    closeCalendar();
+    loadAndStartDay(date);
+  },
+});
+
+function populateStrategySelect() {
+  strategySelect.innerHTML = '';
+  for (const s of STRATEGIES) {
+    const opt = document.createElement('option');
+    opt.value = s.key;
+    opt.textContent = s.label;
+    strategySelect.appendChild(opt);
   }
+  strategySelect.value = getStrategy().key;
+  updateStrategyBadge();
+}
 
-  const dates = rawDates;
-  if (dates.length === 0) {
-    // Add a demo date so the app is usable immediately
-    const today = new Date();
-    const iso   = today.toISOString().slice(0, 10);
-    const opt   = document.createElement('option');
-    opt.value       = iso;
-    opt.textContent = iso + ' (Demo)';
-    dateSelect.appendChild(opt);
-  } else {
-    for (const d of dates) {
-      const opt = document.createElement('option');
-      opt.value       = d;
-      opt.textContent = d;
-      dateSelect.appendChild(opt);
+function updateStrategyBadge() {
+  const s = getStrategy();
+  const b = STATUS_BADGE[s.status] || { icon: '?', cls: '', text: '' };
+  strategyBadge.className = `st-badge ${b.cls}`;
+  strategyBadge.textContent = `${b.icon} ${b.text}`;
+  strategyBadge.title = s.note || '';
+}
+
+function setDateLabel(date) {
+  dateBtnLabel.textContent = date || '── 選擇日期 ──';
+}
+
+function openCalendar()  { calendarPopover.classList.remove('hidden'); }
+function closeCalendar() { calendarPopover.classList.add('hidden'); }
+
+/** 載入當前策略的 index、重建月曆、自動載入最近有交易的日子。 */
+async function loadStrategyData({ autoLoad = true } = {}) {
+  const index = await loadIndex();
+  calendar.setData(index.days || []);
+
+  if (index.error || !index.days || index.days.length === 0) {
+    // 前端絕不偽造：明確顯示無資料
+    setDateLabel('（無回放資料）');
+    if (engine) { engine = null; }
+    showLoadError(index.error
+      ? `策略「${getStrategy().label}」index 載入失敗：${index.error}`
+      : `策略「${getStrategy().label}」尚無回放資料（請先跑 gen_replay.py）`);
+    return false;
+  }
+  if (autoLoad) {
+    const date = calendar.mostRecentInteresting();
+    if (date) {
+      calendar.selectDate(date);
+      setDateLabel(date);
+      await loadAndStartDay(date);
     }
   }
-
-  // Auto-load the first/most-recent date
-  if (dateSelect.options.length > 1) {
-    dateSelect.selectedIndex = 1;
-    await loadAndStartDay(dateSelect.value);
-  }
+  return true;
 }
 
 // ── Toolbar Controls ──────────────────────────────────────────────────────────
 
-dateSelect.addEventListener('change', () => {
-  const date = dateSelect.value;
-  if (date) loadAndStartDay(date);
+strategySelect.addEventListener('change', async () => {
+  if (!setStrategy(strategySelect.value)) return;
+  updateStrategyBadge();
+  closeCalendar();
+  showLoading(true);
+  await loadStrategyData({ autoLoad: true });
+  showLoading(false);
+});
+
+dateBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  calendarPopover.classList.toggle('hidden');
+});
+
+// 點月曆以外處收合
+document.addEventListener('click', (e) => {
+  if (calendarPopover.classList.contains('hidden')) return;
+  if (!calendarPopover.contains(e.target) && e.target !== dateBtn && !dateBtn.contains(e.target)) {
+    closeCalendar();
+  }
 });
 
 btnPlay.addEventListener('click', () => {
@@ -446,7 +505,8 @@ window.__seekTo = (idx) => {
 
 (async () => {
   showLoading(true);
-  await populateDateSelector();
+  populateStrategySelect();
+  await loadStrategyData({ autoLoad: true });
 
   // headless 自動測試：?autotest=<date> → 載入該日、前進到第 120 根、
   // 再往回 seek 到 60，把結果寫進 DOM 供 dump-dom 檢查
