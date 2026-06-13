@@ -1,9 +1,99 @@
 {
   "days": [
     {
+      "date": "2026-05-01",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=23763.50–27577.50 eq=25670.50；PDH=27622.00",
+      "trades": 0,
+      "wins": 0,
+      "pnl_usd": 0,
+      "total_r": 0,
+      "ambiguous": 0
+    },
+    {
+      "date": "2026-05-04",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=24243.50–27837.25 eq=26040.38；PDH=27917.00",
+      "trades": 1,
+      "wins": 0,
+      "pnl_usd": -193.98,
+      "total_r": -1.0,
+      "ambiguous": 0
+    },
+    {
+      "date": "2026-05-05",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=24243.50–27854.50 eq=26049.00；PDH=27941.00",
+      "trades": 0,
+      "wins": 0,
+      "pnl_usd": 0,
+      "total_r": 0,
+      "ambiguous": 0
+    },
+    {
+      "date": "2026-05-06",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=25080.00–28135.75 eq=26607.88；PDH=28188.25",
+      "trades": 0,
+      "wins": 0,
+      "pnl_usd": 0,
+      "total_r": 0,
+      "ambiguous": 0
+    },
+    {
+      "date": "2026-05-07",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=25081.00–28710.25 eq=26895.62；PDH=28725.75",
+      "trades": 1,
+      "wins": 0,
+      "pnl_usd": -204.48,
+      "total_r": -1.0,
+      "ambiguous": 0
+    },
+    {
+      "date": "2026-05-08",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=25215.75–28750.00 eq=26982.88；PDH=28944.75",
+      "trades": 0,
+      "wins": 0,
+      "pnl_usd": 0,
+      "total_r": 0,
+      "ambiguous": 0
+    },
+    {
+      "date": "2026-05-11",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=25215.75–29339.75 eq=27277.75；PDH=29341.00",
+      "trades": 0,
+      "wins": 0,
+      "pnl_usd": 0,
+      "total_r": 0,
+      "ambiguous": 0
+    },
+    {
+      "date": "2026-05-12",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=25656.25–29429.25 eq=27542.75；PDH=29480.00",
+      "trades": 0,
+      "wins": 0,
+      "pnl_usd": 0,
+      "total_r": 0,
+      "ambiguous": 0
+    },
+    {
+      "date": "2026-05-13",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=26023.50–29429.25 eq=27726.38；PDH=29296.00",
+      "trades": 0,
+      "wins": 0,
+      "pnl_usd": 0,
+      "total_r": 0,
+      "ambiguous": 0
+    },
+    {
       "date": "2026-05-14",
-      "bias": "NO_TRADE",
-      "bias_reason": "歷史 bars 為空，無法計算偏向",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=26439.00–29476.00 eq=27957.50；PDH=29565.50",
       "trades": 0,
       "wins": 0,
       "pnl_usd": 0,
@@ -12,8 +102,8 @@
     },
     {
       "date": "2026-05-15",
-      "bias": "NO_TRADE",
-      "bias_reason": "日 K 不足 3 根，無法計算 Dealing Range",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=26642.25–29686.75 eq=28164.50；PDH=29782.00",
       "trades": 0,
       "wins": 0,
       "pnl_usd": 0,
@@ -22,8 +112,8 @@
     },
     {
       "date": "2026-05-18",
-      "bias": "NO_TRADE",
-      "bias_reason": "日 K 不足 3 根，無法計算 Dealing Range",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=26642.25–29686.75 eq=28164.50；PDH=29486.75",
       "trades": 0,
       "wins": 0,
       "pnl_usd": 0,
@@ -33,7 +123,7 @@
     {
       "date": "2026-05-19",
       "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=29098.75–29686.75 eq=29392.75；PDH=29356.25",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=26642.25–29686.75 eq=28164.50；PDH=29356.25",
       "trades": 0,
       "wins": 0,
       "pnl_usd": 0,
@@ -43,27 +133,7 @@
     {
       "date": "2026-05-20",
       "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–29686.75 eq=29268.50；PDH=29126.50",
-      "trades": 1,
-      "wins": 0,
-      "pnl_usd": -68.44,
-      "total_r": -0.2735,
-      "ambiguous": 0
-    },
-    {
-      "date": "2026-05-21",
-      "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–29686.75 eq=29268.50；PDH=29396.75",
-      "trades": 1,
-      "wins": 1,
-      "pnl_usd": 480.58,
-      "total_r": 1.9776,
-      "ambiguous": 0
-    },
-    {
-      "date": "2026-05-22",
-      "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–29686.75 eq=29268.50；PDH=29554.00",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=26881.00–29686.75 eq=28283.88；PDH=29126.50",
       "trades": 0,
       "wins": 0,
       "pnl_usd": 0,
@@ -71,9 +141,39 @@
       "ambiguous": 0
     },
     {
+      "date": "2026-05-21",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=26926.25–29686.75 eq=28306.50；PDH=29396.75",
+      "trades": 0,
+      "wins": 0,
+      "pnl_usd": 0,
+      "total_r": 0,
+      "ambiguous": 0
+    },
+    {
+      "date": "2026-05-22",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=27161.00–29686.75 eq=28423.88；PDH=29554.00",
+      "trades": 0,
+      "wins": 0,
+      "pnl_usd": 0,
+      "total_r": 0,
+      "ambiguous": 0
+    },
+    {
+      "date": "2026-05-25",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=27161.00–29686.75 eq=28423.88；PDH=29749.00",
+      "trades": 1,
+      "wins": 0,
+      "pnl_usd": -64.48,
+      "total_r": -0.502,
+      "ambiguous": 0
+    },
+    {
       "date": "2026-05-26",
       "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–29686.75 eq=29268.50；PDH=29749.00",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=27161.00–29962.50 eq=28561.75；PDH=29993.75",
       "trades": 0,
       "wins": 0,
       "pnl_usd": 0,
@@ -83,7 +183,7 @@
     {
       "date": "2026-05-27",
       "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–30079.25 eq=29464.75；PDH=30118.75",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=27206.75–30079.75 eq=28643.25；PDH=30118.75",
       "trades": 0,
       "wins": 0,
       "pnl_usd": 0,
@@ -93,7 +193,7 @@
     {
       "date": "2026-05-28",
       "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–30187.50 eq=29518.88；PDH=30192.00",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=27491.25–30187.50 eq=28839.38；PDH=30192.00",
       "trades": 0,
       "wins": 0,
       "pnl_usd": 0,
@@ -103,113 +203,13 @@
     {
       "date": "2026-05-29",
       "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–30306.75 eq=29578.50；PDH=30344.50",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=27632.75–30306.25 eq=28969.50；PDH=30344.50",
       "trades": 0,
       "wins": 0,
       "pnl_usd": 0,
       "total_r": 0,
-      "ambiguous": 0
-    },
-    {
-      "date": "2026-06-01",
-      "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–30396.25 eq=29623.25；PDH=30536.00",
-      "trades": 0,
-      "wins": 0,
-      "pnl_usd": 0,
-      "total_r": 0,
-      "ambiguous": 0
-    },
-    {
-      "date": "2026-06-02",
-      "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–30571.25 eq=29710.75；PDH=30693.00",
-      "trades": 0,
-      "wins": 0,
-      "pnl_usd": 0,
-      "total_r": 0,
-      "ambiguous": 0
-    },
-    {
-      "date": "2026-06-03",
-      "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–30707.25 eq=29778.75；PDH=30721.25",
-      "trades": 1,
-      "wins": 0,
-      "pnl_usd": -194.94,
-      "total_r": -1.0,
-      "ambiguous": 0
-    },
-    {
-      "date": "2026-06-04",
-      "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–30754.75 eq=29802.50；PDH=30807.75",
-      "trades": 0,
-      "wins": 0,
-      "pnl_usd": 0,
-      "total_r": 0,
-      "ambiguous": 0
-    },
-    {
-      "date": "2026-06-05",
-      "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–30754.75 eq=29802.50；PDH=30603.25",
-      "trades": 1,
-      "wins": 1,
-      "pnl_usd": 71.6,
-      "total_r": 0.3551,
-      "ambiguous": 0
-    },
-    {
-      "date": "2026-06-08",
-      "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–30754.75 eq=29802.50；PDH=30100.50",
-      "trades": 0,
-      "wins": 0,
-      "pnl_usd": 0,
-      "total_r": 0,
-      "ambiguous": 0
-    },
-    {
-      "date": "2026-06-09",
-      "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–30754.75 eq=29802.50；PDH=29743.00",
-      "trades": 0,
-      "wins": 0,
-      "pnl_usd": 0,
-      "total_r": 0,
-      "ambiguous": 0
-    },
-    {
-      "date": "2026-06-10",
-      "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28850.25–30754.75 eq=29802.50；PDH=29848.25",
-      "trades": 0,
-      "wins": 0,
-      "pnl_usd": 0,
-      "total_r": 0,
-      "ambiguous": 0
-    },
-    {
-      "date": "2026-06-11",
-      "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28527.25–30754.75 eq=29641.00；PDH=29250.00",
-      "trades": 0,
-      "wins": 0,
-      "pnl_usd": 0,
-      "total_r": 0,
-      "ambiguous": 0
-    },
-    {
-      "date": "2026-06-12",
-      "bias": "BOTH",
-      "bias_reason": "m13_raid：雙向等掃蕩；DR=28527.25–30754.75 eq=29641.00；PDH=29544.25",
-      "trades": 1,
-      "wins": 0,
-      "pnl_usd": -238.44,
-      "total_r": -1.0,
       "ambiguous": 0
     }
   ],
-  "generated_at": "2026-06-12T16:14:23.706259+00:00"
+  "generated_at": "2026-06-12T19:56:53.798958+00:00"
 }
