@@ -104,7 +104,8 @@ class ORBStrategy:
 
         # 時間解析
         self._or_end_time: time = _parse_hm("10:00")   # OR 建立完成
-        self._entry_end_time: time = _parse_hm("15:30")  # 最晚進場
+        # 最晚進場 = entry_window[1]（for_orb 預設 "15:30"，限窗研究可覆蓋）
+        self._entry_end_time: time = _parse_hm(config.entry_window[1])
         self._flatten_time_t: time = _parse_hm(config.flatten_time)
 
     # ── 公開介面 ─────────────────────────────────────────────────────────────
