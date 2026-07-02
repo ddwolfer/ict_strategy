@@ -7,3 +7,6 @@ data/cache/*.csv
 # 回放每日 JSON 量大（5年×多策略約 900MB），不入版控。
 # 保留 index.json（月曆中繼資料）、trades.csv 與 gen_replay.py 供本地重建。
 web/replay_data*/20*.json
+
+# 窗口研究評測 run 的單日回放 JSON（可由 eval / final_exam 腳本重建）
+reports/window_runs/*/20*.json

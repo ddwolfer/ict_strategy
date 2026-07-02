@@ -1,0 +1,46 @@
+{
+ "gapgo_win_eod_r05_IS": {
+  "total_days": 919,
+  "total_trades": 153,
+  "total_wins": 41,
+  "win_rate": 0.2679738562091503,
+  "total_r": 39.6145,
+  "pnl_usd": 7795.66,
+  "final_equity": 57795.66,
+  "max_drawdown_usd": 4437.06,
+  "ambiguous_count": 10
+ },
+ "gapgo_win_eod_r10_IS": {
+  "total_days": 919,
+  "total_trades": 154,
+  "total_wins": 41,
+  "win_rate": 0.2662337662337662,
+  "total_r": 38.6145,
+  "pnl_usd": 15943.78,
+  "final_equity": 65943.78,
+  "max_drawdown_usd": 9862.62,
+  "ambiguous_count": 10
+ },
+ "gapgo_win_flat_r05_IS": {
+  "total_days": 919,
+  "total_trades": 153,
+  "total_wins": 53,
+  "win_rate": 0.3464052287581699,
+  "total_r": 41.1587,
+  "pnl_usd": 8867.28,
+  "final_equity": 58867.28,
+  "max_drawdown_usd": 5966.48,
+  "ambiguous_count": 10
+ },
+ "gapgo_win_flat_r10_IS": {
+  "total_days": 919,
+  "total_trades": 154,
+  "total_wins": 53,
+  "win_rate": 0.34415584415584416,
+  "total_r": 40.1587,
+  "pnl_usd": 18802.44,
+  "final_equity": 68802.44,
+  "max_drawdown_usd": 14226.4,
+  "ambiguous_count": 10
+ }
+}

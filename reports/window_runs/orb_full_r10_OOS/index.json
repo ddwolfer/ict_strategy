@@ -1,0 +1,15 @@
+{
+  "days": [
+    {
+      "date": "2026-06-12",
+      "bias": "BOTH",
+      "bias_reason": "m13_raid：雙向等掃蕩；DR=28526.00–30754.75 eq=29640.38；PDH=29544.25",
+      "trades": 1,
+      "wins": 1,
+      "pnl_usd": 66.02,
+      "total_r": 0.123,
+      "ambiguous": 0
+    }
+  ],
+  "generated_at": "2026-07-02T10:44:53.809138+00:00"
+}
