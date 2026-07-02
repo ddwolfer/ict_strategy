@@ -46,7 +46,9 @@ C3_SIDE_COST = PERP_TAKER + SLIP
 # ── 資料載入 ─────────────────────────────────────────────────────────────────
 
 def load_csv(name: str) -> pd.DataFrame:
-    df = pd.read_csv(CACHE / name, parse_dates=["ts"])
+    df = pd.read_csv(CACHE / name)
+    # 混合時戳精度（資金費率含毫秒尾數）會讓 parse_dates 靜默退回字串
+    df["ts"] = pd.to_datetime(df.ts, utc=True, format="ISO8601")
     return df.sort_values("ts").reset_index(drop=True)
 
 
