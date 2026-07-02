@@ -241,7 +241,7 @@ class StrategyConfig:
     window: str = "RTH_OPEN_3H"
 
     # ── 策略選擇 ─────────────────────────────────────────────────────────────
-    strategy_type: Literal["ict", "orb"] = "ict"
+    strategy_type: Literal["ict", "orb", "gapgo"] = "ict"
 
     # ── ORB 專屬設定 ─────────────────────────────────────────────────────────
     # or_minutes：Opening Range 分鐘數（論文版 30 分）
@@ -254,6 +254,10 @@ class StrategyConfig:
     orb_stop: Literal["or_opposite", "or_mid"] = "or_opposite"
     # orb_tp_r：停利 R 倍數；None = 不設固定 TP，持有到 EOD（論文版）
     orb_tp_r: float | None = None
+
+    # ── Gap-Go 專屬設定（ny-window-research-spec §4 F3，預登記值勿調）────────
+    # 缺口觸發門檻：|gap| >= gap_atr_min × 昨日日線 ATR(14)
+    gap_atr_min: float = 0.3
 
     @classmethod
     def silver_bullet(cls) -> "StrategyConfig":
@@ -285,6 +289,32 @@ class StrategyConfig:
         params = dict(_SESSION_DEFAULTS[session])   # 複製預設值
         params["session"] = session
         params.update(overrides)                     # 使用者覆蓋
+        return cls(**params)
+
+    @classmethod
+    def for_gapgo(cls, **overrides) -> "StrategyConfig":
+        """Gap-Go 策略工廠（ny-window-research-spec §4 F3 預登記規則）。
+
+        窗口研究策略：09:30 缺口觸發、09:34 收盤確認進場（皆在 08:30–11:30
+        窗內），預設 15:55 EOD 強平（win_eod）；win_flat 口徑覆蓋
+        flatten_time="11:30"。
+        """
+        params: dict = {
+            "strategy_type": "gapgo",
+            "session": "NY_AM",
+            "context_start": "08:00",
+            "entry_window": ("09:30", "09:40"),
+            "flatten_time": "15:55",
+            "late_window_thu_fri": False,
+            "gap_atr_min": 0.3,
+            "min_stop_points": 3.0,
+            "max_stop_points": 500.0,
+            "max_trades_per_session": 1,
+            "risk_per_trade_pct": 0.5,
+            "account_equity": 50_000.0,
+            "instrument": "MNQ",
+        }
+        params.update(overrides)
         return cls(**params)
 
     @classmethod

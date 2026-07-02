@@ -22,6 +22,7 @@ from engine.model.config import StrategyConfig
 from engine.model.bias import DailyBias, compute_bias
 from engine.model.strategy import ICTStrategy, StateChanged
 from engine.model.orb import ORBStrategy
+from engine.model.gapgo import GapGoStrategy
 from engine.sim.broker import SimBroker, BrokerConfig
 from engine.sim.risk import RiskManager, RiskConfig, SessionState
 from engine.backtest.decision_log import DayResult, _ts
@@ -170,8 +171,13 @@ def run_day(
         day_es_bars.update(history_es)
 
     if config.strategy_type == "orb":
-        strategy: ICTStrategy | ORBStrategy = ORBStrategy(
+        strategy: ICTStrategy | ORBStrategy | GapGoStrategy = ORBStrategy(
             config=config, bias=bias, broker=broker, risk_manager=risk_mgr
+        )
+    elif config.strategy_type == "gapgo":
+        strategy = GapGoStrategy(
+            config=config, bias=bias, broker=broker, risk_manager=risk_mgr,
+            history_bars=history_bars,
         )
     else:
         strategy = ICTStrategy(config=config, bias=bias, broker=broker, risk_manager=risk_mgr,
